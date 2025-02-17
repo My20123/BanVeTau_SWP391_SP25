@@ -28,9 +28,9 @@
         <div class="col-lg-4 text-center text-lg-end">
             <div class="d-inline-flex align-items-center" style="height: 45px;">
                 <c:if test="${sessionScope.acc.isAdmin == 1}">
-                    <a href="User.jsp" class="btn btn-primary rounded-pill me-2">Manage Account</a>  
+                    <a href="Dashboard.jsp" class="btn btn-primary rounded-pill me-2">Dashboard</a>  
                     <a class="btn btn-primary rounded-pill  me-2" href="Logout.jsp">Logout</a>
-                    <a href="User.jsp" class="me-2">
+                    <a href="profile?uid=${sessionScope.acc.id}" class="me-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                         <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                         <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
@@ -38,7 +38,7 @@
                     </a> 
                 </c:if>
                 <c:if test="${sessionScope.acc.isStaff == 1}">
-                    <a href="User.jsp" class="btn btn-primary rounded-pill me-2">Manage Train</a> 
+                    <a href="profile?uid=${sessionScope.acc.id}" class="btn btn-primary rounded-pill me-2">Manage Train</a> 
                     <a href="User.jsp" class="btn btn-primary rounded-pill me-2">Manage Schedule</a> 
                     <a class="btn btn-primary rounded-pill  me-2" href="Logout.jsp">Logout</a>
                     <a href="User.jsp" class="me-2">
@@ -50,7 +50,7 @@
                 </c:if>
 
                 <c:if test="${sessionScope.acc!=null}"> 
-                    <a href="" class="btn btn-primary rounded-pill  me-2">Giỏ vé</a>
+                    <a href="profile?uid=${sessionScope.acc.id}" class="btn btn-primary rounded-pill  me-2">Giỏ vé</a>
 
                     <div id="dropdown">
                         <a href="User.jsp" class="btn btn-user round-pill me-2" style="border: 1px solid #86B817;border-radius: 20px;color: #86B817;">

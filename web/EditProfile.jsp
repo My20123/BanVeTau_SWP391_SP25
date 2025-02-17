@@ -1,7 +1,8 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>User Profile</title>
+<head>
+        <title>Edit Profile</title>
         <style>
             body {
                 font-family: sans-serif;
@@ -79,41 +80,54 @@
             }
         </style>
     </head>
-    <body>
-        <nav>
-            <a href="Home.jsp">Home</a>
-        </nav>
-        <div class="container">
-            <div class="sidebar">
-                <img src="img/DefaultAvt.png" id="display" alt="Avatar" accept=".png">
-            </div>
-            <div class="content">
+</head>
+<body>
+    <nav>
+        <a href="Home.jsp">Home</a>
+    </nav>
+    <div class="container">
+        <div class="sidebar">
+            <img src="img/DefaultAvt.png" id="display" alt="Avatar" accept=".png">
+            <input type="file" id="file" hidden="">
+            <btn"file">Change avatar</label>
+        </div>
+        <div class="content">
+            <form action="editprofile" method="post">
                 <table>
                     <tr>
                         <th>ID</th>
-                        <td>${sessionScope.acc.id}</td>
+                        <td><input type="text" name="id" value="${requestScope.userss.id}" readonly></td>
                     </tr>
                     <tr>
                         <th>Name</th>
-                        <td>${sessionScope.acc.uname}</td>
+                        <td><input type="text" name="uname" value="${requestScope.userss.uname}"></td>
                     </tr>
                     <tr>
                         <th>Phone number</th>
-                        <td>${sessionScope.acc.uphone}</td>
+                        <td><input type="text" name="uphone" value="${requestScope.userss.uphone}"></td>
                     </tr>
                     <tr>
                         <th>Email</th>
-                        <td>${sessionScope.acc.umail}</td>
+                        <td><input type="text" name="umail" value="${requestScope.userss.umail}"></td>
                     </tr>
                     <tr>
                         <th>Role</th>
-                        <td>${sessionScope.acc.isStaff == 1 ? "Staff" : (sessionScope.acc.isAdmin == 1 ? "Admin" : "User")}</td>
-
+                        <td><input type="text" name="role" value="${requestScope.userss.isStaff == 1 ? "Staff" : (requestScope.userss.isAdmin == 1 ? "Admin" : "User")}"></td>
                     </tr>
                 </table>
-                <a href="editprofile?id=${sessionScope.acc.id}" class="btn">Edit</a>
-            </div>
+                <input type="submit" class="btn" value="Save changes">
+            </form>
         </div>
-    </body>
-
+    </div>
+    <script>
+        const file = document.getElementById('file');
+        const display = document.getElementById('display');
+        file.addEventListener('change', (e) => {
+            if(e.target.files.length){
+                const src = URL.createObjectURL(e.target.files[0]);
+                display.src = src;
+            }
+        });
+    </script>
+</body>
 </html>
