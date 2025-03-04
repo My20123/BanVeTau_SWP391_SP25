@@ -27,7 +27,7 @@
 
         <div class="col-lg-4 text-center text-lg-end">
             <div class="d-inline-flex align-items-center" style="height: 45px;">
-                <c:if test="${sessionScope.acc.isAdmin == 1}">
+                <c:if test="${sessionScope.acc.isAdmin == 1}">            
                     <a href="Dashboard.jsp" class="btn btn-primary rounded-pill me-2">Dashboard</a>  
                     <a href="User.jsp" class="btn btn-primary rounded-pill me-2">Manage Account</a>  
                     <a class="btn btn-primary rounded-pill  me-2" href="Logout.jsp">Logout</a>

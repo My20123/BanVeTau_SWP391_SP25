@@ -2,6 +2,13 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/Github/BanVeTau_SWP391_SP256/src/java/dal/DAO.java</file>
+            <file>file:/D:/Github/BanVeTau_SWP391_SP256/src/java/controller/ViewTrain.java</file>
+            <file>file:/D:/Github/BanVeTau_SWP391_SP256/src/java/model/Trains.java</file>
+            <file>file:/D:/Github/BanVeTau_SWP391_SP256/web/ManageAcc.jsp</file>
+            <file>file:/D:/Github/BanVeTau_SWP391_SP256/src/java/controller/AddTrain.java</file>
+            <file>file:/D:/Github/BanVeTau_SWP391_SP256/src/java/controller/ManageAcc.java</file>
+        </group>
     </open-files>
 </project-private>

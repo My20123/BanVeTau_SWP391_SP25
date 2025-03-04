@@ -31,6 +31,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/user.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> 
     </head>
     <body>
@@ -43,15 +44,13 @@
         <!-- Spinner End -->
         <jsp:include page="Header.jsp"></jsp:include>
             <div class="container">
-                <h1>User Profile</h1>
+                <h1>Edit Profile</h1>
                 <hr>
                 <div class="row">
                     <!-- left column -->
                     <div class="col-md-3">
                         <div class="text-center">
-                            <img src="img/DefaultAvt.png" id="preview" class="avatar img-circle" alt="avatar">
-                            <h6>Upload a different photo...</h6>
-                            <input type="file" id="display" class="form-control" accept="image/*">
+                            <img src="${requestScope.users.avatar}" class="avatar" >                       
                         </div>
                     </div>
                     <!-- edit form column -->
@@ -65,48 +64,58 @@
                                 <label class="col-lg-3 control-label">ID:</label>
                                 <div class="col-lg-8">
                                     <input class="form-control" type="text" name="id" value="${requestScope.users.id}" readonly="">
+                                </div>
+                            </div>                      
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Phone number:</label>
+                                <div class="col-lg-8">
+                                    <input class="form-control" type="phone" minlength="10" maxlength="10" name="uphone" value="${requestScope.users.uphone}">
+                                </div>
                             </div>
-                        </div>                      
-                        <div class="form-group">
-                            <label class="col-lg-3 control-label">Phone number:</label>
-                            <div class="col-lg-8">
-                                <input class="form-control" type="text" name="uphone" value="${requestScope.users.uphone}">
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Email:</label>
+                                <div class="col-lg-8">
+                                    <input class="form-control" type="email" name="umail" value="${requestScope.users.umail}">
+                                </div>
+                            </div>                            
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Username:</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" type="text" name="uname" value="${requestScope.users.uname}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 control-label">Email:</label>
-                            <div class="col-lg-8">
-                                <input class="form-control" type="text" name="umail" value="${requestScope.users.umail}">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Role:</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" name="role" >
+                                        <option value="0" ${requestScope.users.isAdmin == 0 && requestScope.users.isStaff == 0 ? "selected" : ""}>User</option>
+                                        <option value="1" ${requestScope.users.isAdmin == 1 ? "selected" : ""}>Admin</option>
+                                        <option value="2" ${requestScope.users.isStaff == 1 ? "selected" : ""}>Staff</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>                            
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">Username:</label>
-                            <div class="col-md-8">
-                                <input class="form-control" type="text" name="uname" value="${requestScope.users.uname}" >
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">CCCD:</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" type="text" pattern="[0-9]{12}" title="Minimum length for identity number is 12 and not contain letters" name="cccd" value="${requestScope.users.cccd}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">Role:</label>
-                            <div class="col-md-8">
-                                <input class="form-control" type="text" value="${requestScope.users.isStaff == 1 ? "Staff" : (requestScope.users.isAdmin == 1 ? "Admin" : "User")}" readonly="">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Avatar:</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" type="text" name="avatar" value="${requestScope.users.avatar}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">CCCD:</label>
-                            <div class="col-md-8">
-                                <input class="form-control" type="text" name="cccd" value="${requestScope.users.cccd}">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"></label>
+                                <div class="col-md-8">
+                                    <input type="submit" class="btn btn-primary" value="Save changes">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label"></label>
-                            <div class="col-md-8">
-                                <input type="submit" class="btn btn-primary" value="Save changes">
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
         <hr>
         <a class="btn btn-primary" href='Home.jsp'>Home</a>
         <jsp:include page="Footer.jsp"></jsp:include>
