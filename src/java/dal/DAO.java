@@ -45,13 +45,17 @@ public class DAO {
                         rs.getString(5),
                         rs.getInt(6),
                         rs.getInt(7),
-                        rs.getString(8)));
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getBoolean(10)));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return list;
     }
-     public Accounts GetUserById(int id) {
+
+    public Accounts GetUserById(int id) {
         try {
             String query = "SELECT * FROM accounts WHERE uid = ?";
             con = new DBContext().getConnection();
@@ -66,7 +70,9 @@ public class DAO {
                         rs.getString(5),
                         rs.getInt(6),
                         rs.getInt(7),
-                        rs.getString(8));
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getBoolean(10));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,8 +80,9 @@ public class DAO {
         return null;
     }
 
-    public void updateUser(int id, String uname, String uphone, String umail, String cccd) {
-        String query = "UPDATE accounts SET uname = ?, uphone = ?, umail = ?, cccd = ? WHERE uid = ?";
+    public void updateUser(int id, String uname, String uphone, String umail, String cccd, String avatar, int isAdmin, int isStaff) {
+        String query = "UPDATE Accounts SET uname = ?, uphone = ?, umail = ?, cccd = ?, avatar = ?, isAdmin = ?, isStaff = ? WHERE uID = ?";
+
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(query);
@@ -83,12 +90,28 @@ public class DAO {
             ps.setString(2, uphone);
             ps.setString(3, umail);
             ps.setString(4, cccd);
-            ps.setInt(5, id);
+            ps.setString(5, avatar);
+            ps.setInt(6, isAdmin);
+            ps.setInt(7, isStaff);
+            ps.setInt(8, id);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public void updateStatus(int id) {
+        String query = "UPDATE Accounts SET status = NOT status WHERE uID = ?";
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public List getAllStations() {
         List<String> list = new ArrayList<>();
         try {
@@ -134,18 +157,84 @@ public class DAO {
     }
 
     public List getAllTrains() {
-        List<String> list = new ArrayList<>();
+        List<Trains> list = new ArrayList<>();
         try {
-            String query = "SELECT id FROM trains;";
+
+            String query = "SELECT * FROM Trains;";
             con = new DBContext().getConnection();//mo ket noi voi sql
             ps = con.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(rs.getString("route_key"));
+                list.add(new Trains(rs.getString(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4)));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return list;
+    }
+
+    public void addTrain(Trains train) throws Exception {
+        try {
+            String query = "INSERT INTO Trains (id, status, number_seat, number_cabin) VALUES (?, ?, ?, ?)";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(query);
+            ps.setString(1, train.getTid());
+            ps.setInt(2, train.getStatus());
+            ps.setInt(3, train.getNumber_seats());
+            ps.setInt(4, train.getNumber_cabins());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Trains GetTrainById(String id) {
+        try {
+            String query = "SELECT * FROM trains WHERE id = ?";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(query);
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Trains(rs.getString(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void updateTrain(String id, int status, int number_seat, int number_cabin) {
+        String query = "UPDATE trains SET status = ?, number_seat = ?, number_cabin = ? WHERE id = ?";
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1, status);
+            ps.setInt(2, number_seat);
+            ps.setInt(3, number_cabin);
+            ps.setString(4, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteTrain(String id) {
+        String query = "DELETE FROM Trains WHERE id = ?";
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(query);
+            ps.setString(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Accounts login(String user, String pass) {
@@ -164,7 +253,9 @@ public class DAO {
                         rs.getString(5),
                         rs.getInt(6),
                         rs.getInt(7),
-                        rs.getString(8));
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getBoolean(10));
             }
         } catch (Exception e) {
 
@@ -202,7 +293,6 @@ public class DAO {
         }
         return list;
     }
-    
 
     public Accounts checkAccountExist(String user) {
         String query = "select * from accounts where uname = ?";
@@ -220,7 +310,9 @@ public class DAO {
                         rs.getString(5),
                         rs.getInt(6),
                         rs.getInt(7),
-                        rs.getString(8));
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getBoolean(10));
             }
         } catch (Exception e) {
 
@@ -242,25 +334,28 @@ public class DAO {
 
         }
     }
+
 public String searchTrainsWithRid(int rid){
     String trids= "";
     try {
         String query = "SELECT trid FROM schedules where rid = ?;";
+
             con = new DBContext().getConnection();//mo ket noi voi sql
             ps = con.prepareStatement(query);
             ps.setInt(1, rid);
             rs = ps.executeQuery();
             while (rs.next()) {
                 if (rs.isLast()) {
-                    trids+=rs.getString(1);
-                }else
-                trids+=rs.getString(1)+"-";
+                    trids += rs.getString(1);
+                } else {
+                    trids += rs.getString(1) + "-";
+                }
             }
-        
-    } catch (Exception e) {
+
+        } catch (Exception e) {
+        }
+        return trids;
     }
-    return trids;
-}
 
     public List<Schedule> searchSchedules(String fromStation, String toStation, Date date) {
         List<Schedule> list = new ArrayList<>();
