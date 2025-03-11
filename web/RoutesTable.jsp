@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </nav>
-                <div class=" container-fluid py-5 mb-5 " style="background-color: #353e4a;">
+                <div class=" container-fluid py-5 mb-5 " style="background-color: #005F7A;">
                 </div>
             </div>
             <div class="container">

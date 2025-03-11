@@ -390,11 +390,7 @@ button, .button {
     transition: all .2sease-in-out;
     width: 24px;
 }
-.passengers {
-    margin-right: 10px;
-    outline: none;
-    position: relative;
-}
+
 .train-search__submit-btn {
     background-color: #ffae00;
     border: 0;
@@ -416,68 +412,6 @@ button, .button {
     -webkit-transition: background-color .2sease-in-out;
     transition: background-color .2sease-in-out;
 }
-.count-of-passengers {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex
-        ;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    text-align: center;
-    background-color: #fff;
-    border: 1px solid #fff;
-    border-radius: 6px;
-    cursor: pointer;
-    height: 78px;
-    opacity: 1;
-    outline: none;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    width: 78px;
-}
-.count-of-passengers__wrapper {
-    -webkit-box-align: baseline;
-    -ms-flex-align: baseline;
-    align-items: baseline;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex
-        ;
-}
-.count-of-passengers__item {
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex
-        ;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-}
-.count-of-passengers__icon {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex
-        ;
-    margin-bottom: 6px;
-}
-.count-of-passengers__icon svg {
-    fill: #dadada;
-    height: 30px;
-    width: 16px;
-}
-.count-of-passengers__count {
-    color: #000;
-    font-size: 16px;
-    letter-spacing: 0;
-    line-height: 20px;
-}
 .train-search__submit-btn {
     background-color: #ffae00;
     border: 0;
@@ -488,7 +422,6 @@ button, .button {
     display: block;
     font-size: 16px;
     font-weight: bold;
-    height: auto;
     letter-spacing: 0;
     line-height: 19px;
     max-height: none;
@@ -593,9 +526,9 @@ button, .button {
     font-family: 'Nunito', sans-serif;
     position: relative;
     margin-right: 25px;
-    padding: 35px 0;
+    padding: 23px 0;
     color: #FFFFFF !important;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     outline: none;
     transition: .5s;
@@ -732,8 +665,206 @@ input{
     padding: 30px;
     width: 100%;
 }
+/*** Train ***/
+.track {
+  position: relative;
+  overflow:hidden;
+  width:50px;
+  height:100px;
+  border-left: 3px solid #333;
+  transform: skew(-10deg) rotateX(45deg);
+}
 
+.track:before {
+  content:"";
+  position: absolute;
+  height:3px;
+  width:50px;
+  background-color: #333;
+  top:90px;
+  box-shadow: 0 0 #333, 0 -10px #333, 0 -20px #333, 0 -30px #333, 0 -40px #333, 0 -50px #333, 0 -50px #333, 0 -60px #333,0 -70px #333, 0 -80px #333, 0 -90px #333, 0 -100px #333, 0 -110px #333, 0 -120px #333, 0 -130px #333, 0 -140px #333;
+  animation: track 1s linear infinite;
+}
 
+@keyframes track {
+  0% {transform: translateY(70px) rotateX(45deg);}
+  100% {transform: translateY(0px) rotateX(45deg);}
+}
+
+.track:after {
+  content:"";
+  position: absolute;
+  transform: rotate(-15deg);
+  width:50px;
+  height: 120px;
+  background-color: #fff;
+  border-left: 3px solid #333;
+  left:30px;
+  top:-10px;
+}
+
+.train {
+  position: absolute;
+  width: 60px;
+  height:60px;
+  background-color: #333;
+  border-radius:15px;
+  top:0;
+  left:-13px;
+  transform-origin: bottom;
+  animation: rotate 1s linear infinite;
+}
+
+.train:before {
+  content:"";
+  position: absolute;
+  background-color: #ced4da;
+  width:20px;
+  height:15px;
+  left:9px;
+  top:15px;
+  box-shadow: 22px 0 #ced4da;
+}
+
+.train:after {
+  content:"";
+  position: absolute;
+  background-color: #ced4da;
+  border-radius:50%;
+  height:10px;
+  width:10px;
+  top:45px;
+  left:10px;
+  box-shadow: 30px 0px #ced4da;
+}
+.et-train-block {
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 140px;
+    cursor: pointer;
+    width: 140px !important;
+    display: inline-block !important;
+    float: none !important;
+}
+.et-train-head-selected {
+    background-color: #0091d4;
+}
+.et-train-head {
+    width: 120px;
+    height: 120px;
+    border-radius: 20px;
+    background-color: #999;
+    padding: 0 5px;
+    position: absolute;
+    z-index: 99;
+}
+.et-train-base {
+    height: 0;
+    width: 0;
+    border-bottom: 62px solid #000;
+    border-left: 62px solid transparent;
+    border-right: 62px solid transparent;
+    position: absolute;
+    margin-top: 80px;
+    z-index: 1;
+    margin-left: -2px;
+}
+.et-train-base-2 {
+    height: 0;
+    width: 0;
+    border-bottom: 42px solid #fff;
+    border-left: 42px solid transparent;
+    border-right: 42px solid transparent;
+    position: absolute;
+    margin-top: 95px;
+    margin-left: 18px;
+    z-index: 2;
+}
+.et-train-base-3 {
+    height: 0;
+    width: 0;
+    border-bottom: 42px solid #000;
+    border-left: 42px solid transparent;
+    border-right: 42px solid transparent;
+    position: absolute;
+    margin-top: 90px;
+    margin-left: 18px;
+    z-index: 3;
+}
+.et-train-base-4 {
+    height: 0;
+    width: 0;
+    border-bottom: 32px solid #fff;
+    border-left: 32px solid transparent;
+    border-right: 32px solid transparent;
+    position: absolute;
+    margin-top: 95px;
+    margin-left: 28px;
+    z-index: 4;
+}
+.et-train-base-5 {
+    height: 0;
+    width: 0;
+    border-bottom: 32px solid #000;
+    border-left: 32px solid transparent;
+    border-right: 32px solid transparent;
+    position: absolute;
+    margin-top: 90px;
+    margin-left: 28px;
+    z-index: 5;
+}
+.center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.et-train-lamp {
+    height: 15px;
+    border-radius: 10px;
+    background-color: #fff;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    width: 100%;
+    margin: 0 auto;
+}
+.et-train-head-info {
+    height: 70px;
+    width: 100%;
+    border-radius: 10px;
+    background-color: #fff;
+    font-size: 9px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 5px;
+}
+.et-no-margin {
+    margin: 0 10px 0 6px !important;
+    width: 95%;
+}
+.et-col-50 {
+    width: 50%;
+    float: left;
+    display: block;
+    min-height: 1px;
+}
+.et-bold {
+    font-weight: 700;
+}
+.pull-left {
+    float: left !important;
+}
+.pull-right {
+    float: right !important;
+}.et-text-sm {
+    font-size: 8px;
+}.et-bold {
+    font-weight: 700;
+}
+
+.et-text-large {
+    font-size: 1.5em;
+}
 /*** Hero Header ***/
 .hero-header {
     background: url(../img/bg-hero.jpg);

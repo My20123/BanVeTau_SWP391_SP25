@@ -9,8 +9,20 @@ package model;
  * @author tra my
  */
 public class Seats {
-    private int id,status, price;
-    private String cabinid;
+    private int id,status,seatNo, price;
+    private String cabinid,trid;
+   
+
+    public Seats() {
+    }
+
+    public Seats(int id, int status, int seatNo, int price, String cabinid) {
+        this.id = id;
+        this.status = status;// 0 là available, 1 là buying, 2 là bought
+        this.seatNo = seatNo;
+        this.price = price;
+        this.cabinid = cabinid;
+    }
 
     public int getId() {
         return id;
@@ -18,6 +30,14 @@ public class Seats {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getSeatNo() {
+        return seatNo;
+    }
+
+    public void setSeatNo(int seatNo) {
+        this.seatNo = seatNo;
     }
 
     public int getStatus() {
@@ -44,13 +64,18 @@ public class Seats {
         this.cabinid = cabinid;
     }
 
-    public Seats(int id, int status, int price, String cabinid) {
-        this.id = id;
-        this.status = status;
-        this.price = price;
-        this.cabinid = cabinid;
+    public String getTrid() {
+        return trid;
     }
 
-    public Seats() {
+    public void setTrid(String trid) {
+        this.trid = trid;
     }
+
+    @Override
+    public String toString() {
+        return "Seats{" + "id=" + id + ", status=" + status + ", seatNo=" + seatNo + ", price=" + price + ", cabinid=" + cabinid + '}';
+    }
+
+   
 }

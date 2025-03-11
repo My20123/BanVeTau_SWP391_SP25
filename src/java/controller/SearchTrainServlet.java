@@ -7,60 +7,27 @@ package controller;
 import dal.DAO;
 import model.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author tra my
  */
+@WebServlet(name = "SearchTrainServlet", urlPatterns = {"/searchtrain"})
 public class SearchTrainServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SearchTrainServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SearchTrainServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+    private static final Logger LOGGER = Logger.getLogger(SearchTrainServlet.class.getName());
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -73,7 +40,74 @@ public class SearchTrainServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        
+        try {
+            // Get DAO instance
+            DAO dao = new DAO();
+            
+            // Get list of all stations for the form
+            List<String> listS = dao.getAllStations();
+            request.setAttribute("dao", dao);
+            request.setAttribute("listS", listS);
+            
+            // Get form parameters
+            String tripType = request.getParameter("options");
+            String fromStation = request.getParameter("from_station");
+            String toStation = request.getParameter("to_station");
+            String fromDate = request.getParameter("input_from");
+            String returnDate = request.getParameter("input_to");
+            
+            // Set form values as attributes to maintain them after search
+            request.setAttribute("trip_type", tripType);
+            request.setAttribute("depart", fromStation);
+            request.setAttribute("desti", toStation);
+            request.setAttribute("from_date", fromDate);
+            request.setAttribute("return_date", returnDate);
+            
+            
+            // Parse dates
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date departDate = sdf.parse(fromDate);
+            Date returnDateObj = null;
+            if ("roundTrip".equals(tripType) && returnDate != null && !returnDate.trim().isEmpty()) {
+                returnDateObj = sdf.parse(returnDate);
+            }
+            
+            // Search for departure routes and schedules
+            List<Schedule> departSchedules = dao.searchSchedules(fromStation, toStation, departDate);
+            if(departSchedules==null||departSchedules.isEmpty()){
+                request.setAttribute("errorMessage", "Không tìm thấy chuyến tàu nào cho tuyến đường này.");
+                request.getRequestDispatcher("Home.jsp").forward(request, response);
+            }
+                        
+            // Set departure schedules attribute
+            request.setAttribute("departSchedules", departSchedules);
+            
+            
+//            // If round trip, search for return routes and schedules
+            if ("roundTrip".equals(tripType) && returnDateObj != null) {
+                List<Schedule> returnSchedules = dao.searchSchedules(toStation, fromStation, sdf.parse(returnDate));
+                
+               
+                // Set return schedules attribute
+                request.setAttribute("return_schedules", returnSchedules);
+            }
+            
+            // Forward to search result page         
+            request.getRequestDispatcher("SearchResult.jsp").forward(request, response);
+            
+        } catch (ParseException e) {
+            LOGGER.log(Level.SEVERE, "Error parsing date", e);
+            request.setAttribute("error", "Invalid date format");
+            request.getRequestDispatcher("SearchResult.jsp").forward(request, response);
+        }
+        catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error processing search request", e);
+            request.setAttribute("error", "An error occurred while processing your request");
+            request.getRequestDispatcher("SearchResult.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -83,7 +117,71 @@ public class SearchTrainServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Search Train Servlet - Handles train search functionality";
+    }
+     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        
+        try {
+            // Get DAO instance
+            DAO dao = new DAO();
+            
+            // Get list of all stations for the form
+            List<String> listS = dao.getAllStations();
+            request.setAttribute("dao", dao);
+            request.setAttribute("listS", listS);
+            
+            // Get form parameters
+            String tripType = request.getParameter("trip_type");
+            String fromStation = request.getParameter("from_station");
+            String toStation = request.getParameter("to_station");
+            String fromDate = request.getParameter("input_from");
+            String returnDate = request.getParameter("input_to");
+            
+            // Set form values as attributes to maintain them after search
+            request.setAttribute("trip_type", tripType);
+            request.setAttribute("depart", fromStation);
+            request.setAttribute("desti", toStation);
+            request.setAttribute("from_date", fromDate);
+            request.setAttribute("return_date", returnDate);
+            
+                      
+            // Parse dates
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date departDate = sdf.parse(fromDate);
+            Date returnDateObj = null;
+            if ("roundTrip".equals(tripType) && returnDate != null && !returnDate.trim().isEmpty()) {
+                returnDateObj = sdf.parse(returnDate);
+            }
+            
+            // Search for departure routes and schedules
+            List<Schedule> departSchedules = dao.searchSchedules(fromStation, toStation, departDate);
+            
+            // Set departure schedules attribute
+            request.setAttribute("departSchedules", departSchedules);
+                        
+            // If round trip, search for return routes and schedules
+            if ("roundTrip".equals(tripType) && returnDateObj != null) {
+                List<Schedule> returnSchedules = dao.searchSchedules(toStation, fromStation, sdf.parse(returnDate));
+                
+                // Set return schedules attribute
+                request.setAttribute("return_schedules", returnSchedules);
+            }
+            
+            // Forward to search result page
+            request.getRequestDispatcher("SearchResult.jsp").forward(request, response);
+            
+        } catch (ParseException e) {
+            LOGGER.log(Level.SEVERE, "Error parsing date", e);
+            request.setAttribute("error", "Invalid date format");
+            request.getRequestDispatcher("SearchResult.jsp").forward(request, response);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error processing search request", e);
+            request.setAttribute("error", "An error occurred while processing your request");
+            request.getRequestDispatcher("SearchResult.jsp").forward(request, response);
+        }
+    }
 }

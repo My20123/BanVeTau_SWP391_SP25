@@ -21,9 +21,10 @@ CREATE TABLE Accounts (
 -- drop table Tickets
 -- drop table Seats
 -- drop table Cabins
+-- drop table Schedules
 -- drop table Trains
+-- drop table Routes_data
 -- drop table Routes
--- drop table Trips
 
 -- Create the Route table 
 CREATE TABLE Routes(
@@ -45,7 +46,8 @@ id varchar(5) PRIMARY KEY,
 train_type VARCHAR(100) NOT NULL,
 status int  NULL, -- 1 là available, 0 là not available
 number_seat int NULL,
-number_cabin int NULL
+number_cabin int NULL,
+avail_seats int NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create the Schedules table
@@ -65,6 +67,7 @@ CREATE TABLE Cabins(
 id varchar(10) PRIMARY KEY,
 number_seat int NUll,
 status int NULL,
+avail_seat int NUll,
 trid varchar(5),
 ctype varchar(100),
 FOREIGN KEY (trid) REFERENCES Trains(id)
@@ -223,6 +226,7 @@ INSERT INTO Schedules (rid, trid, from_time, to_time) VALUES
 (18, 'SE5', '2025-03-01 13:00:00', '2025-03-01 17:30:00'); -- Tàu nhanh (~4h30)
 
 -- Insert into the Trains table
+
 INSERT INTO Trains (id, status, number_seat, number_cabin, train_type) VALUES 
 ('SE1',  1, 374, 10, 'Tàu nhanh'), 
 ('SE2',  1, 360, 10, 'Tàu nhanh'), 
@@ -245,6 +249,7 @@ INSERT INTO Trains (id, status, number_seat, number_cabin, train_type) VALUES
 -- Insert into the Schedules table
 
 
+
 -- SELECT
 --    s.id AS schedule_id,
  --   rd.route_key AS station,
@@ -256,12 +261,12 @@ INSERT INTO Trains (id, status, number_seat, number_cabin, train_type) VALUES
 --    s.id = 1;  -- Thay 1 bằng ID của lịch trình bạn muốn xem
 
 -- Insert into the Cabins table
-INSERT INTO Cabins(id, number_seat, status, trid, ctype) value
-('SE1/1',56,1,'SE1','A56LV'),('SE1/2',56,1,'SE1','A56LV'),('SE1/3',42,1,'SE1','Bn42LM'),('SE1/4',42,1,'SE1','Bn42LM'),('SE1/5',28,1,'SE1','An28LMV'),('SE1/6',28,1,'SE1','An28LMV'),('SE1/7',28,1,'SE1','An28LMV'),('SE1/8',28,1,'SE1','An28LMV'),('SE1/9',28,1,'SE1','An28LMV'),('SE1/10',24,1,'SE1','An24LV2M'),
-('SE3/1',64,1,'SE3','A64LV'),('SE3/2',64,1,'SE3','A64LV'),('SE3/3',56,1,'SE3','A56LV'),('SE3/4',42,1,'SE3','Bn42L'),('SE3/5',42,1,'SE3','Bn42L'),('SE3/6',42,1,'SE3','Bn42L'),('SE3/7',42,1,'SE3','Bn42L'),('SE3/8',28,1,'SE3','An28LV'),('SE3/9',28,1,'SE3','An28LV'),('SE3/10',28,1,'SE3','An28LV'),('SE3/11',28,1,'SE3','An28LV'),
-('SE5/1',56,1,'SE5','A56LV'),('SE5/2',56,1,'SE5','A56LV'),('SE5/3',42,1,'SE5','Bn42LM'),('SE5/4',42,1,'SE5','Bn42LM'),('SE5/5',28,1,'SE5','An28LMV'),('SE5/6',28,1,'SE5','An28LMV'),('SE5/7',28,1,'SE5','An28LMV'),('SE5/8',28,1,'SE5','An28LMV'),('SE5/9',28,1,'SE5','An28LMV'),('SE5/10',24,1,'SE5','An24LV2M')
+INSERT INTO Cabins(id, number_seat, status,avail_seat, trid, ctype) value
+('SE1/1',56,1,56,'SE1','A56LV'),('SE1/2',56,1,56,'SE1','A56LV'),('SE1/3',42,1,42,'SE1','Bn42LM'),('SE1/4',42,1,42,'SE1','Bn42LM'),('SE1/5',28,1,28,'SE1','An28LMV'),('SE1/6',28,1,28,'SE1','An28LMV'),('SE1/7',28,1,28,'SE1','An28LMV'),('SE1/8',28,1,28,'SE1','An28LMV'),('SE1/9',28,1,28,'SE1','An28LMV'),('SE1/10',24,1,24,'SE1','An24LV2M'),
+('SE3/1',64,1,64,'SE3','A64LV'),('SE3/2',64,1,64,'SE3','A64LV'),('SE3/3',56,1,56,'SE3','A56LV'),('SE3/4',42,1,42,'SE3','Bn42L'),('SE3/5',42,1,42,'SE3','Bn42L'),('SE3/6',42,1,42,'SE3','Bn42L'),('SE3/7',42,1,42,'SE3','Bn42L'),('SE3/8',28,1,28,'SE3','An28LV'),('SE3/9',28,1,28,'SE3','An28LV'),('SE3/10',28,1,28,'SE3','An28LV'),('SE3/11',28,1,28,'SE3','An28LV'),
+('SE5/1',56,1,56,'SE5','A56LV'),('SE5/2',56,1,56,'SE5','A56LV'),('SE5/3',42,1,42,'SE5','Bn42LM'),('SE5/4',42,1,42,'SE5','Bn42LM'),('SE5/5',28,1,28,'SE5','An28LMV'),('SE5/6',28,1,28,'SE5','An28LMV'),('SE5/7',28,1,28,'SE5','An28LMV'),('SE5/8',28,1,28,'SE5','An28LMV'),('SE5/9',28,1,28,'SE5','An28LMV'),('SE5/10',24,1,24,'SE5','An24LV2M')
 ;
-
+SELECT avail_seat FROM Cabins where id = 'SE1/1';
 -- Insert into the Seats table
 INSERT INTO Seats (status, price, cbid) VALUE (1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1')
 ;
@@ -272,3 +277,4 @@ INSERT INTO Tickets (from_station, to_station, from_date, to_date, ttype, trid,s
 
 -- Insert into the Order_details table
 INSERT INTO Order_details (tid,cid,status,total_price,payment_type,payment_date) VALUE (1,5,1,1022000,1,'2025-02-21');
+

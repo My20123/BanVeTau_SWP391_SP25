@@ -14,10 +14,19 @@ public class Tickets {
     private int id;
     private String from_station,to_station;
     private LocalDateTime from_time,to_time;
-    private int ttype;
+    private int ttype; //1 là 1 chiều; 2 là khứ hồi
     private String trid;
     private int sid,rid;
     private String cbid;
+    private String tcode;
+
+    public String getTcode() {
+        return tcode;
+    }
+
+    public void setTcode(String tcode) {
+        this.tcode = tcode;
+    }
 
     public int getId() {
         return id;
