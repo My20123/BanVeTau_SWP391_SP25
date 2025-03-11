@@ -22,11 +22,13 @@ public class Accounts {
     private int isStaff;
     private int isAdmin;
     private String cccd;
+    private String avatar;
+    private Boolean status;
 
     public Accounts() {
     }
 
-    public Accounts(int id, String uname, String umail, String pass, String uphone, int isStaff, int isAdmin, String cccd) {
+    public Accounts(int id, String uname, String umail, String pass, String uphone, int isStaff, int isAdmin, String cccd, String avatar, Boolean status) {
         this.id = id;
         this.uname = uname;
         this.umail = umail;
@@ -35,6 +37,8 @@ public class Accounts {
         this.isStaff = isStaff;
         this.isAdmin = isAdmin;
         this.cccd = cccd;
+        this.avatar = avatar;
+        this.status = status;
     }
 
     public int getId() {
@@ -101,5 +105,20 @@ public class Accounts {
         this.cccd = cccd;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
 }

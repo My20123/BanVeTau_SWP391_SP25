@@ -36,8 +36,12 @@ public class EditProfileServlet extends HttpServlet {
         String phone = request.getParameter("uphone");
         String email = request.getParameter("umail");
         String cccd = request.getParameter("cccd");
+        String avatar = request.getParameter("avatar");
+        int role = Integer.parseInt(request.getParameter("role"));
+        int isAdmin = (role == 1) ? 1 : 0;
+        int isStaff = (role == 2) ? 1 : 0;
         DAO d = new DAO();
-        d.updateUser(uId, name, phone, email, cccd);
+        d.updateUser(uId, name, phone, email, cccd,avatar, isAdmin,isStaff);
 
         HttpSession session = request.getSession();
         Accounts updatedUser = d.GetUserById(uId);
