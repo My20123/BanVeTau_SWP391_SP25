@@ -114,8 +114,8 @@ public class DAO {
     public void updateStatus(int id) {
         String query = "UPDATE Accounts SET status = NOT status WHERE uID = ?";
         try {
-            con = new DBContext().getConnection();
-            ps = con.prepareStatement(query);
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -345,15 +345,15 @@ public class DAO {
             return Integer.parseInt(parts[1]); // Chỉ lấy số và chuyển về kiểu Integer để sắp xếp
         }));
         return list;
-
+    }
     public void addTrain(Trains train) throws Exception {
         try {
             String query = "INSERT INTO Trains (id, status, number_seat, number_cabin) VALUES (?, ?, ?, ?)";
-            con = new DBContext().getConnection();
-            ps = con.prepareStatement(query);
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
             ps.setString(1, train.getTid());
             ps.setInt(2, train.getStatus());
-            ps.setInt(3, train.getNumber_seats());
+            ps.setInt(3, train.getTotal_seats());
             ps.setInt(4, train.getNumber_cabins());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -364,8 +364,8 @@ public class DAO {
     public Trains GetTrainById(String id) {
         try {
             String query = "SELECT * FROM trains WHERE id = ?";
-            con = new DBContext().getConnection();
-            ps = con.prepareStatement(query);
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
             ps.setString(1, id);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -383,8 +383,8 @@ public class DAO {
     public void updateTrain(String id, int status, int number_seat, int number_cabin) {
         String query = "UPDATE trains SET status = ?, number_seat = ?, number_cabin = ? WHERE id = ?";
         try {
-            con = new DBContext().getConnection();
-            ps = con.prepareStatement(query);
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
             ps.setInt(1, status);
             ps.setInt(2, number_seat);
             ps.setInt(3, number_cabin);
@@ -398,8 +398,8 @@ public class DAO {
     public void deleteTrain(String id) {
         String query = "DELETE FROM Trains WHERE id = ?";
         try {
-            con = new DBContext().getConnection();
-            ps = con.prepareStatement(query);
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
             ps.setString(1, id);
             ps.executeUpdate();
         } catch (Exception e) {
