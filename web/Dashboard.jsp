@@ -3,7 +3,9 @@
     Created on : Feb 16, 2025, 10:47:00 PM
     Author     : lenovo
 --%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +43,9 @@
                 </li>
 
                 <li>
+
                     <a href="manageacc">
+
                         <span class="icon">
                             <ion-icon name="people-outline"></ion-icon>
                         </span>
@@ -49,11 +53,13 @@
                     </a>
                 </li>
                 <li>
+
                     <a href="viewT">
                         <span class="icon">
                             <ion-icon name="lock-closed-outline"></ion-icon>
                         </span>
                         <span class="title">Manage Train</span>
+
                     </a>
                 </li>
                  <li>
@@ -87,7 +93,9 @@
             </div>
 
             <!-- ======================= Cards ================== -->
+
 <!--            <div class="cardBox">
+
                 <div class="card">
                     <div>
                         <div class="numbers">1,504</div>
@@ -131,10 +139,12 @@
                         <ion-icon name="cash-outline"></ion-icon>
                     </div>
                 </div>
-            </div>-->
+
+            </div>
 
             <!-- ================ Order Details List ================= -->
-<!--            <div class="details">
+            <div class="details">
+
                 <div class="recentOrders">
                     <div class="cardHeader">
                         <h2>Recent Orders</h2>
@@ -209,10 +219,11 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>-->
+
+                </div>
 
                 <!-- ================= New Customers ================ -->
-<!--                <div class="recentCustomers">
+                <div class="recentCustomers">
                     <div class="cardHeader">
                         <h2>Recent Customers</h2>
                     </div>
@@ -293,7 +304,9 @@
                 </div>
             </div>
         </div>
-    </div>-->
+
+    </div>
+
 
     <!-- =========== Scripts =========  -->
     <script src="js/dashboard.js"></script>

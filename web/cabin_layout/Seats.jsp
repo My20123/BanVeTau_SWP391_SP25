@@ -17,8 +17,10 @@
     String cbid = request.getParameter("cbid");
     int sid = Integer.parseInt(request.getParameter("sid"));
     String ctype = request.getParameter("ctype");
-    String depart = (String) request.getAttribute("depart"); // Lấy từ EL ${depart}
-    String desti = (String) request.getAttribute("desti"); // Lấy từ EL ${desti}
+
+    String depart =  request.getParameter("depart"); // Lấy từ EL ${depart}
+    String desti =  request.getParameter("desti"); // Lấy từ EL ${desti}
+
     int totalSeats = Integer.parseInt(request.getParameter("total")); // Tổng số ghế
     int seatsInRow = Integer.parseInt(request.getParameter("row"));  // Loại cabin A thì số ghế trong 1 hàng là 4, loại cabin B thì số ghế trong 1 hàng là 6
     DAO dao = new DAO();%> 
@@ -175,12 +177,15 @@
                 %>
             </div>
         </div>   
-        <%} else {%>
+
+<%} else {%>
         <div class="et-car-nm-64-half-block">
             <div class="et-full-width" >
                 <%for (int j = 1; j <= seatsInRow / 2; j++) {%>
                 <div class="et-car-nm-64-sit ng-isolate-scope" style="visibility: hidden"><div class="et-car-seat-left et-seat-h-35" analytics-on="click" ng-click="buyTicket(seat, direct)"><div class="et-col-16 et-sit-side"></div><div class="et-col-84 et-sit-sur-outer"><div class="et-sit-sur text-center et-sit-bought" ng-class="{'et-sit-booked': seat.Status.Status == 2,'et-sit-bought': seat.Status.Status == 1, 'et-sit-longer': seat.Status.Status == 5, 'can-buy': seat.Status.Status == 5 & amp; & amp; seat.detail.fee > 0, 'et-sit-blocked': seat.Status.Status == 4 & amp; & amp; (!seat.Status.LyDo || seat.Status.LyDo.toLowerCase().indexOf('chỗ giãn cách') == - 1), 'et-sit-avaiable': seat.Status.Status == 3, 'et-sit-buying': seat.Status.Status == 6, 'et-sit-distancing': seat.Status.Status == 4 & amp; & amp; seat.Status.LyDo & amp; & amp; seat.Status.LyDo.toLowerCase().indexOf('chỗ giãn cách') != - 1}"><div data-popover="Chỗ đã bán" data-popover-title="Chỗ đã bán" data-popover-trigger="mouseenter" data-popover-placement="top" class="et-sit-no ng-scope"><span  ></span> <img src="/images/loading51.gif"  class="ng-hide"></div></div></div></div></div>
-                                    <%for (int i = 1; i <= totalSeats / 2; i++) {
+
+                    <%for (int i = 1; i <= totalSeats / 2; i++) {
+
                             if (i % seatsInRow == j) {
                                 int seatPrice = dao.updateSeatsPrice(depart, desti, sid, ctype, cbid, i);
                 Seats seat=dao.get1SeatWithCabinIdNSeatN0(cbid, 1);
