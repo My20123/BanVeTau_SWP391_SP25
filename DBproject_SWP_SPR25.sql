@@ -1,7 +1,7 @@
 USE prj_train;
 
-drop database prj_train
-create database prj_train
+-- drop database prj_train
+-- create database prj_train
 -- Create the Accounts table
 CREATE TABLE Accounts (
 	uID int   AUTO_INCREMENT PRIMARY KEY,
@@ -60,7 +60,7 @@ CREATE TABLE Schedules (
     FOREIGN KEY (trid) REFERENCES Trains(id), -- Giờ sẽ khớp với Trains.id (VARCHAR)
     FOREIGN KEY (rid) REFERENCES Routes(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
---drop table schedules
+-- --drop table schedules
 
 -- Create the Cabins table 
 CREATE TABLE Cabins(
@@ -70,12 +70,15 @@ status int NULL,
 avail_seat int NUll,
 trid varchar(5),
 ctype varchar(100),
+sid int NULL,
+FOREIGN KEY (sid) REFERENCES Schedules(id),
 FOREIGN KEY (trid) REFERENCES Trains(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create the Seats table
 CREATE TABLE Seats(
   id int  AUTO_INCREMENT PRIMARY KEY,
+  seatNo int NULL,
   status int NULL,
   price int NULL,
   cbid varchar(10) ,
@@ -114,8 +117,6 @@ CREATE TABLE Order_details (
   FOREIGN KEY (cid) REFERENCES Accounts(uid),
   FOREIGN KEY (tid) REFERENCES Tickets(id)
 );
-
-
 
 
 USE prj_train;
@@ -180,11 +181,34 @@ INSERT INTO Routes_data (id, route_key, value) VALUES
 (18, 'Đà Nẵng', 0), (18, 'Tam Kỳ', 75), (18, 'Quảng Ngãi', 150), (18, 'Quy Nhơn', 400);
 -- drop table Routes_data;
 -- drop table Trains
+
+-- Insert into the Trains table
+INSERT INTO Trains (id, status, number_seat, number_cabin, train_type,avail_seats) VALUES 
+('SE1',  1, 374, 10, 'Tàu nhanh',374), 
+('SE2',  1, 360, 10, 'Tàu nhanh',360), 
+('SE3',  1, 464, 11, 'Tàu thường',464),
+('SE4',  1, 464, 11, 'Tàu thường',464), 
+('SE5',  1, 360, 10, 'Tàu nhanh',360), 
+('SE6',  1, 360, 10, 'Tàu nhanh',360), 
+('SE7',  1, 408, 11, 'Tàu thường',408), 
+('SE8',  1, 464, 11, 'Tàu thường',464), 
+('SE9',  1, 472, 11, 'Tàu thường',472),
+('SE10', 1, 472, 11, 'Tàu thường',472),
+('SE12', 1, 464, 11, 'Tàu thường',464),
+('SE19', 1, 280, 10, 'Tàu cao cấp',280),
+('SE23', 0, 210, 10, 'Tàu nhanh',0), -- tàu hỏng, mất khoang
+('SE24', 1, 376, 10, 'Tàu nhanh',376),
+('HP1',  1, 760, 12, 'Tàu thường',760),
+('SP3',  1, 282, 11, 'Tàu cao cấp',282),
+('SP7',  1, 268, 11, 'Tàu cao cấp',268);
+
+
+-- Insert into the Schedules table
 INSERT INTO Schedules (rid, trid, from_time, to_time) VALUES 
 -- Tuyến Hà Nội - Sài Gòn
-(1, 'SE1', '2025-03-01 06:00:00', '2025-03-02 16:00:00'), -- Tàu nhanh (~34h)
-(1, 'SE3', '2025-03-01 14:00:00', '2025-03-02 22:00:00'), -- Tàu thường (~32h)
-(1, 'SE5', '2025-03-02 06:00:00', '2025-03-03 20:00:00'), -- Tàu nhanh (~38h)
+(1, 'SE1', '2025-03-09 06:00:00', '2025-03-10 16:00:00'), -- Tàu nhanh (~34h)
+(1, 'SE3', '2025-03-09 14:00:00', '2025-03-10 22:00:00'), -- Tàu thường (~32h)
+(1, 'SE5', '2025-03-09 06:00:00', '2025-03-10 20:00:00'), -- Tàu nhanh (~38h)
 
 -- Tuyến Hà Nội - Đà Nẵng
 (2, 'SE7', '2025-03-01 07:30:00', '2025-03-01 21:00:00'), -- Tàu thường (~13h30)
@@ -225,28 +249,8 @@ INSERT INTO Schedules (rid, trid, from_time, to_time) VALUES
 -- Tuyến Đà Nẵng - Quy Nhơn
 (18, 'SE5', '2025-03-01 13:00:00', '2025-03-01 17:30:00'); -- Tàu nhanh (~4h30)
 
--- Insert into the Trains table
 
-INSERT INTO Trains (id, status, number_seat, number_cabin, train_type) VALUES 
-('SE1',  1, 374, 10, 'Tàu nhanh'), 
-('SE2',  1, 360, 10, 'Tàu nhanh'), 
-('SE3',  1, 464, 11, 'Tàu thường'),
-('SE4',  1, 464, 11, 'Tàu thường'), 
-('SE5',  1, 360, 10, 'Tàu nhanh'), 
-('SE6',  1, 360, 10, 'Tàu nhanh'), 
-('SE7',  1, 408, 11, 'Tàu thường'), 
-('SE8',  1, 464, 11, 'Tàu thường'), 
-('SE9',  1, 472, 11, 'Tàu thường'),
-('SE10', 1, 472, 11, 'Tàu thường'),
-('SE12', 1, 464, 11, 'Tàu thường'),
-('SE19', 1, 280, 10, 'Tàu cao cấp'),
-('SE23', 0, 210, 10, 'Tàu nhanh'), -- tàu hỏng, mất khoang
-('SE24', 1, 376, 10, 'Tàu nhanh'),
-('HP1',  1, 760, 12, 'Tàu thường'),
-('SP3',  1, 282, 11, 'Tàu cao cấp'),
-('SP7',  1, 268, 11, 'Tàu cao cấp');
 
--- Insert into the Schedules table
 
 
 
@@ -261,14 +265,14 @@ INSERT INTO Trains (id, status, number_seat, number_cabin, train_type) VALUES
 --    s.id = 1;  -- Thay 1 bằng ID của lịch trình bạn muốn xem
 
 -- Insert into the Cabins table
-INSERT INTO Cabins(id, number_seat, status,avail_seat, trid, ctype) value
-('SE1/1',56,1,56,'SE1','A56LV'),('SE1/2',56,1,56,'SE1','A56LV'),('SE1/3',42,1,42,'SE1','Bn42LM'),('SE1/4',42,1,42,'SE1','Bn42LM'),('SE1/5',28,1,28,'SE1','An28LMV'),('SE1/6',28,1,28,'SE1','An28LMV'),('SE1/7',28,1,28,'SE1','An28LMV'),('SE1/8',28,1,28,'SE1','An28LMV'),('SE1/9',28,1,28,'SE1','An28LMV'),('SE1/10',24,1,24,'SE1','An24LV2M'),
-('SE3/1',64,1,64,'SE3','A64LV'),('SE3/2',64,1,64,'SE3','A64LV'),('SE3/3',56,1,56,'SE3','A56LV'),('SE3/4',42,1,42,'SE3','Bn42L'),('SE3/5',42,1,42,'SE3','Bn42L'),('SE3/6',42,1,42,'SE3','Bn42L'),('SE3/7',42,1,42,'SE3','Bn42L'),('SE3/8',28,1,28,'SE3','An28LV'),('SE3/9',28,1,28,'SE3','An28LV'),('SE3/10',28,1,28,'SE3','An28LV'),('SE3/11',28,1,28,'SE3','An28LV'),
-('SE5/1',56,1,56,'SE5','A56LV'),('SE5/2',56,1,56,'SE5','A56LV'),('SE5/3',42,1,42,'SE5','Bn42LM'),('SE5/4',42,1,42,'SE5','Bn42LM'),('SE5/5',28,1,28,'SE5','An28LMV'),('SE5/6',28,1,28,'SE5','An28LMV'),('SE5/7',28,1,28,'SE5','An28LMV'),('SE5/8',28,1,28,'SE5','An28LMV'),('SE5/9',28,1,28,'SE5','An28LMV'),('SE5/10',24,1,24,'SE5','An24LV2M')
+INSERT INTO Cabins(id, number_seat, status,avail_seat, trid, ctype,sid) value
+('SE1/1',56,1,56,'SE1','A56LV',1),('SE1/2',56,1,56,'SE1','A56LV',1),('SE1/3',42,1,42,'SE1','Bn42L',1),('SE1/4',42,1,42,'SE1','Bn42L',1),('SE1/5',28,1,28,'SE1','An28LV',1),('SE1/6',28,1,28,'SE1','An28LV',1),('SE1/7',28,1,28,'SE1','An28LV',1),('SE1/8',28,1,28,'SE1','An28LV',1),('SE1/9',28,1,28,'SE1','An28LV',1),('SE1/10',28,1,28,'SE1','An28LV',1),
+('SE3/1',64,1,64,'SE3','A64LV',2),('SE3/2',64,1,64,'SE3','A64LV',2),('SE3/3',56,1,56,'SE3','A56LV',2),('SE3/4',42,1,42,'SE3','Bn42L',2),('SE3/5',42,1,42,'SE3','Bn42L',2),('SE3/6',42,1,42,'SE3','Bn42L',2),('SE3/7',42,1,42,'SE3','Bn42L',2),('SE3/8',28,1,28,'SE3','An28LV',2),('SE3/9',28,1,28,'SE3','An28LV',2),('SE3/10',28,1,28,'SE3','An28LV',2),('SE3/11',28,1,28,'SE3','An28LV',2),
+('SE5/1',56,1,56,'SE5','A56LV',3),('SE5/2',56,1,56,'SE5','A56LV',3),('SE5/3',42,1,42,'SE5','Bn42L',3),('SE5/4',42,1,42,'SE5','Bn42L',3),('SE5/5',28,1,28,'SE5','An28LV',3),('SE5/6',28,1,28,'SE5','An28LV',3),('SE5/7',28,1,28,'SE5','An28LV',3),('SE5/8',28,1,28,'SE5','An28LV',3),('SE5/9',28,1,28,'SE5','An28LV',3),('SE5/10',42,1,42,'SE5','Bn42L',3)
 ;
-SELECT avail_seat FROM Cabins where id = 'SE1/1';
+
 -- Insert into the Seats table
-INSERT INTO Seats (status, price, cbid) VALUE (1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1'),(1,1022000,'SE1/1')
+INSERT INTO Seats (seatNo,status, price, cbid) VALUE (1,0,1022000,'SE1/1'),(2,0,1022000,'SE1/1'),(3,0,1022000,'SE1/1'),(4,0,1022000,'SE1/1'),(5,0,1022000,'SE1/1'),(6,0,1022000,'SE1/1'),(7,0,1022000,'SE1/1'),(8,0,1022000,'SE1/1'),(9,0,1022000,'SE1/1'),(10,0,1022000,'SE1/1'),(11,0,1022000,'SE1/1'),(12,0,1022000,'SE1/1'),(13,0,1022000,'SE1/1'),(14,0,1022000,'SE1/1'),(15,0,1022000,'SE1/1'),(16,0,1022000,'SE1/1'),(17,0,1022000,'SE1/1'),(18,0,1022000,'SE1/1'),(19,0,1022000,'SE1/1'),(20,0,1022000,'SE1/1'),(21,0,1022000,'SE1/1'),(22,0,1022000,'SE1/1'),(23,0,1022000,'SE1/1')
 ;
 
 -- Insert into the Tickets table
@@ -277,4 +281,43 @@ INSERT INTO Tickets (from_station, to_station, from_date, to_date, ttype, trid,s
 
 -- Insert into the Order_details table
 INSERT INTO Order_details (tid,cid,status,total_price,payment_type,payment_date) VALUE (1,5,1,1022000,1,'2025-02-21');
+-- SELECT * FROM Cabins where trid = 'SE1' and sid=1;
+-- select * from Schedules where id=1;
+-- SELECT ABS((SELECT value FROM Routes_data WHERE route_key = 'Huế' AND id = 1) -
+-- (SELECT value FROM Routes_data WHERE route_key = 'Vinh' AND id = 1)) AS distance
+-- SELECT * FROM Cabins WHERE trid ='SE1'
+-- SELECT s.id, s.rid, s.trid, t.train_type, r.from_station, r.to_station, s.from_time, s.to_time 
+-- FROM schedules s INNER JOIN routes r ON s.rid = r.id 
+-- INNER JOIN trains t ON s.trid = t.id 
+-- WHERE r.from_station = 'Hà Nội' AND r.to_station = 'Sài Gòn'
+-- AND DATE(s.from_time) = '2025-03-09'
+-- SELECT * FROM Seats where cbid = 'SE1/1' and seatNo=1
+select * from  routes;
+INSERT INTO Schedules (rid, trid, from_time, to_time) VALUES 
+-- Tuyến Hà Nội - Sài Gòn
+(1, 'SE1', '2025-03-10 06:00:00', '2025-03-11 16:00:00'), -- Tàu nhanh (~34h)
+(1, 'SE3', '2025-03-10 14:00:00', '2025-03-11 22:00:00'), -- Tàu thường (~32h)
+(1, 'SE5', '2025-03-10 06:00:00', '2025-03-11 20:00:00'); -- Tàu nhanh (~38h)
+INSERT INTO Schedules (rid, trid, from_time, to_time) VALUES 
+-- Tuyến Sài Gòn-Hà Nội 
+(6, 'SE2', '2025-03-11 06:00:00', '2025-03-12 16:00:00'), -- Tàu nhanh (~34h)
+(6, 'SE4', '2025-03-11 14:00:00', '2025-03-12 22:00:00'), -- Tàu thường (~32h)
+(6, 'SE6', '2025-03-11 06:00:00', '2025-03-12 20:00:00'); -- Tàu nhanh (~38h)
 
+INSERT INTO Schedules (rid, trid, from_time, to_time) VALUES 
+-- Tuyến Hà Nội - Sài Gòn
+(1, 'SE1', '2025-03-11 06:00:00', '2025-03-12 16:00:00'), -- Tàu nhanh (~34h)
+(1, 'SE3', '2025-03-11 14:00:00', '2025-03-12 22:00:00'), -- Tàu thường (~32h)
+(1, 'SE5', '2025-03-11 06:00:00', '2025-03-12 20:00:00'); -- Tàu nhanh (~38h)
+INSERT INTO Schedules (rid, trid, from_time, to_time) VALUES 
+-- Tuyến Sài Gòn-Hà Nội 
+(6, 'SE2', '2025-03-12 06:00:00', '2025-03-13 16:00:00'), -- Tàu nhanh (~34h)
+(6, 'SE4', '2025-03-12 14:00:00', '2025-03-13 22:00:00'), -- Tàu thường (~32h)
+(6, 'SE6', '2025-03-12 06:00:00', '2025-03-13 20:00:00'); -- Tàu nhanh (~38h)
+SELECT * FROM Cabins;
+INSERT INTO Schedules (rid, trid, from_time, to_time) VALUES 
+-- Tuyến Hà Nội - Sài Gòn
+(1, 'SE1', '2025-03-15 06:00:00', '2025-03-16 16:00:00'), -- Tàu nhanh (~34h)
+(1, 'SE3', '2025-03-15 14:00:00', '2025-03-16 22:00:00'), -- Tàu thường (~32h)
+(1, 'SE5', '2025-03-15 06:00:00', '2025-03-16 20:00:00'); -- Tàu nhanh (~38h)
+SELECT * FROM Trains

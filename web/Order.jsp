@@ -198,7 +198,9 @@
                     </div>
                     
                     <div class="action-buttons">
-                        <a href="payment?orderId=${order.id}" class="btn btn-primary">
+
+                        <a href="pay" class="btn btn-primary">
+
                             <i class="fas fa-credit-card me-2"></i>Tiến Hành Thanh Toán
                         </a>
                         <a href="home" class="btn btn-outline-secondary">

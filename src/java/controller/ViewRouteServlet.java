@@ -15,11 +15,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import model.Routes;
+
 /**
  *
  * @author tra my
  */
-public class RoutesViewServlet extends HttpServlet {
+public class ViewRouteServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -87,4 +88,3 @@ public class RoutesViewServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 }
-

@@ -525,6 +525,12 @@
                                         return;
                                     selectedCabinId = cid; // Lưu cabinId đã chọn
                                     selectedCabinType = ctype; // Lưu cabinType đã chọn
+<<<<<<< HEAD
+=======
+                                    const depart = "<c:out value='${depart}' />";
+const desti = "<c:out value='${desti}' />";
+console.log("depart: "+depart+",desti: "+desti);
+>>>>>>> 212f457 (fix missing file)
 
                                     // Xóa selected class từ tất cả các cabin icons
                                     document.querySelectorAll('.et-car-block .caIcon.et-car-icon').forEach(icon => {
@@ -551,7 +557,11 @@
 
                                     // Xác định layout cần tải dựa vào loại cabin
                                     const regex = /^(A|B)n\d{2}L(V)?$/;
+<<<<<<< HEAD
                                     let layoutFile = regex.test(ctype) ? "cabin_layout/Berths.jsp?cbid=" + cid + "&total=" + totalSeats + "&room=" + berthsInRoom + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId : "cabin_layout/Seats.jsp?cbid=" + cid + "&total=" + totalSeats + "&row=" + seatsInRow + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId;
+=======
+                                    let layoutFile = regex.test(ctype) ? "cabin_layout/Berths.jsp?cbid=" + cid + "&total=" + totalSeats + "&room=" + berthsInRoom + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId+"&depart="+depart+"&desti="+desti : "cabin_layout/Seats.jsp?cbid=" + cid + "&total=" + totalSeats + "&row=" + seatsInRow + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId+"&depart="+depart+"&desti="+desti;
+>>>>>>> 212f457 (fix missing file)
                                     console.log("scheduleid: ", selectedScheduleId);
                                     fetch(layoutFile)
                                             .then(response => response.text())

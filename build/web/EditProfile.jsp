@@ -31,7 +31,9 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+
         <link rel="stylesheet" href="css/user.css"/>
+
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> 
     </head>
     <body>
@@ -44,12 +46,15 @@
         <!-- Spinner End -->
         <jsp:include page="Header.jsp"></jsp:include>
             <div class="container">
+
                 <h1>Edit Profile</h1>
+
                 <hr>
                 <div class="row">
                     <!-- left column -->
                     <div class="col-md-3">
                         <div class="text-center">
+
                             <img src="${requestScope.users.avatar}" class="avatar" >                       
                         </div>
                     </div>
@@ -64,6 +69,7 @@
                                 <label class="col-lg-3 control-label">ID:</label>
                                 <div class="col-lg-8">
                                     <input class="form-control" type="text" name="id" value="${requestScope.users.id}" readonly="">
+
                                 </div>
                             </div>                      
                             <div class="form-group">
@@ -116,6 +122,7 @@
                     </div>
                 </div>
             </div>
+
         <hr>
         <a class="btn btn-primary" href='Home.jsp'>Home</a>
         <jsp:include page="Footer.jsp"></jsp:include>
