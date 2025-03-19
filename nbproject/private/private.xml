@@ -1,35 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-<<<<<<< HEAD
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-
-            <file>file:/C:/Users/tra%20my/OneDrive/Máy%20tính/prjBanVeTau_SWP391_SE1874_SP25/web/SearchResult.jsp</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Máy%20tính/prjBanVeTau_SWP391_SE1874_SP25/src/java/controller/SearchTrainServlet.java</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Máy%20tính/prjBanVeTau_SWP391_SE1874_SP25/src/java/controller/BookingServlet.java</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Máy%20tính/prjBanVeTau_SWP391_SE1874_SP25/web/cabin_layout/Seats.jsp</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Máy%20tính/prjBanVeTau_SWP391_SE1874_SP25/web/Home.jsp</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Máy%20tính/prjBanVeTau_SWP391_SE1874_SP25/src/java/dal/DAO.java</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Máy%20tính/prjBanVeTau_SWP391_SE1874_SP25/web/Order.jsp</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Máy%20tính/prjBanVeTau_SWP391_SE1874_SP25/src/java/dal/DBContext.java</file>
-
-=======
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/controller/HomeServlet.java</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/Config/VNPAYService.java</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/controller/LoginServlet.java</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/dal/DAO.java</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/web/ManageTrain.jsp</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/controller/AddTrain.java</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/dal/DBContext.java</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/web/StaffHome.jsp</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/web/index.html</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/web/Order.jsp</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/controller/BookingServlet.java</file>
-            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/controller/PaymentServlet.java</file>
->>>>>>> 212f457 (fix missing file)
-        </group>
+        <group/>
     </open-files>
 </project-private>

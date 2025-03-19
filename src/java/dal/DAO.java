@@ -170,22 +170,25 @@ public class DAO {
         return routes;
     }
 
-   public List getAllTrains() {
-        List<String> list = new ArrayList<>();
+    public List getAllTrains() {
+        List<Trains> list = new ArrayList<>();
         try {
-
-            String query = "SELECT id FROM Trains;";
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-
+            String query = "SELECT * FROM Trains;";
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(rs.getString("route_key"));
+                list.add(new Trains(rs.getString(1),
+                        rs.getString(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getInt(6)));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return list;
     }
-
 
     public List<Schedule> getAllSchedules() {
         List<Schedule> list = new ArrayList<>();
@@ -313,7 +316,8 @@ public class DAO {
         }
         return list;
     }
- public Seats get1SeatWithCabinIdNSeatN0(String cbid,int seatNo) {
+
+    public Seats get1SeatWithCabinIdNSeatN0(String cbid, int seatNo) {
         try {
             String query = "SELECT * FROM Seats where cbid = ? and seatNo = ?;";
             PreparedStatement ps = conn.prepareStatement(query);
@@ -327,6 +331,7 @@ public class DAO {
         }
         return null;
     }
+
     public List getCabinsWithTrainIDNScheduleID(String trid, int sid) {
         List<Cabins> list = new ArrayList();
         try {
@@ -346,15 +351,18 @@ public class DAO {
         }));
         return list;
     }
+
     public void addTrain(Trains train) throws Exception {
         try {
-            String query = "INSERT INTO Trains (id, status, number_seat, number_cabin) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO Trains (id, train_type, status, number_seat, number_cabin, avail_seats) VALUES (?, ?, ?, ?, ?, ?)";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, train.getTid());
-            ps.setInt(2, train.getStatus());
-            ps.setInt(3, train.getTotal_seats());
-            ps.setInt(4, train.getNumber_cabins());
+            ps.setString(2, train.getTrain_type());
+            ps.setInt(3, train.getStatus());
+            ps.setInt(4, train.getTotal_seats());
+            ps.setInt(5, train.getNumber_cabins());
+            ps.setInt(6, train.getAvailable_seats());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -370,9 +378,11 @@ public class DAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 return new Trains(rs.getString(1),
-                        rs.getInt(2),
+                        rs.getString(2),
                         rs.getInt(3),
-                        rs.getInt(4));
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getInt(6));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -380,15 +390,17 @@ public class DAO {
         return null;
     }
 
-    public void updateTrain(String id, int status, int number_seat, int number_cabin) {
-        String query = "UPDATE trains SET status = ?, number_seat = ?, number_cabin = ? WHERE id = ?";
+    public void updateTrain(String id, String type, int status, int number_seat, int number_cabin, int avail_seats) {
+        String query = "UPDATE trains SET train_type = ?, status = ?, number_seat = ?, number_cabin = ?, avail_seats = ? WHERE id = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setInt(1, status);
-            ps.setInt(2, number_seat);
-            ps.setInt(3, number_cabin);
-            ps.setString(4, id);
+            ps.setString(1, type);
+            ps.setInt(2, status);
+            ps.setInt(3, number_seat);
+            ps.setInt(4, number_cabin);
+            ps.setInt(5, avail_seats);
+            ps.setString(6, id);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -507,13 +519,11 @@ public class DAO {
         }
     }
 
-
     public String searchTrainIDWithRid(int rid) {
         String trids = "";
         try {
             String query = "SELECT trid FROM Schedules where rid = ?;";
             PreparedStatement ps = conn.prepareStatement(query);
-
 
             ps.setInt(1, rid);
             ResultSet rs = ps.executeQuery();
@@ -888,5 +898,47 @@ public class DAO {
 //        for (Routes o : list) {
 //            System.out.println(o);
 //        }
+    }
+
+    public int getTotalAccounts() {
+        try {
+            String sql = "SELECT COUNT(*) FROM Accounts";
+            PreparedStatement st = conn.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("getTotalAccounts: " + e);
+        }
+        return 0;
+    }
+
+    public List<Accounts> getAccountsByPage(int page, int rowsPerPage) {
+        List<Accounts> list = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM Accounts ORDER BY uID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, (page - 1) * rowsPerPage);
+            st.setInt(2, rowsPerPage);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                list.add(new Accounts(
+                    rs.getInt("uID"),
+                    rs.getString("uname"),
+                    rs.getString("umail"),
+                    rs.getString("pass"),
+                    rs.getString("uphone"),
+                    rs.getInt("isStaff"),
+                    rs.getInt("isAdmin"),
+                    rs.getString("cccd"),
+                    rs.getString("avatar"),
+                    rs.getBoolean("status")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println("getAccountsByPage: " + e);
+        }
+        return list;
     }
 }
