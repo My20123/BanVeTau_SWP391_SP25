@@ -30,9 +30,11 @@
                 <thead>
                     <tr>
                         <th>Train ID</th>
+                        <th>Train type</th>   
                         <th>Train status</th>
                         <th>Total seats</th>
                         <th>Total cabins</th>
+                        <th>Seats available</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -40,14 +42,16 @@
                     <c:forEach items="${tlist}" var="t">
                     <tr>
                         <td>${t.tid}</td>
+                        <td>${t.train_type}</td>
                         <td>
                             <c:choose>
                                 <c:when test="${t.status == 1}">Available</c:when>
                                 <c:otherwise>Maintenance</c:otherwise>
                             </c:choose>
                         </td>
-                        <td>${t.number_seats}</td>
+                        <td>${t.total_seats}</td>
                         <td>${t.number_cabins}</td>
+                        <td>${t.available_seats}</td>
                         <td>
                             <a href="editT?id=${t.tid}"><i class="fas fa-edit"></i></a>
                             <a href="deleteT?id=${t.tid}" onclick="return confirm('Are you sure you want to delete this train?');"><i class="fas fa-trash-alt"></i></a>
