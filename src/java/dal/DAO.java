@@ -189,6 +189,83 @@ public class DAO {
         }
         return list;
     }
+    public List<Cabins> getAllCabins() {
+        List<Cabins> list = new ArrayList<>();
+        String query = "select * from cabins";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Cabins(rs.getString(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getInt(7)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public void addCabin(Cabins ca) throws Exception {
+        try {
+            String query = "INSERT INTO Cabins (id, number_seat, status, avail_seat, trid, ctype, sid) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, ca.getId());
+            ps.setInt(2, ca.getNumber_seats());
+            ps.setInt(3, ca.getStatus());
+            ps.setInt(4, ca.getAvail_seats());
+            ps.setString(5, ca.getTrid());
+            ps.setString(6, ca.getCtype());
+            ps.setInt(7, ca.getSid());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public Cabins GetCabinById(String id) {
+        try {
+            String query = "SELECT * FROM cabins WHERE id = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Cabins(rs.getString(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getInt(7));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void updateCabin(String id, int number_seat, int status, int avail_seat, String trid, String ctype, int sid) {
+        String query = "UPDATE cabins SET number_seat = ?, status = ?, avail_seat = ?, trid = ?, ctype = ?, sid WHERE id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, number_seat);
+            ps.setInt(2, status);
+            ps.setInt(3, avail_seat);
+            ps.setString(4, trid);
+            ps.setString(5, ctype);
+            ps.setInt(6,sid);                 
+            ps.setString(7, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
 
     public List<Schedule> getAllSchedules() {
         List<Schedule> list = new ArrayList<>();
@@ -444,6 +521,7 @@ public class DAO {
         }
         return null;
     }
+    
 
     public List searchRoute(String depart, String desti) {
         List<Routes> list = new ArrayList<>();
