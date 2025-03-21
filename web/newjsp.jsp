@@ -83,21 +83,6 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
 
-        <!-- Swap data Javascript -->
-        <script>
-                                                                                function swapData() {
-                                                                                    // Lấy giá trị từ các input
-                                                                                    var gaDi = document.getElementById("from_station").value;
-                                                                                    var gaDen = document.getElementById("to_station").value;
-
-                                                                                    // Đổi giá trị giữa hai input
-                                                                                    document.getElementById("from_station").value = gaDen;
-                                                                                    document.getElementById("to_station").value = gaDi;
-                                                                                }
-
-
-        </script>
-    </script>
 </body>
 
 </html>
