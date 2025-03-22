@@ -40,10 +40,7 @@
                             </svg></a>
                         <div class="dropdown-menu m-0">
                             <a href="User.jsp"  class="dropdown-item">Profile</a>
-                            <a href="#" class="dropdown-item">Order History</a>
-                            <a href="#" class="dropdown-item">Cart</a>
                             <a href="logout" class="dropdown-item">Logout</a>
-                            <a href="404.html" class="dropdown-item">404 Page</a>
                         </div>
                     </div>
                 </c:if>
@@ -56,17 +53,13 @@
                             </svg></a>
                         <div class="dropdown-menu m-0">
                             <a href="User.jsp" class="dropdown-item">Profile</a>
-                            <a href="#" class="dropdown-item">Order History</a>
-                            <a href="#" class="dropdown-item">Cart</a>
                             <a href="logout" class="dropdown-item">Logout</a>
-                            <a href="404.html" class="dropdown-item">404 Page</a>
                         </div>
                     </div>
                             
                 </c:if>
 
                 <c:if test="${sessionScope.acc != null }"> 
-                    <a href="" class="btn btn-primary rounded-pill  me-2">Giỏ vé</a>
                     <div class="nav-item dropdown">
                         <a href="User.jsp" class="nav-link dropdown-toggle btn btn-user round-pill me-2" data-bs-toggle="dropdown" style="border: 1px solid #86B817;border-radius: 20px;color: #86B817;">${sessionScope.acc.uname}<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16" style="margin-bottom: 2px;">
                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
@@ -74,17 +67,14 @@
                             </svg></a>
                         <div class="dropdown-menu m-0">
                             <a href="User.jsp" class="dropdown-item">Profile</a>
-                            <a href="#" class="dropdown-item">Order History</a>
-                            <a href="#" class="dropdown-item">Cart</a>
+                            <a href="order-history" class="dropdown-item">Order History</a>
                             <a href="logout" class="dropdown-item">Logout</a>
-                            <a href="404.html" class="dropdown-item">404 Page</a>
                         </div>
                     </div>
 
 
                 </c:if>
                 <c:if test="${sessionScope.acc==null}">
-                    <a href="" class="btn btn-primary rounded-pill  me-2">Giỏ vé</a>
                     <a href="Login.jsp" class="btn btn-primary rounded-pill  me-2">Đăng nhập</a>
                      <a href="SignUp.jsp" class="btn btn-primary rounded-pill  me-2">Đăng ký</a>
 

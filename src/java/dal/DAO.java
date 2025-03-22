@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -170,7 +171,7 @@ public class DAO {
         return routes;
     }
 
-   public List getAllTrains() {
+    public List getAllTrains() {
         List<String> list = new ArrayList<>();
         try {
 
@@ -185,7 +186,6 @@ public class DAO {
         }
         return list;
     }
-
 
     public List<Schedule> getAllSchedules() {
         List<Schedule> list = new ArrayList<>();
@@ -248,6 +248,34 @@ public class DAO {
             System.out.println("Error in getTotalSchedules: " + e.getMessage());
         }
         return 0;
+    }
+
+    public List getALlRefund() throws Exception {
+        List<Refund> refundList = new ArrayList<>();
+
+        try {
+            conn = new DBContext().getConnection();
+            String sql = "SELECT r.id, r.orderid, a.uname, r.requestdate, r.totalAmount, r.status FROM Refund r JOIN Order_Details od ON r.orderid = od.id JOIN Accounts a ON r.accountid1 = a.uid";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Refund refund = new Refund(
+                        rs.getInt("id"),
+                        rs.getInt("orderid"),
+                        rs.getString("uname"),
+                        rs.getDate("requestdate"),
+                        rs.getDouble("totalAmount"),
+                        rs.getString("status")
+                );
+                refundList.add(refund);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return refundList;
     }
 
     public List<Schedule> getSchedulesByPage(int page, int recordsPerPage, String trainType) {
@@ -313,7 +341,8 @@ public class DAO {
         }
         return list;
     }
- public Seats get1SeatWithCabinIdNSeatN0(String cbid,int seatNo) {
+
+    public Seats get1SeatWithCabinIdNSeatN0(String cbid, int seatNo) {
         try {
             String query = "SELECT * FROM Seats where cbid = ? and seatNo = ?;";
             PreparedStatement ps = conn.prepareStatement(query);
@@ -327,6 +356,7 @@ public class DAO {
         }
         return null;
     }
+
     public List getCabinsWithTrainIDNScheduleID(String trid, int sid) {
         List<Cabins> list = new ArrayList();
         try {
@@ -346,6 +376,7 @@ public class DAO {
         }));
         return list;
     }
+
     public void addTrain(Trains train) throws Exception {
         try {
             String query = "INSERT INTO Trains (id, status, number_seat, number_cabin) VALUES (?, ?, ?, ?)";
@@ -433,8 +464,7 @@ public class DAO {
         return null;
     }
 
-    public List searchRoute(String depart, String desti) {
-        List<Routes> list = new ArrayList<>();
+    public Routes searchRoute(String depart, String desti) {
         try {
 
             String query = "select id,from_station, to_station  from Routes where id in(SELECT rd1.id FROM Routes_data rd1 JOIN Routes_data rd2 ON rd1.id = rd2.id WHERE rd1.route_key = ?  AND rd1.value < rd2.value AND rd2.route_key = ?)";
@@ -460,11 +490,11 @@ public class DAO {
                     int value = rs1.getInt("value");
                     thr_station.put(route_key, value);
                 }
-                list.add(new Routes(rid, from_station, to_station, thr_station));
+                return new Routes(rid, from_station, to_station, thr_station);
             }
         } catch (Exception e) {
         }
-        return list;
+        return null;
     }
 
     public Accounts checkAccountExist(String user) {
@@ -507,13 +537,11 @@ public class DAO {
         }
     }
 
-
     public String searchTrainIDWithRid(int rid) {
         String trids = "";
         try {
             String query = "SELECT trid FROM Schedules where rid = ?;";
             PreparedStatement ps = conn.prepareStatement(query);
-
 
             ps.setInt(1, rid);
             ResultSet rs = ps.executeQuery();
@@ -698,6 +726,37 @@ public class DAO {
         }
     }
 
+    public boolean createRefund(int orderID, String CusName, double amount, Date requestDate) {
+        String query = "Select uid from Accounts where uname = ?";
+        int cusID;
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, CusName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                cusID = rs.getInt(1);
+                String sql = "INSERT INTO Refund (orderid, accountid1, accountid2, totalAmount, requestdate,status) VALUES (?, ?, 2, ?,?,'PENDING')";
+
+                try {
+                    PreparedStatement st = conn.prepareStatement(sql);
+                    st.setInt(1, orderID);
+                    st.setInt(2, cusID);
+                    st.setDouble(3, amount);
+                    st.setDate(4, new java.sql.Date(requestDate.getTime()));
+
+                    int rowsAffected = st.executeUpdate();
+                    return rowsAffected > 0;
+                    
+                } catch (SQLException e) {
+                    System.out.println("Error creating booking: " + e.getMessage());                    
+                }
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+
     private boolean updateCabinAvailability(String scheduleId, String cabinId) {
         String sql = "UPDATE Cabins SET avail_seat = avail_seat - 1 "
                 + "WHERE id = ? AND sid = ? AND avail_seat > 0";
@@ -785,22 +844,38 @@ public class DAO {
         return price; // Nếu không cập nhật được bất kỳ ghế nào
     }
 
-    public int createTicket(Tickets ticket) {
+    public void updateRefundStatus(String status, int id) {
+        try {
+            String sql = "UPDATE Refund SET status = ? WHERE id = ?";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, status);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int createTicket(LocalDateTime from_time, LocalDateTime to_time,String fromStation, String toStation,int ttype, String trid, int sid, int rid,String cbid) {
         String query = "INSERT INTO Tickets (from_station, to_station, from_date, to_date, ttype, trid,sid,rid,cbid) "
-                + "VALUES (?, ?, ?, ?, ?)";
-        Timestamp timestamp1 = Timestamp.valueOf(ticket.getFrom_time());
-        Timestamp timestamp2 = Timestamp.valueOf(ticket.getTo_time());
+                + "VALUES (?, ?, ?, ?, ?,?,?,?,?)";
+        Timestamp timestamp1 = Timestamp.valueOf(from_time);
+        Timestamp timestamp2 = Timestamp.valueOf(to_time);
         try {
             PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1, ticket.getFrom_station());
-            ps.setString(2, ticket.getTo_station());
+            ps.setString(1, fromStation);
+            ps.setString(2, toStation);
             ps.setTimestamp(3, timestamp1);
             ps.setTimestamp(4, timestamp2);
-            ps.setInt(5, ticket.getTtype());
-            ps.setString(6, ticket.getTrid());
-            ps.setInt(7, ticket.getSid());
-            ps.setInt(8, ticket.getRid());
-            ps.setString(9, ticket.getCbid());
+            ps.setInt(5, ttype);
+            ps.setString(6, trid);
+            ps.setInt(7, sid);
+            ps.setInt(8, rid);
+            ps.setString(9, cbid);
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
@@ -855,10 +930,22 @@ public class DAO {
 //    }
     public static void main(String[] args) throws ParseException, Exception {
         DAO dao = new DAO();
-
+        LocalDateTime now= LocalDateTime.now();
+        DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+       String formatterđateTime= now.format(formatter);
+       
+       
+        String dateTimeStr="2025-03-11 06:00:00";
+       LocalDateTime parsedDateTime= LocalDateTime.parse(dateTimeStr,formatter);
+       String to_time="2025-03-12 16:00:00";
+       
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
         System.out.println(dao.searchSchedules("Sài Gòn", "Hà Nội", sdf.parse("2025-03-12")));
         System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());
+        System.out.println(dao.getALlRefund());
+        System.out.println(dao.createRefund(2, "My", 1022000, sdf.parse("2025-03-16")));
+//        System.out.println(dao.createTicket(parsedDateTime, LocalDateTime.parse(to_time, formatter), "Hà Nội", "Sài Gòn", 1, "SE1", 2, 1, "SE1/1"));
 //        System.out.println(dao.updateSeatsPrice("Hà Nội", "Sài Gòn", 1, "A56LV", "SE1/1", 1));
 //         System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());
 //        List<Schedule> listS = dao.searchSchedules("Hà Nội", "Sài Gòn", sdf.parse("2025-03-09"));

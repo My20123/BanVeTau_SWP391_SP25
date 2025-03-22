@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,10 +44,11 @@
             padding: 30px;
         }
         .info-section {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
             margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         .ticket-table {
             border-radius: 10px;
@@ -87,16 +89,75 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .passenger-info:hover {
+            background-color: #e9ecef;
         }
         .passenger-info input {
-            padding: 4px 8px;
+            flex: 1;
+            padding: 8px 12px;
             border: 1px solid #ced4da;
-            border-radius: 4px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        .passenger-info input:focus {
+            border-color: #06A3DA;
+            box-shadow: 0 0 0 0.2rem rgba(6, 163, 218, 0.25);
+            outline: none;
+        }
+        .passenger-info input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
         }
         .passenger-info label {
             margin-bottom: 0;
+            min-width: 180px;
+            font-weight: 500;
+            color: #495057;
+        }
+        .passenger-info i {
+            width: 20px;
+            color: #06A3DA;
+        }
+        .ticket-table .passenger-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 8px;
+            padding: 4px;
+            background-color: transparent;
+        }
+        .ticket-table .passenger-info:hover {
+            background-color: transparent;
+        }
+        .ticket-table .passenger-info input {
+            flex: 1;
+            padding: 4px 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            height: 32px;
+        }
+        .ticket-table .passenger-info input:focus {
+            border-color: #06A3DA;
+            box-shadow: 0 0 0 0.1rem rgba(6, 163, 218, 0.15);
+            outline: none;
+        }
+        .ticket-table .passenger-info label {
+            margin-bottom: 0;
             min-width: 60px;
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.85rem;
+        }
+        .ticket-table td {
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -139,11 +200,22 @@
                         <div class="col-md-12">
                             <div class="info-section">
                                 <h5 class="mb-4"><i class="fas fa-user me-2"></i>Thông Tin Đặt Vé</h5>
-                                <p><strong><i class="fas fa-hashtag"></i> Mã Vé:</strong> 522</p>
-                                <p><strong><i class="fas fa-user-circle"></i> Tên Khách Hàng:</strong> My</p>
-                                <p><strong><i class="fas fa-id-card"></i> CCCD:</strong> 0889</p>
-                                <p><strong><i class="far fa-envelope"></i> Email:</strong> email</p>
-                                <p><strong><i class="fas fa-phone"></i> Số Điện Thoại:</strong> 09xxx</p>
+                                <div class="passenger-info">
+                                    <label><i class="fas fa-user-circle"></i> Họ và Tên Người Đặt:</label>
+                                    <input type="text" name="name" value="${account.uname}" ${empty account.uname ? '' : 'readonly'}>
+                                </div>
+                                <div class="passenger-info">
+                                    <label><i class="fas fa-id-card"></i> CCCD:</label>
+                                    <input type="text" name="cccd" value="${account.cccd}" ${empty account.cccd ? '' : 'readonly'}>
+                                </div>
+                                <div class="passenger-info">
+                                    <label><i class="far fa-envelope"></i> Email:</label>
+                                    <input type="email" name="email" value="${account.umail}" ${empty account.umail ? '' : 'readonly'}>
+                                </div>
+                                <div class="passenger-info">
+                                    <label><i class="fas fa-phone"></i> SĐT:</label>
+                                    <input type="tel" name="phone" value="${account.uphone}" ${empty account.uphone ? '' : 'readonly'}>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -180,7 +252,11 @@
                                                 <strong>Cabin: </strong>${seat["selectedCabinId"]}<br>
                                                 <strong>Khởi hành:</strong>${from_date}
                                             </td>
-                                            <td>${seat["price"]} VNĐ</td>
+                                            <td>
+
+                                            <c:set var="totalPrice" value="${totalPrice + seat.price}" />
+                                            <fmt:formatNumber value="${seat.price}" pattern="#,##0" /> VNĐ
+                                            </td>
                                             <td>
                                                 <a href="javascript:void(0)" onclick="deleteTicket(this)" class="delete-btn">
                                                     <i class="fas fa-trash-alt"></i>
@@ -194,7 +270,7 @@
                     </div>
                     
                     <div class="mt-4 text-end">
-                        <h5 class="total-amount">Tổng Tiền: ${totalPrice} VNĐ</h5>
+                        <h5 class="total-amount">Tổng Tiền: <fmt:formatNumber value="${totalPrice}" pattern="#,##0"/> VNĐ</h5>
                     </div>
                     
                     <div class="action-buttons">
@@ -257,5 +333,26 @@
             document.querySelector('.total-amount').textContent = `Tổng Tiền: ${total.toLocaleString('vi-VN')} VNĐ`;
         }
     </script>
+    <script>
+            function formatNumberToVND(number) {
+                return number.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
+            }
+
+            function formatVND() {
+                // Get all elements with the class name 'vnd'
+                const elements = document.getElementsByClassName('vnd');
+
+                // Loop through the elements and format the content
+                for (let i = 0; i < elements.length; i++) {
+                    const value = parseInt(elements[i].textContent, 10);
+                    if (!isNaN(value)) {
+                        elements[i].textContent = formatNumberToVND(value);
+                    }
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', formatVND);
+        </script>
+
 </body>
 </html>

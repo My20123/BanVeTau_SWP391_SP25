@@ -399,7 +399,7 @@
 </c:if>
 
 
-                            <div class="et-col-md-12 table-bordered list-ticket-deskhop" ng-show="(searchData.toaDi & amp; & amp; !searchData.toaDi.IsChonChoTuDong) || (searchData.toaVe & amp; & amp; !searchData.toaVe.IsChonChoTuDong)" style="margin-top: 20px; padding: 5px"><div class="et-col-md-12"><div class="et-col-md-4 et-no-padding"><div class="et-col-md-12"><div class="et-col-md-12" style="padding:0px"><div class="et-col-md-12" style="padding:6px 0px 0px 0px"><div class="et-car-block" style="height:36px"><div class="et-car-icon et-car-icon-avaiable"><img src="img/trainCar2.png"></div></div><span style="padding-left:6px" class="ng-binding">Toa còn vé</span></div></div><div class="et-col-md-12 text-center et-no-padding ng-binding" style="margin-top: -20px;display:none">Toa còn vé</div></div></div><div class="et-col-md-3 et-no-padding" style="display:none"><div class="et-col-md-12"><div class="et-col-md-12" style="padding:0px"><div class="et-col-md-12" style="padding:6px 0px 0px 0px;"><div class="et-car-block" style="height:36px"><div class="et-car-icon et-car-icon-full"><img src="img/trainCar2.png"></div></div><span style="padding-left:6px" class="ng-binding">Toa chưa bán</span></div></div><div class="et-col-md-12 et-no-padding text-center ng-binding" style="margin-top: -20px;display:none">Toa chưa bán</div></div></div><div class="et-col-md-4 et-no-padding"><div class="et-col-md-12"><div class="et-col-md-12" style="padding:0px"><div class="et-col-md-12" style="padding:6px 0px 0px 0px;"><div class="et-car-block" style="height:36px"><div class="et-car-icon et-car-icon-selected"><img src="img/trainCar2.png"></div></div><span style="padding-left:6px" class="ng-binding">Toa đang chọn</span></div></div><div class="et-col-md-12 et-no-padding text-center ng-binding" style="margin-top: -20px;display:none">Toa đang chọn</div></div></div><div class="et-col-md-4 et-no-padding"><div class="et-col-md-12"><div class="et-col-md-12" style="padding:0px"><div class="et-col-md-12" style="padding:6px 0px 0px 0px;"><div class="et-car-block" style="height:36px"><div class="et-car-icon et-car-icon-sold-out"><img src="img/trainCar2.png"></div></div><span style="padding-left:6px" class="ng-binding">Toa hết vé</span></div></div><div class="et-col-md-12 text-center et-no-padding ng-binding" style="margin-top: -20px;display:none">Toa hết vé</div></div></div></div><div class="et-col-md-12 table-bordered"></div><div class="et-col-md-12 et-legend" style="padding:0px"><div class="et-col-md-4" style="padding: 0px"><div class="et-col-md-4" style="padding: 0px"><div class="row"><div class="et-car-nm-64-sit et-col-md-6" style="padding-right:0px"><div class="et-col-16 et-sit-side"></div><div class="et-col-64 et-sit-sur-outer"><div class="et-sit-sur text-center"></div></div></div><div class="et-bed-left et-col-md-3 et-no-padding" style="width:30%"><div class="et-bed-outer"><div class="et-bed text-center"></div><div class="et-bed-illu"></div></div></div></div></div><div class="et-col-md-8" style="padding: 0px"><div class="et-legend-label ng-binding" style="margin-left:-6px">Chỗ trống</div></div></div><div class="et-col-md-4" style="padding: 0px"><div class="et-col-md-4" style="padding: 0px"><div class="row"><div class="et-car-nm-64-sit et-col-md-6" style="padding-right:0px"><div class="et-col-16 et-sit-side"></div><div class="et-col-64 et-sit-sur-outer"><div class="et-sit-sur text-center et-sit-longer"></div></div></div><div class="et-bed-left et-col-md-3 et-no-padding" style="width:30%"><div class="et-bed-outer"><div class="et-bed text-center et-sit-longer"></div><div class="et-bed-illu"></div></div></div></div></div><div class="et-col-md-8" style="padding: 0px"><div class="et-legend-label ng-binding" style="margin-left:-6px">Chỗ chưa cắt chặng</div></div></div><div class="et-col-md-4" style="padding: 0px"><div class="et-col-md-4" style="padding: 0px"><div class="row"><div class="et-car-nm-64-sit et-col-md-6" style="padding-right:0px"><div class="et-col-16 et-sit-side"></div><div class="et-col-64 et-sit-sur-outer"><div class="et-sit-sur text-center et-sit-blocked"></div></div></div><div class="et-bed-left et-col-md-3 et-no-padding" style="width:30%"><div class="et-bed-outer"><div class="et-bed text-center et-sit-blocked"></div><div class="et-bed-illu"></div></div></div></div></div><div class="et-col-md-8" style="padding: 0px"><div class="et-legend-label ng-binding" style="margin-left:-6px">Chỗ đã bán, không bán</div></div></div></div></div>
+                            <div class="et-col-md-12 table-bordered list-ticket-deskhop"  style="margin-top: 20px; padding: 5px"><div class="et-col-md-12"><div class="et-col-md-4 et-no-padding"><div class="et-col-md-12"><div class="et-col-md-12" style="padding:0px"><div class="et-col-md-12" style="padding:6px 0px 0px 0px"><div class="et-car-block" style="height:36px"><div class="et-car-icon et-car-icon-avaiable"><img src="img/trainCar2.png"></div></div><span style="padding-left:6px" class="ng-binding">Toa còn vé</span></div></div><div class="et-col-md-12 text-center et-no-padding ng-binding" style="margin-top: -20px;display:none">Toa còn vé</div></div></div><div class="et-col-md-3 et-no-padding" style="display:none"><div class="et-col-md-12"><div class="et-col-md-12" style="padding:0px"><div class="et-col-md-12" style="padding:6px 0px 0px 0px;"><div class="et-car-block" style="height:36px"><div class="et-car-icon et-car-icon-full"><img src="img/trainCar2.png"></div></div><span style="padding-left:6px" class="ng-binding">Toa chưa bán</span></div></div><div class="et-col-md-12 et-no-padding text-center ng-binding" style="margin-top: -20px;display:none">Toa chưa bán</div></div></div><div class="et-col-md-4 et-no-padding"><div class="et-col-md-12"><div class="et-col-md-12" style="padding:0px"><div class="et-col-md-12" style="padding:6px 0px 0px 0px;"><div class="et-car-block" style="height:36px"><div class="et-car-icon et-car-icon-selected"><img src="img/trainCar2.png"></div></div><span style="padding-left:6px" class="ng-binding">Toa đang chọn</span></div></div><div class="et-col-md-12 et-no-padding text-center ng-binding" style="margin-top: -20px;display:none">Toa đang chọn</div></div></div><div class="et-col-md-4 et-no-padding"><div class="et-col-md-12"><div class="et-col-md-12" style="padding:0px"><div class="et-col-md-12" style="padding:6px 0px 0px 0px;"><div class="et-car-block" style="height:36px"><div class="et-car-icon et-car-icon-sold-out"><img src="img/trainCar2.png"></div></div><span style="padding-left:6px" class="ng-binding">Toa hết vé</span></div></div><div class="et-col-md-12 text-center et-no-padding ng-binding" style="margin-top: -20px;display:none">Toa hết vé</div></div></div></div><div class="et-col-md-12 table-bordered"></div><div class="et-col-md-12 et-legend" style="padding:0px"><div class="et-col-md-4" style="padding: 0px"><div class="et-col-md-4" style="padding: 0px"><div class="row"><div class="et-car-nm-64-sit et-col-md-6" style="padding-right:0px"><div class="et-col-16 et-sit-side"></div><div class="et-col-64 et-sit-sur-outer"><div class="et-sit-sur text-center"></div></div></div><div class="et-bed-left et-col-md-3 et-no-padding" style="width:30%"><div class="et-bed-outer"><div class="et-bed text-center"></div><div class="et-bed-illu"></div></div></div></div></div><div class="et-col-md-8" style="padding: 0px"><div class="et-legend-label ng-binding" style="margin-left:-6px">Chỗ trống</div></div></div><div class="et-col-md-4" style="padding: 0px"><div class="et-col-md-4" style="padding: 0px"><div class="row"><div class="et-car-nm-64-sit et-col-md-6" style="padding-right:0px"><div class="et-col-16 et-sit-side"></div><div class="et-col-64 et-sit-sur-outer"><div class="et-sit-sur text-center et-sit-longer"></div></div></div><div class="et-bed-left et-col-md-3 et-no-padding" style="width:30%"><div class="et-bed-outer"><div class="et-bed text-center et-sit-longer"></div><div class="et-bed-illu"></div></div></div></div></div><div class="et-col-md-8" style="padding: 0px"><div class="et-legend-label ng-binding" style="margin-left:-6px">Chỗ chưa cắt chặng</div></div></div><div class="et-col-md-4" style="padding: 0px"><div class="et-col-md-4" style="padding: 0px"><div class="row"><div class="et-car-nm-64-sit et-col-md-6" style="padding-right:0px"><div class="et-col-16 et-sit-side"></div><div class="et-col-64 et-sit-sur-outer"><div class="et-sit-sur text-center et-sit-blocked"></div></div></div><div class="et-bed-left et-col-md-3 et-no-padding" style="width:30%"><div class="et-bed-outer"><div class="et-bed text-center et-sit-blocked"></div><div class="et-bed-illu"></div></div></div></div></div><div class="et-col-md-8" style="padding: 0px"><div class="et-legend-label ng-binding" style="margin-left:-6px">Chỗ đã bán, không bán</div></div></div></div></div>
                         </div>
                         <div class="col-3 cart-section" style="position: sticky; top: 20px;">
                             <div class="card">
@@ -415,6 +415,7 @@
                                         <input type="hidden" name="from_station" value="${depart}">
                                         <input type="hidden" name="to_station" value="${desti}">
                                         <input type="hidden" name="from_date" value="${from_date}">
+                                        <input type="hidden" name="trip_type" value="${trip_type}">
                                         <button type="submit" class="btn btn-primary w-100">
                                             <i class="fas fa-ticket-alt me-2"></i>Đặt vé
                                         </button>
@@ -525,12 +526,11 @@
                                         return;
                                     selectedCabinId = cid; // Lưu cabinId đã chọn
                                     selectedCabinType = ctype; // Lưu cabinType đã chọn
-<<<<<<< HEAD
-=======
+
                                     const depart = "<c:out value='${depart}' />";
 const desti = "<c:out value='${desti}' />";
 console.log("depart: "+depart+",desti: "+desti);
->>>>>>> 212f457 (fix missing file)
+
 
                                     // Xóa selected class từ tất cả các cabin icons
                                     document.querySelectorAll('.et-car-block .caIcon.et-car-icon').forEach(icon => {
@@ -557,11 +557,9 @@ console.log("depart: "+depart+",desti: "+desti);
 
                                     // Xác định layout cần tải dựa vào loại cabin
                                     const regex = /^(A|B)n\d{2}L(V)?$/;
-<<<<<<< HEAD
-                                    let layoutFile = regex.test(ctype) ? "cabin_layout/Berths.jsp?cbid=" + cid + "&total=" + totalSeats + "&room=" + berthsInRoom + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId : "cabin_layout/Seats.jsp?cbid=" + cid + "&total=" + totalSeats + "&row=" + seatsInRow + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId;
-=======
+
                                     let layoutFile = regex.test(ctype) ? "cabin_layout/Berths.jsp?cbid=" + cid + "&total=" + totalSeats + "&room=" + berthsInRoom + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId+"&depart="+depart+"&desti="+desti : "cabin_layout/Seats.jsp?cbid=" + cid + "&total=" + totalSeats + "&row=" + seatsInRow + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId+"&depart="+depart+"&desti="+desti;
->>>>>>> 212f457 (fix missing file)
+
                                     console.log("scheduleid: ", selectedScheduleId);
                                     fetch(layoutFile)
                                             .then(response => response.text())
@@ -610,8 +608,24 @@ console.log("depart: "+depart+",desti: "+desti);
 
                                     const depart = "<%= request.getAttribute("depart")%>";
                                     const desti = "<%= request.getAttribute("desti")%>";
-                                    const fromTime = "<%= request.getAttribute("from_date")%>";
-
+                                    
+                                    // Lấy thời gian từ schedule được chọn
+                                    const selectedTrainHead = document.querySelector('.et-train-head-selected');
+                                    let fromTime = '';
+                                    let toTime = '';
+                                    if (selectedTrainHead) {
+                                        // Lấy thời gian đi
+                                        const fromTimeElement = selectedTrainHead.querySelector('.et-train-head-info .row:first-child .ng-binding:last-child');
+                                        if (fromTimeElement) {
+                                            fromTime = fromTimeElement.textContent;
+                                        }
+                                        
+                                        // Lấy thời gian đến
+                                        const toTimeElement = selectedTrainHead.querySelector('.et-train-head-info .row:nth-child(2) .ng-binding:last-child');
+                                        if (toTimeElement) {
+                                            toTime = toTimeElement.textContent;
+                                        }
+                                    }
 
                                     if (!seatSurElement) {
                                         console.warn("⚠ Không tìm thấy .et-sit-sur trong seatElement");
@@ -643,16 +657,15 @@ console.log("depart: "+depart+",desti: "+desti);
                                         seatInfo.innerHTML = `
         <p>` + selectedTrainId + `: ` + depart + ` - ` + desti + `</p> 
             <p> ` + seatType + ` - Toa ` + selectedCabinId + ` - Chỗ ` + seatNumber + ` </p>
-            <p> ` + fromTime + ` </p>        
+            <p> ` + fromTime + ` - ` + toTime + ` </p>        
             <p> ` + price + ` VNĐ</p>
         `;
                                         cart.appendChild(seatInfo);
                                         seatSurElement.classList.add("et-sit-buying");
-                                        selectedSeats.push({ seatNumber, selectedCabinId,seatType,selectedTrainId, price});
-                                         document.getElementById("selectedSeatsInput").value = JSON.stringify(selectedSeats);
-                                         console.log("🛒 Ghế đã chọn:", JSON.stringify(selectedSeats));
-                                         button.style.display='block';
-                                         
+                                        selectedSeats.push({ seatNumber, selectedCabinId, seatType, selectedTrainId, price, fromTime, toTime });
+                                        document.getElementById("selectedSeatsInput").value = JSON.stringify(selectedSeats);
+                                        console.log("🛒 Ghế đã chọn:", JSON.stringify(selectedSeats));
+                                        button.style.display='block';
                                     }
                                 }
 

@@ -13,6 +13,7 @@ import java.util.Date;
 public class Order_Details {
     private int id, tid, cid, status, total_price, payment_type;
     private Date payment_date;
+    private Tickets tickets;
 
     public Order_Details() {
     }
@@ -82,5 +83,14 @@ public class Order_Details {
     public void setPayment_date(Date payment_date) {
         this.payment_date = payment_date;
     }
+
+    public Tickets getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(Tickets tickets) {
+        this.tickets = tickets;
+    }
+    
     
 }
