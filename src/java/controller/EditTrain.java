@@ -78,27 +78,14 @@ public class EditTrain extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        try {
-            String tId = request.getParameter("id");
-            String type = request.getParameter("type");
-            int status = Integer.parseInt(request.getParameter("status"));
-            int seat = Integer.parseInt(request.getParameter("seat"));
-            int cabin = Integer.parseInt(request.getParameter("cabin"));
-            int ava_seat = Integer.parseInt(request.getParameter("ava_seat"));
-            
-            // Validate the input
-            if (seat < 1 || cabin < 1 || ava_seat < 0 || ava_seat > seat) {
-                response.sendRedirect("viewT?error=invalid_input");
-                return;
-            }
-            
-            DAO d = new DAO();
-            d.updateTrain(tId, type, status, seat, cabin, ava_seat);
-            response.sendRedirect("viewT");
-        } catch (Exception e) {
-            System.out.println("Error updating train: " + e.getMessage());
-            response.sendRedirect("viewT?error=update_failed");
-        }
+        String tId = request.getParameter("id");
+        int status = Integer.parseInt(request.getParameter("status"));
+        int seat = Integer.parseInt(request.getParameter("seat"));
+        int cabin = Integer.parseInt(request.getParameter("cabin"));
+        
+        DAO d = new DAO();
+        d.updateTrain(tId, status, seat, cabin);
+        response.sendRedirect("viewT");
     }
 
     /** 

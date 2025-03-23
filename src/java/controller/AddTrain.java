@@ -29,13 +29,12 @@ public class AddTrain extends HttpServlet {
             throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("id");
-        String type = request.getParameter("type");
         int status = Integer.parseInt(request.getParameter("status"));
         int seat = Integer.parseInt(request.getParameter("seat"));
         int cabin = Integer.parseInt(request.getParameter("cabin"));
-        int ava_seat = Integer.parseInt(request.getParameter("ava_seat"));
+
         DAO dao = new DAO();
-        dao.addTrain(new Trains(id,type, status, seat, cabin,ava_seat));
+        dao.addTrain(new Trains(id, status, seat, cabin));
 
         response.sendRedirect("viewT");
     }
