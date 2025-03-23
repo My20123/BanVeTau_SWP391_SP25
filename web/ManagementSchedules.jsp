@@ -141,7 +141,9 @@
                         <div class="navbar-nav ms-auto py-0">
                             <a href="home" class="nav-item nav-link" style="color: white;">Trang chủ</a>
                             <a href="manageschedule" class="nav-item nav-link active" style="color: #ffa500;">Quản lí lịch trình</a>
-                            <a href="" class="nav-item nav-link" style="color: white;">Quản lí tàu</a>                            
+                            <a href="viewT" class="nav-item nav-link" style="color: white;">Quản lí tàu</a> 
+                            <a href="viewC" class="nav-item nav-link" style="color: white;">Quản lí cabin</a> 
+                            <a href="ManageSeat" class="nav-item nav-link" style="color: white;">Quản lí ghế</a> 
                             <a href="" class="nav-item nav-link" style="color: white;">Quản lí vé tàu</a>
                         </div>
                     </div>

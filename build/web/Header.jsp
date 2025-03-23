@@ -31,7 +31,7 @@
                 <c:if test="${sessionScope.acc.isAdmin == 1}">            
 
                     <a href="Dashboard.jsp" class="btn btn-primary rounded-pill me-2">Dashboard</a>  
-                    <a href="User.jsp" class="btn btn-primary rounded-pill me-2">Manage Account</a>  
+                    <a href="manageacc" class="btn btn-primary rounded-pill me-2">Manage Account</a>  
                     <a class="btn btn-primary rounded-pill  me-2" href="Logout.jsp">Logout</a>
                     <div class="nav-item dropdown">
                         <a href="User.jsp" class="nav-link dropdown-toggle btn btn-user round-pill me-2" data-bs-toggle="dropdown" style="border: 1px solid #86B817;border-radius: 20px;color: #86B817;">${sessionScope.acc.uname}<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16" style="margin-bottom: 2px;">

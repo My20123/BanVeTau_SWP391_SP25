@@ -1,20 +1,13 @@
-<%-- 
-    Document   : Home
-    Created on : Jan 19, 2025, 10:48:04 PM
-    Author     : tra my
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
-        <meta charset="utf-8">
-        <title>VietTrains</title>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <meta content="" name="keywords">
-        <meta content="" name="description">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Train list</title>
+        <link rel="stylesheet" href="css/train.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
         <!-- Favicon -->
         <link href="img/favicon.ico" rel="icon">
@@ -40,7 +33,6 @@
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
     </head>
-
     <body>
         <!-- Spinner Start -->
         <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -50,7 +42,7 @@
         </div>
         <!-- Spinner End -->
         <jsp:include page="Header.jsp"></jsp:include>
-         <div class="container-fluid position-relative p-0">
+            <div class="container-fluid position-relative p-0">
                 <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0" style="background-color: #353e4a;">
                     <a href="" class="navbar-brand p-0">
                         <img src="logo/train_logo.png" alt="Logo">
@@ -62,18 +54,60 @@
                         <div class="navbar-nav ms-auto py-0">
                             <a href="home" class="nav-item nav-link active" style="color: #ffa500;">Trang chủ</a>
                             <a href="manageschedule" class="nav-item nav-link" style="color: white;">Quản lí lịch trình</a>
-                            <a href="viewT" class="nav-item nav-link" style="color: white;">Quản lí tàu</a>  
-                            <a href="viewC" class="nav-item nav-link" style="color: white;">Quản lí cabin</a>  
-                             <a href="ManageSeat" class="nav-item nav-link" style="color: white;">Quản lí ghế</a> 
+                            <a href="viewT" class="nav-item nav-link" style="color: white;">Quản lí tàu</a> 
+                            <a href="viewC" class="nav-item nav-link" style="color: white;">Quản lí cabin</a> 
+                            <a href="ManageSeat" class="nav-item nav-link" style="color: white;">Quản lí ghế</a> 
                             <a href="" class="nav-item nav-link" style="color: white;">Quản lí vé tàu</a>
                         </div>
                     </div>
                 </nav>
             </div>
-         <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-
-        <jsp:include page="Footer.jsp"></jsp:include>
+            <!-- Back to Top -->
+            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+            
+            <div class="container">
+                <div class="header">
+                   
+                    
+                    
+                </div>
+                <div class="table-container">
+                    <table id="trainTable">
+                        <thead>
+                            <tr>
+                                <th>Seat ID</th>
+                                <th>Seat No</th>   
+                                <th>Seat status</th>
+                                <th>Price</th>
+                                <th>Cabin ID</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${seatsList}" var="s">
+                            <tr>
+                                <td>${s.id}</td>
+                                <td>${s.seatNo}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${s.status == 0}">Available</c:when>
+                                        <c:when test="${s.status == 1}">Buying</c:when>
+                                        <c:otherwise>Bought</c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>${s.price}</td>
+                                <td>${s.cabinid}</td>
+                                <td>
+                                    <a href="updateS?id=${s.id}"><i class="fas fa-edit"></i></a>                                  
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+             <jsp:include page="Footer.jsp"></jsp:include>
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -87,22 +121,5 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
-
-        <!-- Swap data Javascript -->
-        <script>
-                                                                                function swapData() {
-                                                                                    // Lấy giá trị từ các input
-                                                                                    var gaDi = document.getElementById("from_station").value;
-                                                                                    var gaDen = document.getElementById("to_station").value;
-
-                                                                                    // Đổi giá trị giữa hai input
-                                                                                    document.getElementById("from_station").value = gaDen;
-                                                                                    document.getElementById("to_station").value = gaDi;
-                                                                                }
-
-
-        </script>
-    </script>
-</body>
-
+    </body>
 </html>
