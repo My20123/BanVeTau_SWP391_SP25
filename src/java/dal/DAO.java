@@ -42,7 +42,6 @@ public class DAO {
         }
     }
 
-
     public List<Accounts> getAllAccounts() {
         List<Accounts> list = new ArrayList<>();
         String query = "select * from accounts";
@@ -173,17 +172,21 @@ public class DAO {
     }
 
     public List getAllTrains() {
-        List<String> list = new ArrayList<>();
+        List<Trains> list = new ArrayList<>();
         try {
-
-            String query = "SELECT id FROM Trains;";
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-
+            String query = "SELECT * FROM Trains;";
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(rs.getString("route_key"));
+                list.add(new Trains(rs.getString(1),
+                        rs.getString(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getInt(6)));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return list;
     }
@@ -382,13 +385,15 @@ public class DAO {
 
     public void addTrain(Trains train) throws Exception {
         try {
-            String query = "INSERT INTO Trains (id, status, number_seat, number_cabin) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO Trains (id, train_type, status, number_seat, number_cabin, avail_seats) VALUES (?, ?, ?, ?, ?, ?)";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, train.getTid());
-            ps.setInt(2, train.getStatus());
-            ps.setInt(3, train.getTotal_seats());
-            ps.setInt(4, train.getNumber_cabins());
+            ps.setString(2, train.getTrain_type());
+            ps.setInt(3, train.getStatus());
+            ps.setInt(4, train.getTotal_seats());
+            ps.setInt(5, train.getNumber_cabins());
+            ps.setInt(6, train.getAvailable_seats());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -404,9 +409,11 @@ public class DAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 return new Trains(rs.getString(1),
-                        rs.getInt(2),
+                        rs.getString(2),
                         rs.getInt(3),
-                        rs.getInt(4));
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getInt(6));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -414,19 +421,36 @@ public class DAO {
         return null;
     }
 
-    public void updateTrain(String id, int status, int number_seat, int number_cabin) {
-        String query = "UPDATE trains SET status = ?, number_seat = ?, number_cabin = ? WHERE id = ?";
+    public void updateTrain(String id, String type, int status, int number_seat, int number_cabin, int avail_seats) {
+        String query = "UPDATE trains SET train_type = ?, status = ?, number_seat = ?, number_cabin = ?, avail_seats = ? WHERE id = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setInt(1, status);
-            ps.setInt(2, number_seat);
-            ps.setInt(3, number_cabin);
-            ps.setString(4, id);
+            ps.setString(1, type);
+            ps.setInt(2, status);
+            ps.setInt(3, number_seat);
+            ps.setInt(4, number_cabin);
+            ps.setInt(5, avail_seats);
+            ps.setString(6, id);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public boolean trainExists(String id) {
+        try {
+            String query = "SELECT COUNT(*) FROM trains WHERE id = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void deleteTrain(String id) {
@@ -584,6 +608,136 @@ public class DAO {
         } catch (Exception e) {
         }
         return 0;
+    }
+
+    public List<Cabins> getAllCabins() {
+        List<Cabins> list = new ArrayList<>();
+        String query = "select * from cabins";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Cabins(rs.getString(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getInt(7)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Seats> getAllSeats() {
+        List<Seats> list = new ArrayList<>();
+        String query = "select * from seats";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Seats(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public Seats GetSeatById(String id) {
+        try {
+            String query = "SELECT * FROM seats WHERE id = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Seats(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void updateSeatStatus(int seatId, int status) {
+        String query = "UPDATE Seats SET status = ? WHERE id = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, status);
+            ps.setInt(2, seatId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addCabin(Cabins ca) throws Exception {
+        try {
+            String query = "INSERT INTO Cabins (id, number_seat, status, avail_seat, trid, ctype, sid) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, ca.getId());
+            ps.setInt(2, ca.getNumber_seats());
+            ps.setInt(3, ca.getStatus());
+            ps.setInt(4, ca.getAvail_seats());
+            ps.setString(5, ca.getTrid());
+            ps.setString(6, ca.getCtype());
+            ps.setInt(7, ca.getSid());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Cabins GetCabinById(String id) {
+        try {
+            String query = "SELECT * FROM cabins WHERE id = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Cabins(rs.getString(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getInt(7));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void updateCabin(String id, int number_seat, int status, int avail_seat, String trid, String ctype, int sid) {
+        String query = "UPDATE cabins SET number_seat = ?, status = ?, avail_seat = ?, trid = ?, ctype = ?, sid = ? WHERE id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, number_seat);
+            ps.setInt(2, status);
+            ps.setInt(3, avail_seat);
+            ps.setString(4, trid);
+            ps.setString(5, ctype);
+            ps.setInt(6, sid);
+            ps.setString(7, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public int searchAvailSeatsOfCabinWithCabinID(String cid) {
@@ -749,9 +903,9 @@ public class DAO {
 
                     int rowsAffected = st.executeUpdate();
                     return rowsAffected > 0;
-                    
+
                 } catch (SQLException e) {
-                    System.out.println("Error creating booking: " + e.getMessage());                    
+                    System.out.println("Error creating booking: " + e.getMessage());
                 }
             }
         } catch (Exception e) {
@@ -863,7 +1017,7 @@ public class DAO {
         }
     }
 
-    public int createTicket(LocalDateTime from_time, LocalDateTime to_time,String fromStation, String toStation,int ttype, String trid, int sid, int rid,String cbid) {
+    public int createTicket(LocalDateTime from_time, LocalDateTime to_time, String fromStation, String toStation, int ttype, String trid, int sid, int rid, String cbid) {
         String query = "INSERT INTO Tickets (from_station, to_station, from_date, to_date, ttype, trid,sid,rid,cbid) "
                 + "VALUES (?, ?, ?, ?, ?,?,?,?,?)";
         Timestamp timestamp1 = Timestamp.valueOf(from_time);
@@ -933,23 +1087,22 @@ public class DAO {
 //    }
     public static void main(String[] args) throws ParseException, Exception {
         DAO dao = new DAO();
-        LocalDateTime now= LocalDateTime.now();
-        DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-       String formatterđateTime= now.format(formatter);
-       
-       
-        String dateTimeStr="2025-03-11 06:00:00";
-       LocalDateTime parsedDateTime= LocalDateTime.parse(dateTimeStr,formatter);
-       String to_time="2025-03-12 16:00:00";
-       
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formatterđateTime = now.format(formatter);
+
+        String dateTimeStr = "2025-03-11 06:00:00";
+        LocalDateTime parsedDateTime = LocalDateTime.parse(dateTimeStr, formatter);
+        String to_time = "2025-03-12 16:00:00";
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        
+
         System.out.println(dao.searchSchedules("Sài Gòn", "Hà Nội", sdf.parse("2025-03-12")));
         System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());
         System.out.println(dao.getALlRefund());
 //        System.out.println(dao.createRefund(2, "My", 1022000, sdf.parse("2025-03-16")));
-System.out.println();
-dao.updateRefundStatus("PENDING", 1);
+        System.out.println();
+        dao.updateRefundStatus("PENDING", 1);
 //        System.out.println(dao.createTicket(parsedDateTime, LocalDateTime.parse(to_time, formatter), "Hà Nội", "Sài Gòn", 1, "SE1", 2, 1, "SE1/1"));
 //        System.out.println(dao.updateSeatsPrice("Hà Nội", "Sài Gòn", 1, "A56LV", "SE1/1", 1));
 //         System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());
@@ -981,6 +1134,7 @@ dao.updateRefundStatus("PENDING", 1);
 //            System.out.println(o);
 //        }
     }
+
     public void addFeedback(int accountId, int rate, String comment) {
         String query = "INSERT INTO Feedback (account_id, rate, comment) VALUES (?, ?, ?)";
         try {
@@ -994,6 +1148,7 @@ dao.updateRefundStatus("PENDING", 1);
             System.out.println("addFeedback: " + e.getMessage());
         }
     }
+
     public int getRouteId(String fromStation, String toStation) {
         String sql = "SELECT id FROM routes WHERE from_station = ? AND to_station = ?";
         try {
@@ -1009,13 +1164,14 @@ dao.updateRefundStatus("PENDING", 1);
         }
         return -1;
     }
+
     public boolean addSchedule(Schedule schedule) {
         Connection conn = null;
         PreparedStatement st = null;
         try {
             conn = new DBContext().getConnection();
             conn.setAutoCommit(false); // Start transaction
-            
+
             // Validate train exists
             String checkTrain = "SELECT id FROM trains WHERE id = ?";
             PreparedStatement checkTrainStmt = conn.prepareStatement(checkTrain);
@@ -1024,17 +1180,17 @@ dao.updateRefundStatus("PENDING", 1);
             if (!trainRs.next()) {
                 throw new SQLException("Mã tàu không tồn tại");
             }
-            
+
             // Insert or get route
             String insertRoute = "INSERT INTO routes (from_station, to_station) VALUES (?, ?)";
             String getRouteId = "SELECT id FROM routes WHERE from_station = ? AND to_station = ?";
-            
+
             // First try to get existing route
             PreparedStatement getRouteStmt = conn.prepareStatement(getRouteId);
             getRouteStmt.setString(1, schedule.getFromStation());
             getRouteStmt.setString(2, schedule.getToStation());
             ResultSet routeRs = getRouteStmt.executeQuery();
-            
+
             int rid;
             if (routeRs.next()) {
                 rid = routeRs.getInt("id");
@@ -1044,7 +1200,7 @@ dao.updateRefundStatus("PENDING", 1);
                 insertRouteStmt.setString(1, schedule.getFromStation());
                 insertRouteStmt.setString(2, schedule.getToStation());
                 insertRouteStmt.executeUpdate();
-                
+
                 ResultSet generatedKeys = insertRouteStmt.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     rid = generatedKeys.getInt(1);
@@ -1052,7 +1208,7 @@ dao.updateRefundStatus("PENDING", 1);
                     throw new SQLException("Không thể tạo tuyến đường mới");
                 }
             }
-            
+
             // Insert schedule
             String insertSchedule = "INSERT INTO schedules (rid, trid, from_time, to_time) VALUES (?, ?, ?, ?)";
             st = conn.prepareStatement(insertSchedule);
@@ -1060,16 +1216,16 @@ dao.updateRefundStatus("PENDING", 1);
             st.setString(2, schedule.getTrid());
             st.setTimestamp(3, schedule.getFromTime());
             st.setTimestamp(4, schedule.getToTime());
-            
+
             boolean success = st.executeUpdate() > 0;
-            
+
             if (success) {
                 conn.commit();
                 return true;
             }
             conn.rollback();
             return false;
-            
+
         } catch (Exception e) {
             try {
                 if (conn != null) {
@@ -1082,7 +1238,9 @@ dao.updateRefundStatus("PENDING", 1);
             return false;
         } finally {
             try {
-                if (st != null) st.close();
+                if (st != null) {
+                    st.close();
+                }
                 if (conn != null) {
                     conn.setAutoCommit(true); // Reset auto commit
                     conn.close();
@@ -1092,6 +1250,7 @@ dao.updateRefundStatus("PENDING", 1);
             }
         }
     }
+
     public void deleteFeedback(int feedbackId) {
         String query = "DELETE FROM Feedback WHERE feedback_id = ?";
         try {
@@ -1103,13 +1262,14 @@ dao.updateRefundStatus("PENDING", 1);
             System.out.println("deleteFeedback: " + e.getMessage());
         }
     }
+
     public boolean deleteSchedule(int id) {
         Connection conn = null;
         PreparedStatement st = null;
         try {
             conn = new DBContext().getConnection();
             conn.setAutoCommit(false); // Start transaction
-            
+
             // Check if schedule exists
             String checkSchedule = "SELECT id FROM schedules WHERE id = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkSchedule);
@@ -1118,21 +1278,21 @@ dao.updateRefundStatus("PENDING", 1);
             if (!rs.next()) {
                 throw new SQLException("Lịch trình không tồn tại");
             }
-            
+
             // Delete the schedule
             String deleteSchedule = "DELETE FROM schedules WHERE id = ?";
             st = conn.prepareStatement(deleteSchedule);
             st.setInt(1, id);
             int result = st.executeUpdate();
-            
+
             if (result > 0) {
                 conn.commit();
                 return true;
             }
-            
+
             conn.rollback();
             return false;
-            
+
         } catch (Exception e) {
             try {
                 if (conn != null) {
@@ -1146,7 +1306,9 @@ dao.updateRefundStatus("PENDING", 1);
             return false;
         } finally {
             try {
-                if (st != null) st.close();
+                if (st != null) {
+                    st.close();
+                }
                 if (conn != null) {
                     conn.setAutoCommit(true); // Reset auto commit
                     conn.close();
@@ -1157,6 +1319,7 @@ dao.updateRefundStatus("PENDING", 1);
             }
         }
     }
+
     public Schedule getScheduleById(int id) {
         String sql = "SELECT s.id, s.rid, s.trid, t.train_type, r.from_station, r.to_station, s.from_time, s.to_time "
                 + "FROM schedules s "
@@ -1187,6 +1350,7 @@ dao.updateRefundStatus("PENDING", 1);
         }
         return null;
     }
+
     public boolean updateSchedule(Schedule schedule) {
         String sql = "UPDATE schedules SET rid=?, trid=?, from_time=?, to_time=? WHERE id=?";
         try {
@@ -1202,6 +1366,7 @@ dao.updateRefundStatus("PENDING", 1);
             return false;
         }
     }
+
     public void updateFeedback(int feedbackId, int rate, String comment) {
         String query = "UPDATE Feedback SET rate = ?, comment = ? WHERE feedback_id = ?";
         try {
@@ -1215,11 +1380,12 @@ dao.updateRefundStatus("PENDING", 1);
             System.out.println("updateFeedback: " + e.getMessage());
         }
     }
+
     public List<Feedback> getAllFeedback() {
         List<Feedback> list = new ArrayList<>();
-        String sql = "SELECT f.*, a.uname as account_name FROM Feedback f " +
-                    "JOIN Accounts a ON f.account_id = a.uid " +
-                    "ORDER BY f.created_at DESC";
+        String sql = "SELECT f.*, a.uname as account_name FROM Feedback f "
+                + "JOIN Accounts a ON f.account_id = a.uid "
+                + "ORDER BY f.created_at DESC";
         try {
             conn = new DBContext().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
@@ -1239,12 +1405,13 @@ dao.updateRefundStatus("PENDING", 1);
         }
         return list;
     }
+
     public List<Feedback> getFeedbackByAccountId(int accountId) {
         List<Feedback> list = new ArrayList<>();
-        String sql = "SELECT f.*, a.uname as account_name FROM Feedback f " +
-                    "JOIN Accounts a ON f.account_id = a.uid " +
-                    "WHERE f.account_id = ? " +
-                    "ORDER BY f.created_at DESC";
+        String sql = "SELECT f.*, a.uname as account_name FROM Feedback f "
+                + "JOIN Accounts a ON f.account_id = a.uid "
+                + "WHERE f.account_id = ? "
+                + "ORDER BY f.created_at DESC";
         try {
             conn = new DBContext().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);

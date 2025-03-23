@@ -8,7 +8,7 @@
         <title>Train list</title>
         <link rel="stylesheet" href="css/train.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <script src="js/filter.js"></script>
+
         <!-- Favicon -->
         <link href="img/favicon.ico" rel="icon">
 
@@ -69,62 +69,45 @@
             
             <div class="container">
                 <div class="header">
-                    <div class="search-bar">
-                        <input type="text" id="search" placeholder="Search..." onkeyup="Train()">
-                        <select id="filterTrain" onchange="Train()">
-                            <option value="all">All</option>
-                            <option value="id">Train ID</option>
-                            <option value="status">Train Status</option>
-                            <option value="seats">Total Seats</option>
-                            <option value="cabins">Total Cabins</option>
-                        </select>
-                    </div>
-                    <a href="AddTrain.jsp" class="add-order-btn">+ Add New Train</a>
+                   
+                    
+                    
                 </div>
                 <div class="table-container">
                     <table id="trainTable">
                         <thead>
                             <tr>
-                                <th>Train ID</th>
-                                <th>Train type</th>   
-                                <th>Train status</th>
-                                <th>Total seats</th>
-                                <th>Total cabins</th>
-                                <th>Seats available</th>
+                                <th>Seat ID</th>
+                                <th>Seat No</th>   
+                                <th>Seat status</th>
+                                <th>Price</th>
+                                <th>Cabin ID</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${tlist}" var="t">
+                        <c:forEach items="${seatsList}" var="s">
                             <tr>
-                                <td>${t.tid}</td>
-                                <td>${t.train_type}</td>
+                                <td>${s.id}</td>
+                                <td>${s.seatNo}</td>
                                 <td>
                                     <c:choose>
-                                        <c:when test="${t.status == 1}">Available</c:when>
-                                        <c:otherwise>Maintenance</c:otherwise>
+                                        <c:when test="${s.status == 0}">Available</c:when>
+                                        <c:when test="${s.status == 1}">Buying</c:when>
+                                        <c:otherwise>Bought</c:otherwise>
                                     </c:choose>
                                 </td>
-                                <td>${t.total_seats}</td>
-                                <td>${t.number_cabins}</td>
-                                <td>${t.available_seats}</td>
+                                <td>${s.price}</td>
+                                <td>${s.cabinid}</td>
                                 <td>
-                                    <a href="editT?id=${t.tid}"><i class="fas fa-edit"></i></a>                                  
+                                    <a href="updateS?id=${s.id}"><i class="fas fa-edit"></i></a>                                  
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
             </div>
-            <div class="pagination">
-                <p>Showing 1 to 10 of 12 entries</p>
-                <div>
-                    <button>&lt;</button>
-                    <button class="active">1</button>
-                    <button>2</button>
-                    <button>&gt;</button>
-                </div>
-            </div>
+            
         </div>
              <jsp:include page="Footer.jsp"></jsp:include>
         <!-- JavaScript Libraries -->
@@ -140,6 +123,5 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
-
     </body>
 </html>

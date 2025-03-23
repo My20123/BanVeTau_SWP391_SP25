@@ -9,17 +9,19 @@ package model;
  * @author tra my
  */
 public class Trains {
-    private String tid;
+    private String tid, train_type;
     private int status,total_seats,number_cabins,available_seats;
 
     public Trains() {
     }
 
-    public Trains(String tid, int status, int number_seats, int number_cabins) {
+    public Trains(String tid, String train_type, int status, int total_seats, int number_cabins, int available_seats) {
         this.tid = tid;
+        this.train_type = train_type;
         this.status = status;
-        this.total_seats = number_seats;
+        this.total_seats = total_seats;
         this.number_cabins = number_cabins;
+        this.available_seats = available_seats;
     }
 
     public String getTid() {
@@ -28,6 +30,14 @@ public class Trains {
 
     public void setTid(String tid) {
         this.tid = tid;
+    }
+
+    public String getTrain_type() {
+        return train_type;
+    }
+
+    public void setTrain_type(String train_type) {
+        this.train_type = train_type;
     }
 
     public int getStatus() {
@@ -61,6 +71,7 @@ public class Trains {
     public void setAvailable_seats(int available_seats) {
         this.available_seats = available_seats;
     }
+
     
     
 }

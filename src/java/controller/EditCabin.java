@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package controller;
 
 import dal.DAO;
@@ -13,14 +8,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Trains;
+import model.Cabins;
 
 /**
  *
  * @author lenovo
  */
-@WebServlet(name="EditTrain", urlPatterns={"/editT"})
-public class EditTrain extends HttpServlet {
+@WebServlet(name="EditCabin", urlPatterns={"/editC"})
+public class EditCabin extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,10 +32,10 @@ public class EditTrain extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EditTrain</title>");  
+            out.println("<title>Servlet EditCabin</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EditTrain at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet EditCabin at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,11 +53,11 @@ public class EditTrain extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {       
         try{
-            String id_train = request.getParameter("id");
+            String id_cabin = request.getParameter("id");
             DAO d = new DAO();
-            Trains t = d.GetTrainById(id_train);
-            request.setAttribute("trains", t);
-            request.getRequestDispatcher("EditTrain.jsp").forward(request, response);
+            Cabins c = d.GetCabinById(id_cabin);
+            request.setAttribute("cabins", c);
+            request.getRequestDispatcher("EditCabin.jsp").forward(request, response);
         }catch(NumberFormatException e){
             System.out.println(e);
         }
@@ -78,27 +73,17 @@ public class EditTrain extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        try {
-            String tId = request.getParameter("id");
-            String type = request.getParameter("type");
-            int status = Integer.parseInt(request.getParameter("status"));
-            int seat = Integer.parseInt(request.getParameter("seat"));
-            int cabin = Integer.parseInt(request.getParameter("cabin"));
-            int ava_seat = Integer.parseInt(request.getParameter("ava_seat"));
-            
-            // Validate the input
-            if (seat < 1 || cabin < 1 || ava_seat < 0 || ava_seat > seat) {
-                response.sendRedirect("viewT?error=invalid_input");
-                return;
-            }
-            
-            DAO d = new DAO();
-            d.updateTrain(tId, type, status, seat, cabin, ava_seat);
-            response.sendRedirect("viewT");
-        } catch (Exception e) {
-            System.out.println("Error updating train: " + e.getMessage());
-            response.sendRedirect("viewT?error=update_failed");
-        }
+        String id = request.getParameter("id");
+        int number_seat = Integer.parseInt(request.getParameter("nseat"));
+        int status = Integer.parseInt(request.getParameter("status"));
+        int avail_seat = Integer.parseInt(request.getParameter("aseat"));
+        String trid = request.getParameter("tid");
+        String ctype = request.getParameter("ctype");
+        int sid = Integer.parseInt(request.getParameter("sid"));
+
+        DAO d = new DAO();
+        d.updateCabin(id, number_seat, status, avail_seat, trid, ctype, sid);
+        response.sendRedirect("viewC");
     }
 
     /** 
