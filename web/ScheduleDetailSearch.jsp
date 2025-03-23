@@ -6,6 +6,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="dal.DAO" %>
+<%@ page import="java.util.List" %>
+<%
+    DAO dao = new DAO();
+    List<String> listS = dao.getAllStations();
+    request.setAttribute("listS", listS);
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -59,37 +66,41 @@
 
             .station-search-container {
                 display: flex;
-                align-items: center;
+                align-items: flex-end;
                 background: white;
                 border-radius: 8px;
-                padding: 10px 20px;
+                padding: 20px;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 margin: 20px 0;
+                gap: 15px;
             }
 
-            .station-input-group {
+            .station-select {
                 flex: 1;
-                position: relative;
-                display: flex;
-                align-items: center;
             }
 
-            .station-icon {
-                color: #666;
-                margin-right: 10px;
-                font-size: 20px;
+            .input-container label {
+                display: block;
+                margin-bottom: 8px;
+                color: #495057;
+                font-weight: 500;
+                font-size: 14px;
             }
 
-            .station-input {
-                border: none;
-                outline: none;
-                padding: 8px;
+            .form-input {
                 width: 100%;
-                font-size: 16px;
+                padding: 10px;
+                border: 1px solid #ced4da;
+                border-radius: 6px;
+                font-size: 14px;
+                transition: all 0.2s ease;
+                background: #fff;
             }
 
-            .station-input::placeholder {
-                color: #999;
+            .form-input:focus {
+                outline: none;
+                border-color: #4dabf7;
+                box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.1);
             }
 
             .station-switcher {
@@ -99,6 +110,7 @@
                 cursor: pointer;
                 display: flex;
                 align-items: center;
+                margin-bottom: 8px;
             }
 
             .station-switcher svg {
@@ -112,27 +124,34 @@
                 fill: #333;
             }
 
-            .divider {
-                width: 1px;
-                height: 30px;
-                background: #ddd;
-                margin: 0 15px;
+            .btn-submit {
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-weight: 500;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                background: #228be6;
+                color: white;
+                border: none;
+                height: 38px;
+                margin-bottom: 8px;
             }
 
-            .search-results {
-                background: white;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                padding: 20px;
+            .btn-submit:hover {
+                background: #1c7ed6;
             }
 
-            .table th {
-                background-color: #f8f9fa;
-                border-bottom: 2px solid #dee2e6;
-            }
+            @media (max-width: 768px) {
+                .station-search-container {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
 
-            .table td {
-                vertical-align: middle;
+                .station-switcher {
+                    transform: rotate(90deg);
+                    margin: 10px 0;
+                }
             }
         </style>
     </head>
@@ -170,36 +189,58 @@
                     <div class="container py-5" style="margin-top: 3rem;">
                         <form action="searchschedule" method="GET" id="searchForm">
                             <div class="station-search-container">
-                                <div class="station-input-group">
-                                    <i class="fa fa-train station-icon"></i>
-                                    <input type="text" name="from_station" id="from_station" list="stations" class="station-input" placeholder="Ga đi" autocomplete="off" required>
-                                    <datalist id="stations">
-                                        <c:forEach items="${listS}" var="o">
-                                            <option value="${o}">
-                                        </c:forEach>
-                                    </datalist>
+                                <div class="station-select">
+                                    <div class="input-container">
+                                        <label>Ga đi</label>
+                                        <input class="form-input" 
+                                               name="from_station" 
+                                               list="stationsList" 
+                                               id="from_station"
+                                               required
+                                               autocomplete="off"
+                                               placeholder="Chọn ga đi">
+                                    </div>
                                 </div>
+
                                 <button type="button" class="station-switcher" onclick="swapData()">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                         <path d="M21.925 11.62a.999.999 0 0 0-.21-.33l-4.002-3.996a1.004 1.004 0 0 0-1.42 1.418l2.3 2.288H5.407l2.3-2.288a1.003 1.003 0 1 0-1.42-1.418L2.285 11.29a1 1 0 0 0-.21.33c-.1.243-.1.516 0 .759a.998.998 0 0 0 .21.33l4.002 3.996a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.419l-2.3-2.288h13.186l-2.3 2.288a.999.999 0 0 0 .325 1.637 1.002 1.002 0 0 0 1.095-.218l4.002-3.996a.998.998 0 0 0 .21-.33c.1-.243.1-.516 0-.76Z"/>
                                     </svg>
                                 </button>
-                                <div class="station-input-group">
-                                    <i class="fa fa-train station-icon"></i>
-                                    <input type="text" name="to_station" id="to_station" list="stations" class="station-input" placeholder="Ga đến" autocomplete="off" required>
-                                    <datalist id="stations">
-                                        <c:forEach items="${listS}" var="o">
-                                            <option value="${o}">
-                                        </c:forEach>
-                                    </datalist>
+
+                                <div class="station-select">
+                                    <div class="input-container">
+                                        <label>Ga đến</label>
+                                        <input class="form-input" 
+                                               name="to_station" 
+                                               list="stationsList" 
+                                               id="to_station"
+                                               required
+                                               autocomplete="off"
+                                               placeholder="Chọn ga đến">
+                                    </div>
                                 </div>
-                                <div class="station-input-group" style="max-width: 200px;">
-                                    <i class="fa fa-calendar station-icon"></i>
-                                    <input type="date" name="date" id="datepicker" class="station-input" style="width: 145px;" required>
+
+                                <div class="station-select" style="max-width: 200px;">
+                                    <div class="input-container">
+                                        <label>Ngày đi</label>
+                                        <input type="date" 
+                                               name="date" 
+                                               id="datepicker" 
+                                               class="form-input" 
+                                               required>
+                                    </div>
                                 </div>
-                                <button type="submit" class="train-search__submit-btn" style="height: 40px; background-color: #0d6efd; color: white; border: none; border-radius: 4px; padding: 0 20px; cursor: pointer;">Tìm kiếm</button>
+
+                                <button type="submit" class="btn-submit">Tìm kiếm</button>
                             </div>
                         </form>
+
+                        <datalist id="stationsList">
+                            <c:forEach items="${listS}" var="o">
+                                <option value="${o}">
+                            </c:forEach>
+                        </datalist>
 
                         <!-- Kết quả tìm kiếm -->
                         <div class="search-results mt-5">

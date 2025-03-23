@@ -89,10 +89,9 @@
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
                             <a href="home" class="nav-item nav-link active">Trang chủ</a>
-                            <a href="about.html" class="nav-item nav-link ">Thông tin đặt chỗ</a>
-                            <a href="ScheduleDetailSearch.jsp" class="nav-item nav-link">Giờ tàu-Giá vé</a>                            
+                            <a href="ScheduleDetailSearch.jsp" class="nav-item nav-link">Lịch trình tàu</a>                            
                             <a href="routeview" class="nav-item nav-link">Các tuyến đường</a>
-                            <a href="TicketVerifi.jsp" class="nav-item nav-link">Kiểm tra vé</a>
+                            <a href="Feedback.jsp" class="nav-item nav-link">Đánh giá</a>
                             <a href="package.html" class="nav-item nav-link">Quy định</a>
                             <!--                                                <div class="nav-item dropdown">
                                                                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>

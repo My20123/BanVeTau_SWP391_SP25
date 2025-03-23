@@ -48,6 +48,34 @@
         <servlet-name>ChangeRefundStatusServlet</servlet-name>
         <servlet-class>controller.ChangeRefundStatusServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddFeedbackServlet</servlet-name>
+        <servlet-class>controller.AddFeedbackServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddScheduleServlet</servlet-name>
+        <servlet-class>controller.AddScheduleServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteFeedbackServlet</servlet-name>
+        <servlet-class>controller.DeleteFeedbackServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteScheduleServlet</servlet-name>
+        <servlet-class>controller.DeleteScheduleServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditScheduleServlet</servlet-name>
+        <servlet-class>controller.EditScheduleServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateFeedbackServlet</servlet-name>
+        <servlet-class>controller.UpdateFeedbackServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewFeedbackServlet</servlet-name>
+        <servlet-class>controller.ViewFeedbackServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -95,6 +123,34 @@
     <servlet-mapping>
         <servlet-name>ChangeRefundStatusServlet</servlet-name>
         <url-pattern>/changeRefundStatus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddFeedbackServlet</servlet-name>
+        <url-pattern>/addfeedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddScheduleServlet</servlet-name>
+        <url-pattern>/addschedule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteFeedbackServlet</servlet-name>
+        <url-pattern>/deletefeedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteScheduleServlet</servlet-name>
+        <url-pattern>/deleteschedule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditScheduleServlet</servlet-name>
+        <url-pattern>/editschedule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateFeedbackServlet</servlet-name>
+        <url-pattern>/updatefeedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewFeedbackServlet</servlet-name>
+        <url-pattern>/viewfeedback</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>60</session-timeout>
