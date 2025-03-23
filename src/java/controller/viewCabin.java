@@ -1,11 +1,13 @@
+package controller;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller;
 
 import dal.DAO;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +15,18 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import model.Accounts;
+import model.Cabins;
 import model.Trains;
 
 /**
  *
  * @author lenovo
  */
-@WebServlet(name="EditTrain", urlPatterns={"/editT"})
-public class EditTrain extends HttpServlet {
+@WebServlet(urlPatterns={"/viewC"})
+public class viewCabin extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,10 +43,10 @@ public class EditTrain extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EditTrain</title>");  
+            out.println("<title>Servlet viewCabin</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EditTrain at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet viewCabin at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -56,15 +62,18 @@ public class EditTrain extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {       
-        try{
-            String id_train = request.getParameter("id");
-            DAO d = new DAO();
-            Trains t = d.GetTrainById(id_train);
-            request.setAttribute("trains", t);
-            request.getRequestDispatcher("EditTrain.jsp").forward(request, response);
-        }catch(NumberFormatException e){
-            System.out.println(e);
+    throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Accounts user = (Accounts) session.getAttribute("acc");
+        
+        if (user != null && (user.getIsAdmin() == 1 || user.getIsStaff() == 1) ) {
+        DAO d = new DAO();
+        List<Cabins> list = d.getAllCabins();
+        request.setAttribute("clist", list);
+        RequestDispatcher dis = request.getRequestDispatcher("ManageCabin.jsp");
+        dis.forward(request, response);
+        }else{
+            response.sendRedirect("404.html");
         }
     } 
 
@@ -78,27 +87,7 @@ public class EditTrain extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        try {
-            String tId = request.getParameter("id");
-            String type = request.getParameter("type");
-            int status = Integer.parseInt(request.getParameter("status"));
-            int seat = Integer.parseInt(request.getParameter("seat"));
-            int cabin = Integer.parseInt(request.getParameter("cabin"));
-            int ava_seat = Integer.parseInt(request.getParameter("ava_seat"));
-            
-            // Validate the input
-            if (seat < 1 || cabin < 1 || ava_seat < 0 || ava_seat > seat) {
-                response.sendRedirect("viewT?error=invalid_input");
-                return;
-            }
-            
-            DAO d = new DAO();
-            d.updateTrain(tId, type, status, seat, cabin, ava_seat);
-            response.sendRedirect("viewT");
-        } catch (Exception e) {
-            System.out.println("Error updating train: " + e.getMessage());
-            response.sendRedirect("viewT?error=update_failed");
-        }
+        processRequest(request, response);
     }
 
     /** 
