@@ -44,6 +44,10 @@
         <servlet-name>OrderHistoryController</servlet-name>
         <servlet-class>controller.OrderHistoryController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChangeRefundStatusServlet</servlet-name>
+        <servlet-class>controller.ChangeRefundStatusServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>OrderHistoryController</servlet-name>
         <url-pattern>/order-history</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeRefundStatusServlet</servlet-name>
+        <url-pattern>/changeRefundStatus</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>60</session-timeout>

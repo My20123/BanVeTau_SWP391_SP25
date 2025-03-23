@@ -59,7 +59,7 @@
                             
                 </c:if>
 
-                <c:if test="${sessionScope.acc != null }"> 
+                <c:if test="${sessionScope.acc != null && sessionScope.acc.isStaff == 0}"> 
                     <div class="nav-item dropdown">
                         <a href="User.jsp" class="nav-link dropdown-toggle btn btn-user round-pill me-2" data-bs-toggle="dropdown" style="border: 1px solid #86B817;border-radius: 20px;color: #86B817;">${sessionScope.acc.uname}<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16" style="margin-bottom: 2px;">
                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>

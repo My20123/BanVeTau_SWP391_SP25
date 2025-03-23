@@ -31,10 +31,11 @@
 
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
 
+        <!-- Chỉ load các style cần thiết -->
         <!-- Chỉ load các style cần thiết -->
         <style>
             :root {
@@ -265,79 +266,7 @@
                 gap: 1.5rem;
             }
 
-            /* Modal styles */
-            .modal-confirm {
-                color: #636363;
-            }
-            .modal-confirm .modal-content {
-                padding: 20px;
-                border-radius: 5px;
-                border: none;
-            }
-            .modal-confirm .modal-header {
-                border-bottom: none;
-                position: relative;
-                padding: 0;
-            }
-            .modal-confirm h4 {
-                text-align: center;
-                font-size: 26px;
-                margin: 30px 0 -15px;
-            }
-            .modal-confirm .form-control, .modal-confirm .btn {
-                min-height: 40px;
-                border-radius: 3px;
-            }
-            .modal-confirm .close {
-                position: absolute;
-                top: -5px;
-                right: -5px;
-            }
-            .modal-confirm .modal-footer {
-                border: none;
-                text-align: center;
-                border-radius: 5px;
-                font-size: 13px;
-            }
-            .modal-confirm .icon-box {
-                color: #fff;
-                position: absolute;
-                margin: 0 auto;
-                left: 0;
-                right: 0;
-                top: -70px;
-                width: 95px;
-                height: 95px;
-                border-radius: 50%;
-                z-index: 9;
-                background: #06A3DA;
-                padding: 15px;
-                text-align: center;
-                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-            }
-            .modal-confirm .icon-box i {
-                font-size: 58px;
-                position: relative;
-                top: 3px;
-            }
-            .modal-confirm.modal-dialog {
-                margin-top: 80px;
-            }
-            .modal-confirm .btn {
-                color: #fff;
-                border-radius: 4px;
-                text-decoration: none;
-                transition: all 0.4s;
-                line-height: normal;
-                border: none;
-            }
-            .modal-confirm .btn-danger {
-                background: #06A3DA;
-            }
-            .modal-confirm .btn-danger:hover, .modal-confirm .btn-danger:focus {
-                background: #0986c7;
-                outline: none;
-            }
+
             .trigger-btn {
                 display: inline-block;
                 margin: 100px auto;
@@ -362,12 +291,8 @@
                 min-width: 100px;
             }
 
-            .action-group {
-                display: flex;
-                gap: 8px;
-                align-items: center;
-            }
         </style>
+
     </head>
 
     <body>
@@ -380,6 +305,7 @@
         <!-- Spinner End -->
         <jsp:include page="Header.jsp"></jsp:include>
 
+            <!-- Hero Header -->
             <!-- Hero Header -->
             <div class="container-fluid position-relative p-0">
                 <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
@@ -416,9 +342,6 @@
 
             </div>
             <!-- Navbar & Hero End -->
-
-
-
             <!-- Order History Table -->
             <div class="container-xxl py-5">
                 <div class="container">
@@ -444,118 +367,123 @@
                                                 <option value="${o}">
                                                 </c:forEach>                                                                                                     
                                         </datalist>
-                                        </div>
                                     </div>
-                                        </div>
-                                <div class="col-lg-3">
-                                    <div class="search-box">
-                                        <label for="to_station" class="form-label">Ga đến</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-white border-end-0">
-                                                <i class="fas fa-train text-muted"></i>
-                                            </span>
-                                            <input type="text" class="form-control border-start-0" id="to_station" 
-                                                   name="to_station" placeholder="Nhập ga đến" list="stations-to"
-                                                   value="${param.to_station != null ? param.to_station : ''}">
-                                        </div>
-                                        <datalist id="stations-to">
-                                            <c:forEach items="${listS}" var="o">
-                                                <option value="${o}">
-                                                </c:forEach>                                                                                                     
-                                        </datalist> 
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="search-box">
-                                        <label for="departure_date" class="form-label">Ngày đi</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-white border-end-0">
-                                                <i class="fas fa-calendar text-muted"></i>
-                                            </span>
-                                            <input type="date" class="form-control border-start-0" id="departure_date" 
-                                                   name="departure_date" 
-                                                   value="${param.departure_date != null ? param.departure_date : ''}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="search-box">
-                                        <label for="status" class="form-label">Trạng thái</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-white border-end-0">
-                                                <i class="fas fa-info-circle text-muted"></i>
-                                            </span>
-                                            <select name="status" id="status" class="form-select border-start-0">
-                                                <option value="">Tất cả trạng thái</option>
-                                                <option value="2" ${param.status == '2' ? 'selected' : ''}>Chờ xử lý</option>
-                                                <option value="1" ${param.status == '1' ? 'selected' : ''}>Hoàn thành</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 d-flex justify-content-end gap-3">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-filter me-2"></i>Lọc kết quả
-                                    </button>
-                                    <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
-                                        <i class="fas fa-redo me-2"></i>Đặt lại
-                                    </button>
                                 </div>
                             </div>
+                            <div class="col-lg-3">
+                                <div class="search-box">
+                                    <label for="to_station" class="form-label">Ga đến</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="fas fa-train text-muted"></i>
+                                        </span>
+                                        <input type="text" class="form-control border-start-0" id="to_station" 
+                                               name="to_station" placeholder="Nhập ga đến" list="stations-to"
+                                               value="${param.to_station != null ? param.to_station : ''}">
+                                    </div>
+                                    <datalist id="stations-to">
+                                        <c:forEach items="${listS}" var="o">
+                                            <option value="${o}">
+                                            </c:forEach>                                                                                                     
+                                    </datalist> 
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="search-box">
+                                    <label for="departure_date" class="form-label">Ngày đi</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="fas fa-calendar text-muted"></i>
+                                        </span>
+                                        <input type="date" class="form-control border-start-0" id="departure_date" 
+                                               name="departure_date" 
+                                               >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="search-box">
+                                    <label for="status" class="form-label">Trạng thái</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="fas fa-info-circle text-muted"></i>
+                                        </span>
+                                        <select name="status" id="status" class="form-select border-start-0">
+                                            <option value="">Tất cả trạng thái</option>
+                                            <option value="2" ${param.status == '2' ? 'selected' : ''}>Chờ xử lý</option>
+                                            <option value="1" ${param.status == '1' ? 'selected' : ''}>Hoàn thành</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex justify-content-end gap-3">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-filter me-2"></i>Lọc kết quả
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
+                                    <i class="fas fa-redo me-2"></i>Đặt lại
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </div>
+
+
                 <div class="table-responsive">
                     <c:if test="${orderList.size() > 0}">
-                        <table class="table table-hover">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>STT</th>
                                     <th>Vé</th>
-                                    <th>Trạng thái</th>
-                                    <th>Tổng tiền</th>
                                     <th>Ngày thanh toán</th>
-                                    <th>Thao tác</th>
+                                    <th>Số tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:set var="totalPrice" value="0" />
-                                <c:forEach var="order" items="${orderList}" varStatus="status">
+                                <c:forEach var="order" items="${orderList}">
                                     <tr>
                                         <td>${status.index + 1}</td>
                                         <td>${order.tickets.from_station} - ${order.tickets.to_station}</td>
-                                        <td>
-                                            <span class="status-badge ${order.status == 2 ? 'status-pending' : 'status-completed'}">
-                                                ${order.status == 2 ? 'Chờ xử lý' : 'Hoàn thành'}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <fmt:formatNumber value="${order.total_price}" pattern="#,##0" /> VNĐ
-                                        </td>
                                         <td><fmt:formatDate value="${order.payment_date}" pattern="dd/MM/yyyy" /></td>
-                                        <td>
-                                            <div class="d-flex gap-2">
-                                                <c:if test="${order.status == 1}">
-                                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmCancel('${order.id}')">
-                                                        <i class="fas fa-times-circle me-1"></i>Hủy vé
-                                                    </button>
-                                                </c:if>
-                                                <button class="btn btn-info btn-sm" onclick="viewDetails('${order.id}')">
-                                                    <i class="fas fa-eye me-1"></i>Chi tiết
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                        <td><fmt:formatNumber value="${order.total_price}" pattern="#,##0" /> VNĐ</td>
+                                        <td><span class="status-badge ${order.status == 2 ? 'status-pending' : 'status-completed'}">
+                                                ${order.status == 2 ? 'Chờ xử lý' : 'Hoàn thành'}
+                                            </span></td>
+                                        <td><c:if test="${order.status == 1}">
+                                                <button class="btn btn-danger" onclick="openCancelModal(${order.id})">Hủy vé</button></c:if></td>
+                                        </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
                     </c:if>
-                    <c:if test="${orderList.size() < 1}">
-                        <div class="empty-state">
-                            <i class="fas fa-ticket-alt"></i>
-                            <p>Không có dữ liệu đặt vé</p>
-                        </div>
-                    </c:if>
                 </div>
+
+                <!-- Bootstrap Modal for Cancel Confirmation -->
+                <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="cancelModalLabel">Xác nhận hủy vé</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc chắn muốn hủy vé này không?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+                                <form id="cancel-order" method="POST" action="cancel-order">
+                                    <input type="hidden" id="orderId" name="orderId" value="">
+                                    <button type="submit" class="btn btn-danger">Có, hủy vé</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
 
                 <!-- Paging Links -->
                 <nav aria-label="Page navigation">
@@ -583,60 +511,22 @@
                 </nav>
             </div>
         </div>
-    </div>
-    <!-- Order History End -->
 
-    <jsp:include page="gui/footer.jsp"></jsp:include>
+        <script>
+            function resetForm() {
+                document.getElementById('from_station').value = '';
+                document.getElementById('to_station').value = '';
+                document.getElementById('departure_date').value = '';
+                document.getElementById('status').value = '';
+                window.location.href = 'order-history';
+            }
+            function openCancelModal(orderId) {
+                document.getElementById("orderId").value = orderId;
+                var cancelModal = new bootstrap.Modal(document.getElementById("cancelModal"));
+                cancelModal.show();
+            }
 
-    <!-- Essential JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Chỉ giữ lại function cần thiết -->
-    <script>
-                                                function viewDetails(orderId) {
-                                                    window.location.href = 'order-details?id=' + orderId;
-                                                }
-
-        function resetForm() {
-            document.getElementById('from_station').value = '';
-            document.getElementById('to_station').value = '';
-            document.getElementById('departure_date').value = '';
-            document.getElementById('status').value = '';
-            window.location.href = 'order-history';
-        }
-
-        function confirmCancel(orderId) {
-            Swal.fire({
-                title: 'Xác nhận hủy vé',
-                text: 'Bạn có chắc chắn muốn hủy vé này không?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#dc3545',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Có, hủy vé',
-                cancelButtonText: 'Không'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Tạo form và submit
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = 'cancel-order';
-                    
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'orderId';
-                    input.value = orderId;
-                    
-                    form.appendChild(input);
-                    document.body.appendChild(form);
-                    form.submit();
-                }
-            });
-        }
-    </script>
-</body>
+        </script>
+    </body>
 </html>
 

@@ -944,7 +944,9 @@ public class DAO {
         System.out.println(dao.searchSchedules("Sài Gòn", "Hà Nội", sdf.parse("2025-03-12")));
         System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());
         System.out.println(dao.getALlRefund());
-        System.out.println(dao.createRefund(2, "My", 1022000, sdf.parse("2025-03-16")));
+//        System.out.println(dao.createRefund(2, "My", 1022000, sdf.parse("2025-03-16")));
+System.out.println();
+dao.updateRefundStatus("PENDING", 1);
 //        System.out.println(dao.createTicket(parsedDateTime, LocalDateTime.parse(to_time, formatter), "Hà Nội", "Sài Gòn", 1, "SE1", 2, 1, "SE1/1"));
 //        System.out.println(dao.updateSeatsPrice("Hà Nội", "Sài Gòn", 1, "A56LV", "SE1/1", 1));
 //         System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());

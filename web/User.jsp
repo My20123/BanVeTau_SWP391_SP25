@@ -7,24 +7,7 @@
         <meta charset="utf-8">
         <title>User Profile</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
-<<<<<<< HEAD
-        <link href="img/favicon.ico" rel="icon">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-        <link href="lib/animate/animate.min.css" rel="stylesheet">
-        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-        <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-        <link href="css/style.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> 
-        <link rel="stylesheet" href="css/user.css">            
-    </head>
-    <body>
-=======
+
         <meta content="" name="keywords">
         <meta content="" name="description">
 
@@ -55,13 +38,11 @@
     </head>
     <body>
         <!-- Spinner Start -->
->>>>>>> 212f457 (fix missing file)
         <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-<<<<<<< HEAD
         <jsp:include page="Header.jsp"></jsp:include>
         <div class="container">
             <h1>User Profile</h1>
@@ -83,78 +64,41 @@
                             <label class="col-lg-3 control-label">ID:</label>
                             <div class="col-lg-8">
                                 <input class="form-control" type="text" value="${user.id}" readonly>
-=======
-        <!-- Spinner End -->
-        <jsp:include page="Header.jsp"></jsp:include>
-            <div class="container">
-                <h1>User Profile</h1>
-                <hr>
-                <div class="row">
-                    <!-- left column -->
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <img src="img/DefaultAvt.png" class="avatar img-circle" alt="avatar" >
-                            
-                        </div>
-                    </div>
-                    <!-- edit form column -->
-                    <div class="col-md-9 personal-info">
-                        <div class="alert alert-info alert-dismissable">
-                            <a class="panel-close close" data-dismiss="alert"></a>
-                            <i class="fa fa-coffee"></i> Update your profile information </div>
-                        <h3>Personal info</h3>
-                        <form class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label">ID:</label>
-                                <div class="col-lg-8">
-                                    <input class="form-control" type="text" value="${user.id}" readonly="">
->>>>>>> 212f457 (fix missing file)
+
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Phone number:</label>
                             <div class="col-lg-8">
-<<<<<<< HEAD
                                 <input class="form-control" type="text" value="${user.uphone}" readonly>
-=======
-                                <input class="form-control" type="text" value="${user.uphone}" readonly="">
->>>>>>> 212f457 (fix missing file)
+
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Email:</label>
                             <div class="col-lg-8">
-<<<<<<< HEAD
                                 <input class="form-control" type="text" value="${user.umail}" readonly>
-=======
-                                <input class="form-control" type="text" value="${user.umail}" readonly="">
->>>>>>> 212f457 (fix missing file)
+
                             </div>
                         </div>                            
                         <div class="form-group">
                             <label class="col-md-3 control-label">Username:</label>
                             <div class="col-md-8">
-<<<<<<< HEAD
                                 <input class="form-control" type="text" value="${user.uname}" readonly>
-=======
-                                <input class="form-control" type="text" value="${user.uname}" readonly="">
->>>>>>> 212f457 (fix missing file)
+
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label">Role:</label>
                             <div class="col-md-8">
-<<<<<<< HEAD
                                 <input class="form-control" type="text" value="${user.isStaff == 1 ? "Staff" : (user.isAdmin == 1 ? "Admin" : "User")}" readonly>
-=======
-                                <input class="form-control" type="text" value="${user.isStaff == 1 ? "Staff" : (user.isAdmin == 1 ? "Admin" : "User")}" readonly="">
->>>>>>> 212f457 (fix missing file)
+
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label">CCCD:</label>
                             <div class="col-md-8">
-<<<<<<< HEAD
+
                                 <input class="form-control" type="text" value="${user.cccd}" readonly>
                             </div>
                         </div>
@@ -162,21 +106,14 @@
                             <label class="col-md-3 control-label">Avatar:</label>
                             <div class="col-md-8">
                                 <input class="form-control" type="text" value="${user.avatar}" readonly>
-=======
-                                <input class="form-control" type="text" value="${user.cccd}" readonly="">
->>>>>>> 212f457 (fix missing file)
+
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label"></label>
                             <div class="col-md-8">
                                 <a href="editprofile?id=${user.id}" class="btn btn-primary">Edit</a>
-<<<<<<< HEAD
-=======
-                                <!--                                    <input type="button" class="btn btn-primary" value="Edit">
-                                                                    <span></span>
-                                                                    <input type="reset" class="btn btn-default" value="Cancel">-->
->>>>>>> 212f457 (fix missing file)
+
                             </div>
                         </div>
                     </form>
@@ -186,10 +123,9 @@
         <hr>
         <a class="btn btn-primary" href='Home.jsp'>Home</a>
         <jsp:include page="Footer.jsp"></jsp:include>
-<<<<<<< HEAD
-=======
+
         <!-- JavaScript Libraries -->
->>>>>>> 212f457 (fix missing file)
+
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="lib/wow/wow.min.js"></script>
@@ -199,11 +135,7 @@
         <script src="lib/tempusdominus/js/moment.min.js"></script>
         <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
         <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-<<<<<<< HEAD
-=======
 
-        <!-- Template Javascript -->
->>>>>>> 212f457 (fix missing file)
         <script src="js/main.js"></script>
     </body>
 </html>

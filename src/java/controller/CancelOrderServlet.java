@@ -33,7 +33,7 @@ public class CancelOrderServlet extends HttpServlet {
                 // Cập nhật trạng thái order
                 orderDAO.updateOrderStatus(orderId, 2); // 2 = Đã hủy
                 
-dao.updateRefundStatus("PENDING", orderId);
+                dao.updateRefundStatus("PENDING", orderId);
                 // Tạo refund request mới
                 java.util.Date currentDate = new java.util.Date();
                 dao.createRefund(orderId, acc.getUname(), order.getTotal_price(), currentDate);
