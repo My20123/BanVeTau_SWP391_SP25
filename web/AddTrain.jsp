@@ -6,6 +6,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Add Train</title>
         <link rel="stylesheet" href="css/edit.css">
+        <style>
+            .error-message {
+                color: red;
+                font-size: 12px;
+                margin-left: 10px;
+            }
+        </style>
     </head>
     <body>
         <div class="form-container">
@@ -14,6 +21,14 @@
                 <div class="form-group">
                     <label for="id">Train ID</label>
                     <input type="text" name="id" required>
+                    <%
+                        String errorMessage = (String) request.getAttribute("errorMessage");
+                        if (errorMessage != null) {
+                    %>
+                        <span class="error-message"><%= errorMessage %></span>
+                    <%
+                        }
+                    %>
                 </div>
                 <div class="form-group">
                     <label for="type">Train type</label>

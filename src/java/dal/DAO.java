@@ -189,6 +189,23 @@ public class DAO {
         }
         return list;
     }
+
+    public boolean trainExists(String id) {
+        try {
+            String query = "SELECT COUNT(*) FROM trains WHERE id = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public List<Cabins> getAllCabins() {
         List<Cabins> list = new ArrayList<>();
         String query = "select * from cabins";
@@ -209,6 +226,57 @@ public class DAO {
         }
         return list;
     }
+
+    public List<Seats> getAllSeats() {
+        List<Seats> list = new ArrayList<>();
+        String query = "select * from seats";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Seats(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public Seats GetSeatById(String id) {
+        try {
+            String query = "SELECT * FROM seats WHERE id = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Seats(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void updateSeatStatus(int seatId, int status) {
+        String query = "UPDATE Seats SET status = ? WHERE id = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, status);
+            ps.setInt(2, seatId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addCabin(Cabins ca) throws Exception {
         try {
             String query = "INSERT INTO Cabins (id, number_seat, status, avail_seat, trid, ctype, sid) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -226,6 +294,7 @@ public class DAO {
             e.printStackTrace();
         }
     }
+
     public Cabins GetCabinById(String id) {
         try {
             String query = "SELECT * FROM cabins WHERE id = ?";
@@ -249,7 +318,7 @@ public class DAO {
     }
 
     public void updateCabin(String id, int number_seat, int status, int avail_seat, String trid, String ctype, int sid) {
-        String query = "UPDATE cabins SET number_seat = ?, status = ?, avail_seat = ?, trid = ?, ctype = ?, sid WHERE id = ?";
+        String query = "UPDATE cabins SET number_seat = ?, status = ?, avail_seat = ?, trid = ?, ctype = ?, sid = ? WHERE id = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -258,14 +327,13 @@ public class DAO {
             ps.setInt(3, avail_seat);
             ps.setString(4, trid);
             ps.setString(5, ctype);
-            ps.setInt(6,sid);                 
+            ps.setInt(6, sid);
             ps.setString(7, id);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
 
     public List<Schedule> getAllSchedules() {
         List<Schedule> list = new ArrayList<>();
@@ -521,7 +589,6 @@ public class DAO {
         }
         return null;
     }
-    
 
     public List searchRoute(String depart, String desti) {
         List<Routes> list = new ArrayList<>();
@@ -1002,16 +1069,16 @@ public class DAO {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 list.add(new Accounts(
-                    rs.getInt("uID"),
-                    rs.getString("uname"),
-                    rs.getString("umail"),
-                    rs.getString("pass"),
-                    rs.getString("uphone"),
-                    rs.getInt("isStaff"),
-                    rs.getInt("isAdmin"),
-                    rs.getString("cccd"),
-                    rs.getString("avatar"),
-                    rs.getBoolean("status")
+                        rs.getInt("uID"),
+                        rs.getString("uname"),
+                        rs.getString("umail"),
+                        rs.getString("pass"),
+                        rs.getString("uphone"),
+                        rs.getInt("isStaff"),
+                        rs.getInt("isAdmin"),
+                        rs.getString("cccd"),
+                        rs.getString("avatar"),
+                        rs.getBoolean("status")
                 ));
             }
         } catch (SQLException e) {
