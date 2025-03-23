@@ -23,7 +23,11 @@ public class DBContext {
     private final String portNumber = "3306";
     private final String user = "root";
 
+<<<<<<< HEAD
     private final String password = "khanh123";
+=======
+    private final String password = "12345678";
+>>>>>>> b3e3c26 (chuẩn bị trước khi merge)
 
     public static void main(String[] args) {
         try {

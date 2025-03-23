@@ -17,6 +17,7 @@ CREATE TABLE Accounts (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- drop table Order_details;
+-- drop table Refund;
 -- drop table Accounts
 -- drop table Tickets
 -- drop table Seats
@@ -118,15 +119,31 @@ CREATE TABLE Order_details (
   FOREIGN KEY (tid) REFERENCES Tickets(id)
 );
 
--- Create the Feedback table
+
+-- Create Refund table 
+CREATE TABLE Refund (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    orderid INT NOT NULL,
+    accountid1 INT NOT NULL,
+    accountid2 INT NOT NULL,
+    refunddate DATETIME DEFAULT NULL,
+    totalAmount int NOT NULL,
+    requestdate DATETIME NOT NULL,
+    status varchar(10) not null,
+    FOREIGN KEY (orderid) REFERENCES Order_details(id),
+    FOREIGN KEY (accountid1) REFERENCES Accounts(uid),
+    FOREIGN KEY (accountid2) REFERENCES Accounts(uid)
+);
+
 CREATE TABLE Feedback (
     feedback_id INT AUTO_INCREMENT PRIMARY KEY,
-    account_id INT NOT NULL,
-    rate INT NOT NULL CHECK (rate >= 1 AND rate <= 5),
-    comment TEXT NOT NULL,
+    account_id INT,
+    rate INT CHECK (rate BETWEEN 1 AND 5),
+    comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (account_id) REFERENCES Accounts(uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (account_id) REFERENCES Accounts(uID)
+);
 
 
 USE prj_train;
@@ -286,11 +303,18 @@ INSERT INTO Seats (seatNo,status, price, cbid) VALUE (1,0,1022000,'SE1/1'),(2,0,
 ;
 
 -- Insert into the Tickets table
-INSERT INTO Tickets (from_station, to_station, from_date, to_date, ttype, trid,sid,rid,cbid) VALUE ('Hà Nội','Sài Gòn','2025-02-22 10:30:00','2025-02-22 10:30:00',1,'SE1',1,1,'SE1/1')
-;
+INSERT INTO Tickets (from_station, to_station, from_date, to_date, ttype, trid,sid,rid,cbid) VALUE ('Hà Nội','Sài Gòn','2025-02-22 10:30:00','2025-02-22 10:30:00',1,'SE1',1,1,'SE1/1'),
+ ('Hà Nội','Sài Gòn','2025-02-22 10:30:00','2025-02-22 10:30:00',1,'SE1',1,1,'SE1/1');
 
 -- Insert into the Order_details table
-INSERT INTO Order_details (tid,cid,status,total_price,payment_type,payment_date) VALUE (1,5,1,1022000,1,'2025-02-21');
+INSERT INTO Order_details (tid,cid,status,total_price,payment_type,payment_date) VALUE (1,5,1,1022000,1,'2025-02-21'),
+(2,5,1,1022000,1,'2025-02-21');
+
+-- Insert into the Refund table
+INSERT INTO Refund(orderid, accountid1, accountid2, refunddate, totalAmount, requestdate,status) value( 1,5,2,'2025-02-21',1022000,'2025-02-21',0);
+
+INSERT INTO Feedback (account_id, rate, comment) 
+VALUES (1, 5, 'Dịch vụ rất tốt!');
 -- SELECT * FROM Cabins where trid = 'SE1' and sid=1;
 -- select * from Schedules where id=1;
 -- SELECT ABS((SELECT value FROM Routes_data WHERE route_key = 'Huế' AND id = 1) -
@@ -327,7 +351,17 @@ INSERT INTO Schedules (rid, trid, from_time, to_time) VALUES
 SELECT * FROM Cabins;
 INSERT INTO Schedules (rid, trid, from_time, to_time) VALUES 
 -- Tuyến Hà Nội - Sài Gòn
-(1, 'SE1', '2025-03-15 06:00:00', '2025-03-16 16:00:00'), -- Tàu nhanh (~34h)
-(1, 'SE3', '2025-03-15 14:00:00', '2025-03-16 22:00:00'), -- Tàu thường (~32h)
-(1, 'SE5', '2025-03-15 06:00:00', '2025-03-16 20:00:00'); -- Tàu nhanh (~38h)
-SELECT * FROM Trains
+(1, 'SE1', '2025-03-22 06:00:00', '2025-03-23 16:00:00'), -- Tàu nhanh (~34h)
+(1, 'SE3', '2025-03-22 14:00:00', '2025-03-23 22:00:00'), -- Tàu thường (~32h)
+(1, 'SE5', '2025-03-22 06:00:00', '2025-03-23 20:00:00'); -- Tàu nhanh (~38h)
+
+DELETE FROM refund WHERE id BETWEEN 2 AND 9;
+
+
+SELECT r.id, r.orderid, a.uname, r.requestdate, r.totalAmount, r.status FROM Refund r JOIN Order_Details od ON r.orderid = od.id JOIN Accounts a ON r.accountid1 = a.uid;
+
+INSERT INTO Refund (orderid, accountid1, accountid2, totalAmount, requestdate,status) VALUES (2, 5, 2, 1022000,'2025-02-21','PENDING');
+select * from order_details;
+select * from refund;
+update refund set status='REJECTED' where orderid=2
+SELECT r.id, r.orderid, a.uname, r.requestdate, r.totalAmount, r.status FROM Refund r JOIN Order_Details od ON r.orderid = od.id JOIN Accounts a ON r.accountid1 = a.uid where r.status='APPROVED'
