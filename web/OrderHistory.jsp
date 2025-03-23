@@ -146,6 +146,9 @@
                 font-weight: 500;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
+                display: inline-block;
+                min-width: 120px;
+                text-align: center;
             }
 
             .status-pending {
@@ -291,6 +294,17 @@
                 min-width: 100px;
             }
 
+            /* Thêm style cho các trạng thái mới */
+            .status-rejected {
+                background-color: var(--danger-color);
+                color: white;
+            }
+
+            .status-refunded {
+                background-color: #6c757d;
+                color: white;
+            }
+
         </style>
 
     </head>
@@ -410,6 +424,8 @@
                                         </span>
                                         <select name="status" id="status" class="form-select border-start-0">
                                             <option value="">Tất cả trạng thái</option>
+                                            <option value="0" ${param.status == '0' ? 'selected' : ''}>Bị từ chối</option>
+                                            <option value="3" ${param.status == '3' ? 'selected' : ''}>Đã hoàn tiền</option>
                                             <option value="2" ${param.status == '2' ? 'selected' : ''}>Chờ xử lý</option>
                                             <option value="1" ${param.status == '1' ? 'selected' : ''}>Hoàn thành</option>
                                         </select>
@@ -449,12 +465,23 @@
                                         <td>${order.tickets.from_station} - ${order.tickets.to_station}</td>
                                         <td><fmt:formatDate value="${order.payment_date}" pattern="dd/MM/yyyy" /></td>
                                         <td><fmt:formatNumber value="${order.total_price}" pattern="#,##0" /> VNĐ</td>
-                                        <td><span class="status-badge ${order.status == 2 ? 'status-pending' : 'status-completed'}">
-                                                ${order.status == 2 ? 'Chờ xử lý' : 'Hoàn thành'}
-                                            </span></td>
-                                        <td><c:if test="${order.status == 1}">
-                                                <button class="btn btn-danger" onclick="openCancelModal(${order.id})">Hủy vé</button></c:if></td>
-                                        </tr>
+                                        <td>
+                                            <span class="status-badge ${order.status == 2 ? 'status-pending' : 
+                                                                       order.status == 1 ? 'status-completed' :
+                                                                       order.status == 0 ? 'status-rejected' :
+                                                                       'status-refunded'}">
+                                                ${order.status == 2 ? 'Chờ xử lý' : 
+                                                  order.status == 1 ? 'Hoàn thành' :
+                                                  order.status == 0 ? 'Bị từ chối' :
+                                                  'Đã hoàn tiền'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <c:if test="${order.status == 1}">
+                                                <button class="btn btn-danger" onclick="openCancelModal(${order.id})">Hủy vé</button>
+                                            </c:if>
+                                        </td>
+                                    </tr>
                                 </c:forEach>
                             </tbody>
                         </table>

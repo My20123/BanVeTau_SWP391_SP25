@@ -303,7 +303,7 @@
 
             <!-- Search Container -->
             <div class="search-container">
-                <form action="RefundServlet" method="GET" class="row g-3">
+                <form action="viewRefund" method="GET" class="row g-3">
                     <input type="hidden" name="action" value="search">
                     <div class="col-md-4">
                         <div class="input-group">
@@ -311,7 +311,7 @@
                                 <i class="fas fa-search text-muted"></i>
                             </span>
                             <input type="text" name="searchId" class="form-control border-start-0" 
-                                   placeholder="Tìm kiếm theo mã hoàn tiền hoặc mã đơn hàng"
+                                   placeholder="Tìm kiếm theo mã đơn hàng"
                                    value="${param.searchId != null ? param.searchId : ''}">
                         </div>
                     </div>

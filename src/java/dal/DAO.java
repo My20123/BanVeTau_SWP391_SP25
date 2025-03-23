@@ -255,33 +255,62 @@ public class DAO {
         return 0;
     }
 
-    public List getALlRefund() throws Exception {
-        List<Refund> refundList = new ArrayList<>();
+   public List<Refund> getFilterRefund(Integer orderid, String status, Date date) throws Exception {
+    List<Refund> refundList = new ArrayList<>();
 
-        try {
-            conn = new DBContext().getConnection();
-            String sql = "SELECT r.id, r.orderid, a.uname, r.requestdate, r.totalAmount, r.status FROM Refund r JOIN Order_Details od ON r.orderid = od.id JOIN Accounts a ON r.accountid1 = a.uid";
+    // Dùng try-with-resources để tránh rò rỉ tài nguyên
+    try (Connection conn = new DBContext().getConnection()) {
+        StringBuilder sql = new StringBuilder(
+            "SELECT r.id, r.orderid, a.uname, r.requestdate, r.totalAmount, r.status " +
+            "FROM Refund r " +
+            "JOIN Order_Details od ON r.orderid = od.id " +
+            "JOIN Accounts a ON r.accountid1 = a.uid"
+        );
 
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+        List<Object> params = new ArrayList<>();
+        boolean hasCondition = false; // Để kiểm tra có điều kiện WHERE nào chưa
 
-            while (rs.next()) {
-                Refund refund = new Refund(
+        if (orderid != null) {
+            sql.append(hasCondition ? " AND" : " WHERE").append(" r.orderid = ?");
+            params.add(orderid);
+            hasCondition = true;
+        }
+        if (status != null) {
+            sql.append(hasCondition ? " AND" : " WHERE").append(" r.status = ?");
+            params.add(status);
+            hasCondition = true;
+        }
+        if (date != null) {
+            sql.append(hasCondition ? " AND" : " WHERE").append(" r.requestdate = ?");
+            params.add(new java.sql.Date(date.getTime()));
+        }
+
+        try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            // Gán giá trị tham số vào PreparedStatement
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Refund refund = new Refund(
                         rs.getInt("id"),
                         rs.getInt("orderid"),
                         rs.getString("uname"),
                         rs.getDate("requestdate"),
                         rs.getDouble("totalAmount"),
                         rs.getString("status")
-                );
-                refundList.add(refund);
+                    );
+                    refundList.add(refund);
+                }
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return refundList;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return refundList;
+}
+
 
     public List<Schedule> getSchedulesByPage(int page, int recordsPerPage, String trainType) {
         List<Schedule> list = new ArrayList<>();
@@ -848,6 +877,20 @@ public class DAO {
 
         return schedule;
     }
+    public int searchOrderIDByRefundID(int refundID){
+        int orderid=0;
+        String query = "SELECT orderid FROM refund where id = ?;";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, refundID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                orderid = rs.getInt(1);
+            }
+            
+        } catch (Exception e) {
+        }
+        return orderid;
+    }
 
     public boolean createBooking(int userId, String scheduleId, String cabinId,
             double totalAmount, String paymentMethod,
@@ -1099,10 +1142,10 @@ public class DAO {
 
         System.out.println(dao.searchSchedules("Sài Gòn", "Hà Nội", sdf.parse("2025-03-12")));
         System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());
-        System.out.println(dao.getALlRefund());
+        System.out.println(dao.getFilterRefund(null, null, sdf.parse("2025-03-16 00:00:00")));
 //        System.out.println(dao.createRefund(2, "My", 1022000, sdf.parse("2025-03-16")));
-        System.out.println();
-        dao.updateRefundStatus("PENDING", 1);
+
+System.out.println(dao.searchOrderIDByRefundID(1));
 //        System.out.println(dao.createTicket(parsedDateTime, LocalDateTime.parse(to_time, formatter), "Hà Nội", "Sài Gòn", 1, "SE1", 2, 1, "SE1/1"));
 //        System.out.println(dao.updateSeatsPrice("Hà Nội", "Sài Gòn", 1, "A56LV", "SE1/1", 1));
 //         System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());

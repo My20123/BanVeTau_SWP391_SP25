@@ -5,6 +5,7 @@
 package controller;
 
 import dal.DAO;
+import dal.OrderDetailDAO;
 import model.*;
 import java.io.IOException;
 import java.util.List;
@@ -42,6 +43,7 @@ public class ChangeRefundStatusServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         DAO dao = new DAO();
+        OrderDetailDAO orderDao= new OrderDetailDAO();
 
         try {
             String action = request.getParameter("action");
@@ -56,9 +58,11 @@ public class ChangeRefundStatusServlet extends HttpServlet {
 
             // Xử lý action
             if (action.equals("approve")) {
-                dao.updateRefundStatus("APPROVED", refundId);
+                dao.updateRefundStatus("APPROVED", refundId);                
+                orderDao.updateOrderStatus(dao.searchOrderIDByRefundID(refundId), 3);
             } else if (action.equals("reject")) {
                 dao.updateRefundStatus("REJECTED", refundId);
+                orderDao.updateOrderStatus(dao.searchOrderIDByRefundID(refundId), 0);
             } else {
                 throw new IllegalArgumentException("Action không hợp lệ");
             }
