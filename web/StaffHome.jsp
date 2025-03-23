@@ -1,8 +1,4 @@
-<%-- 
-    Document   : Home
-    Created on : Jan 19, 2025, 10:48:04 PM
-    Author     : tra my
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -63,7 +59,7 @@
                             <a href="home" class="nav-item nav-link active" style="color: #ffa500;">Trang chủ</a>
                             <a href="manageschedule" class="nav-item nav-link" style="color: white;">Quản lí lịch trình</a>
 
-                            <a href="viewT" class="nav-item nav-link" style="color: white;">Quản lí tàu</a>                            
+                            <a href="viewT" class="nav-item nav-link" style="color: white;">Quản lí tàu</a>      
 <a href="viewRefund" class="nav-item nav-link" style="color: white;">Quản lí refund</a> 
                             <a href="" class="nav-item nav-link" style="color: white;">Quản lí vé tàu</a>
                         </div>
