@@ -8,7 +8,7 @@
         <title>Train list</title>
         <link rel="stylesheet" href="css/train.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <script src="js/filter.js"></script>
+        <script src="js/cabinfilter.js"></script>
         <!-- Favicon -->
         <link href="img/favicon.ico" rel="icon">
 
@@ -56,7 +56,7 @@
                             <a href="manageschedule" class="nav-item nav-link" style="color: white;">Quản lí lịch trình</a>
 
                             <a href="viewT" class="nav-item nav-link" style="color: white;">Quản lí tàu</a> 
-                            <a href="viewC" class="nav-item nav-link" style="color: white;">Quản lí cabin</a> 
+                            <a href="viewC" class="nav-item nav-link" style="color: white;">Quản lí cabin</a>
                              <a href="ManageSeat" class="nav-item nav-link" style="color: white;">Quản lí ghế</a> 
                             <a href="" class="nav-item nav-link" style="color: white;">Quản lí vé tàu</a>
                         </div>
@@ -69,46 +69,53 @@
             <div class="container">
                 <div class="header">
                     <div class="search-bar">
-                        <input type="text" id="search" placeholder="Search..." onkeyup="Train()">
-                        <select id="filterTrain" onchange="Train()">
+                        <input type="text" id="search" placeholder="Search..." onkeyup="filterTable()">                       
+                        <select id="filterCabin" onchange="filterTable()">
                             <option value="all">All</option>
-                            <option value="id">Train ID</option>
-                            <option value="status">Train Status</option>
-                            <option value="seats">Total Seats</option>
-                            <option value="cabins">Total Cabins</option>
+                            <option value="id">Cabin ID</option>
+                            <option value="status">Cabin status</option>
+                            <option value="seats">Available_seat</option>
+                            <option value="train_id">Train_ID</option>
+                            <option value="type">Cabin Type</option>
+                            <option value="schedule_id">Schedule ID</option>
                         </select>
+                        
                     </div>
-                    <a href="AddTrain.jsp" class="add-order-btn">+ Add New Train</a>
+                    
+                    <a href="AddCabin.jsp" class="add-order-btn">+ Add New Cabin</a>
                 </div>
                 <div class="table-container">
                     <table id="trainTable">
                         <thead>
                             <tr>
-                                <th>Train ID</th>
-                                <th>Train type</th>   
-                                <th>Train status</th>
-                                <th>Total seats</th>
-                                <th>Total cabins</th>
-                                <th>Seats available</th>
+                                <th data-column="id">Cabin ID</th>
+                                <th data-column="number_seat">Number_seat</th>   
+                                <th data-column="status">Cabin status</th>
+                                <th data-column="seats">Available_seat</th>
+                                <th data-column="train_id">Train_ID</th>
+                                <th data-column="type">Cabin Type</th>
+                                <th data-column="schedule_id">Schedule ID</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${tlist}" var="t">
+                        <c:forEach items="${clist}" var="c">
                             <tr>
-                                <td>${t.tid}</td>
-                                <td>${t.train_type}</td>
-                                <td>
+                                <td data-column="id">${c.id}</td>
+                                <td data-column="number_seat">${c.number_seats}</td>
+                                <td data-column="status">
                                     <c:choose>
-                                        <c:when test="${t.status == 1}">Available</c:when>
-                                        <c:otherwise>Maintenance</c:otherwise>
+                                        <c:when test="${c.status == 1}">Available</c:when>
+                                        <c:when test="${c.status == 0}">Full</c:when>
+                                        <c:otherwise>Sold Out</c:otherwise>
                                     </c:choose>
                                 </td>
-                                <td>${t.total_seats}</td>
-                                <td>${t.number_cabins}</td>
-                                <td>${t.available_seats}</td>
+                                <td data-column="seats">${c.avail_seats}</td>
+                                <td data-column="train_id">${c.trid}</td>
+                                <td data-column="type">${c.ctype}</td>
+                                <td data-column="schedule_id">${c.sid}</td>
                                 <td>
-                                    <a href="editT?id=${t.tid}"><i class="fas fa-edit"></i></a>                                  
+                                    <a href="editC?id=${c.id}"><i class="fas fa-edit"></i></a>                                  
                                 </td>
                             </tr>
                         </c:forEach>
@@ -118,10 +125,10 @@
             <div class="pagination">
                 <p>Showing 1 to 10 of 12 entries</p>
                 <div>
-                    <button>&lt;</button>
-                    <button class="active">1</button>
-                    <button>2</button>
-                    <button>&gt;</button>
+                    <button onclick="prevPage()">&lt;</button>
+                    <button class="active" onclick="goToPage(1)">1</button>
+                    <button onclick="goToPage(2)">2</button>
+                    <button onclick="nextPage()">&gt;</button>
                 </div>
             </div>
         </div>
@@ -139,6 +146,5 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
-
     </body>
 </html>
