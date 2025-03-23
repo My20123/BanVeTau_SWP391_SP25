@@ -118,6 +118,16 @@ CREATE TABLE Order_details (
   FOREIGN KEY (tid) REFERENCES Tickets(id)
 );
 
+-- Create the Feedback table
+CREATE TABLE Feedback (
+    feedback_id INT AUTO_INCREMENT PRIMARY KEY,
+    account_id INT NOT NULL,
+    rate INT NOT NULL CHECK (rate >= 1 AND rate <= 5),
+    comment TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (account_id) REFERENCES Accounts(uid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 USE prj_train;
 -- Insert into the Accounts table

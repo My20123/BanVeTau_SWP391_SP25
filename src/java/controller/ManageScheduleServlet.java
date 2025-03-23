@@ -38,6 +38,10 @@ public class ManageScheduleServlet extends HttpServlet {
             int totalRecords = dao.getTotalSchedules();
             int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
             
+            // Chỉ set message và error nếu chúng được truyền vào từ URL
+            String message = request.getParameter("message");
+            String error = request.getParameter("error");
+            
             request.setAttribute("schedules", schedules);
             request.setAttribute("currentPage", page);
             request.setAttribute("totalPages", totalPages);
@@ -45,11 +49,20 @@ public class ManageScheduleServlet extends HttpServlet {
             request.setAttribute("sortBy", sortBy);
             request.setAttribute("sortOrder", sortOrder);
             
-            request.getRequestDispatcher("ManagementSchedules.jsp").forward(request, response);
+            // Chỉ set message và error nếu chúng không null
+            if (message != null && !message.isEmpty()) {
+                request.setAttribute("message", message);
+            }
+            if (error != null && !error.isEmpty()) {
+                request.setAttribute("error", error);
+            }
+            
+            request.getRequestDispatcher("ManagementSchedule.jsp").forward(request, response);
             
         } catch (Exception e) {
             System.out.println("Error in ManageScheduleServlet: " + e.getMessage());
             e.printStackTrace();
+            response.sendRedirect("manageschedule");
         }
     }
 

@@ -42,6 +42,7 @@ public class DAO {
         }
     }
 
+
     public List<Accounts> getAllAccounts() {
         List<Accounts> list = new ArrayList<>();
         String query = "select * from accounts";
@@ -221,11 +222,12 @@ public class DAO {
 
     public int getTotalSchedules() {
         String sql = "SELECT COUNT(*) FROM schedules s "
-                + "INNER JOIN trains t ON s.trid = t.id ";
+                + "INNER JOIN trains t ON s.trid = t.id "
+                + "WHERE DATE(s.from_time) >= CURDATE() ";
 
-        String trainType = null; //request.getParameter("type");
+        String trainType = null;
         if (trainType != null && !trainType.isEmpty()) {
-            sql += "WHERE t.train_type = ?";
+            sql += "AND t.train_type = ?";
         }
 
         try {
@@ -283,10 +285,11 @@ public class DAO {
         String sql = "SELECT s.id, s.rid, s.trid, t.train_type, r.from_station, r.to_station, s.from_time, s.to_time "
                 + "FROM schedules s "
                 + "INNER JOIN routes r ON s.rid = r.id "
-                + "INNER JOIN trains t ON s.trid = t.id ";
+                + "INNER JOIN trains t ON s.trid = t.id "
+                + "WHERE DATE(s.from_time) >= CURDATE() ";
 
         if (trainType != null && !trainType.isEmpty()) {
-            sql += "WHERE t.train_type = ? ";
+            sql += "AND t.train_type = ? ";
         }
 
         sql += "ORDER BY s.from_time ASC LIMIT ? OFFSET ?";
@@ -977,5 +980,289 @@ dao.updateRefundStatus("PENDING", 1);
 //        for (Routes o : list) {
 //            System.out.println(o);
 //        }
+    }
+    public void addFeedback(int accountId, int rate, String comment) {
+        String query = "INSERT INTO Feedback (account_id, rate, comment) VALUES (?, ?, ?)";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, accountId);
+            ps.setInt(2, rate);
+            ps.setString(3, comment);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("addFeedback: " + e.getMessage());
+        }
+    }
+    public int getRouteId(String fromStation, String toStation) {
+        String sql = "SELECT id FROM routes WHERE from_station = ? AND to_station = ?";
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, fromStation);
+            st.setString(2, toStation);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error getting route ID: " + e.getMessage());
+        }
+        return -1;
+    }
+    public boolean addSchedule(Schedule schedule) {
+        Connection conn = null;
+        PreparedStatement st = null;
+        try {
+            conn = new DBContext().getConnection();
+            conn.setAutoCommit(false); // Start transaction
+            
+            // Validate train exists
+            String checkTrain = "SELECT id FROM trains WHERE id = ?";
+            PreparedStatement checkTrainStmt = conn.prepareStatement(checkTrain);
+            checkTrainStmt.setString(1, schedule.getTrid());
+            ResultSet trainRs = checkTrainStmt.executeQuery();
+            if (!trainRs.next()) {
+                throw new SQLException("Mã tàu không tồn tại");
+            }
+            
+            // Insert or get route
+            String insertRoute = "INSERT INTO routes (from_station, to_station) VALUES (?, ?)";
+            String getRouteId = "SELECT id FROM routes WHERE from_station = ? AND to_station = ?";
+            
+            // First try to get existing route
+            PreparedStatement getRouteStmt = conn.prepareStatement(getRouteId);
+            getRouteStmt.setString(1, schedule.getFromStation());
+            getRouteStmt.setString(2, schedule.getToStation());
+            ResultSet routeRs = getRouteStmt.executeQuery();
+            
+            int rid;
+            if (routeRs.next()) {
+                rid = routeRs.getInt("id");
+            } else {
+                // If route doesn't exist, create new one
+                PreparedStatement insertRouteStmt = conn.prepareStatement(insertRoute, PreparedStatement.RETURN_GENERATED_KEYS);
+                insertRouteStmt.setString(1, schedule.getFromStation());
+                insertRouteStmt.setString(2, schedule.getToStation());
+                insertRouteStmt.executeUpdate();
+                
+                ResultSet generatedKeys = insertRouteStmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    rid = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Không thể tạo tuyến đường mới");
+                }
+            }
+            
+            // Insert schedule
+            String insertSchedule = "INSERT INTO schedules (rid, trid, from_time, to_time) VALUES (?, ?, ?, ?)";
+            st = conn.prepareStatement(insertSchedule);
+            st.setInt(1, rid);
+            st.setString(2, schedule.getTrid());
+            st.setTimestamp(3, schedule.getFromTime());
+            st.setTimestamp(4, schedule.getToTime());
+            
+            boolean success = st.executeUpdate() > 0;
+            
+            if (success) {
+                conn.commit();
+                return true;
+            }
+            conn.rollback();
+            return false;
+            
+        } catch (Exception e) {
+            try {
+                if (conn != null) {
+                    conn.rollback(); // Rollback on error
+                }
+            } catch (Exception ex) {
+                System.out.println("Error rolling back transaction: " + ex.getMessage());
+            }
+            System.out.println("Error adding schedule: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                if (st != null) st.close();
+                if (conn != null) {
+                    conn.setAutoCommit(true); // Reset auto commit
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+    }
+    public void deleteFeedback(int feedbackId) {
+        String query = "DELETE FROM Feedback WHERE feedback_id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, feedbackId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("deleteFeedback: " + e.getMessage());
+        }
+    }
+    public boolean deleteSchedule(int id) {
+        Connection conn = null;
+        PreparedStatement st = null;
+        try {
+            conn = new DBContext().getConnection();
+            conn.setAutoCommit(false); // Start transaction
+            
+            // Check if schedule exists
+            String checkSchedule = "SELECT id FROM schedules WHERE id = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkSchedule);
+            checkStmt.setInt(1, id);
+            ResultSet rs = checkStmt.executeQuery();
+            if (!rs.next()) {
+                throw new SQLException("Lịch trình không tồn tại");
+            }
+            
+            // Delete the schedule
+            String deleteSchedule = "DELETE FROM schedules WHERE id = ?";
+            st = conn.prepareStatement(deleteSchedule);
+            st.setInt(1, id);
+            int result = st.executeUpdate();
+            
+            if (result > 0) {
+                conn.commit();
+                return true;
+            }
+            
+            conn.rollback();
+            return false;
+            
+        } catch (Exception e) {
+            try {
+                if (conn != null) {
+                    conn.rollback(); // Rollback on error
+                }
+            } catch (Exception ex) {
+                System.out.println("Error rolling back transaction: " + ex.getMessage());
+            }
+            System.out.println("Error deleting schedule: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (st != null) st.close();
+                if (conn != null) {
+                    conn.setAutoCommit(true); // Reset auto commit
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+    public Schedule getScheduleById(int id) {
+        String sql = "SELECT s.id, s.rid, s.trid, t.train_type, r.from_station, r.to_station, s.from_time, s.to_time "
+                + "FROM schedules s "
+                + "INNER JOIN routes r ON s.rid = r.id "
+                + "INNER JOIN trains t ON s.trid = t.id "
+                + "WHERE s.id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                Schedule s = new Schedule();
+                s.setId(rs.getInt("id"));
+                s.setRid(rs.getInt("rid"));
+                s.setTrid(rs.getString("trid"));
+                s.setTrainType(rs.getString("train_type"));
+                s.setFromStation(rs.getString("from_station"));
+                s.setToStation(rs.getString("to_station"));
+                s.setFromTime(rs.getTimestamp("from_time"));
+                s.setToTime(rs.getTimestamp("to_time"));
+                return s;
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getScheduleById: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public boolean updateSchedule(Schedule schedule) {
+        String sql = "UPDATE schedules SET rid=?, trid=?, from_time=?, to_time=? WHERE id=?";
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, schedule.getRid());
+            st.setString(2, schedule.getTrid());
+            st.setTimestamp(3, schedule.getFromTime());
+            st.setTimestamp(4, schedule.getToTime());
+            st.setInt(5, schedule.getId());
+            return st.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Error updating schedule: " + e.getMessage());
+            return false;
+        }
+    }
+    public void updateFeedback(int feedbackId, int rate, String comment) {
+        String query = "UPDATE Feedback SET rate = ?, comment = ? WHERE feedback_id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, rate);
+            ps.setString(2, comment);
+            ps.setInt(3, feedbackId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updateFeedback: " + e.getMessage());
+        }
+    }
+    public List<Feedback> getAllFeedback() {
+        List<Feedback> list = new ArrayList<>();
+        String sql = "SELECT f.*, a.uname as account_name FROM Feedback f " +
+                    "JOIN Accounts a ON f.account_id = a.uid " +
+                    "ORDER BY f.created_at DESC";
+        try {
+            conn = new DBContext().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Feedback f = new Feedback();
+                f.setFeedbackId(rs.getInt("feedback_id"));
+                f.setAccountId(rs.getInt("account_id"));
+                f.setRate(rs.getInt("rate"));
+                f.setComment(rs.getString("comment"));
+                f.setCreatedAt(rs.getTimestamp("created_at"));
+                f.setAccountName(rs.getString("account_name"));
+                list.add(f);
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting feedbacks: " + e.getMessage());
+        }
+        return list;
+    }
+    public List<Feedback> getFeedbackByAccountId(int accountId) {
+        List<Feedback> list = new ArrayList<>();
+        String sql = "SELECT f.*, a.uname as account_name FROM Feedback f " +
+                    "JOIN Accounts a ON f.account_id = a.uid " +
+                    "WHERE f.account_id = ? " +
+                    "ORDER BY f.created_at DESC";
+        try {
+            conn = new DBContext().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, accountId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Feedback f = new Feedback();
+                f.setFeedbackId(rs.getInt("feedback_id"));
+                f.setAccountId(rs.getInt("account_id"));
+                f.setRate(rs.getInt("rate"));
+                f.setComment(rs.getString("comment"));
+                f.setCreatedAt(rs.getTimestamp("created_at"));
+                f.setAccountName(rs.getString("account_name"));
+                list.add(f);
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting feedbacks by account: " + e.getMessage());
+        }
+        return list;
     }
 }
