@@ -16,10 +16,10 @@ public class Seats {
     public Seats() {
     }
 
-    public Seats(int id, int status, int seatNo, int price, String cabinid) {
+    public Seats(int id, int seatNo, int status, int price, String cabinid) {
         this.id = id;
-        this.status = status;// 0 là available, 1 là buying, 2 là bought
         this.seatNo = seatNo;
+        this.status = status;// 0 là available, 1 là buying, 2 là bought
         this.price = price;
         this.cabinid = cabinid;
     }
