@@ -1,3 +1,4 @@
+/* Body Styling */
 body {
     font-family: sans-serif;
     background-color: #f8f9fa;
@@ -5,6 +6,7 @@ body {
     padding: 20px;
 }
 
+/* Heading Styling */
 h1 {
     text-align: left;
     color: #212529;
@@ -12,10 +14,11 @@ h1 {
     margin-bottom: 15px;
 }
 
+/* Table Styling */
 table {
-    width: 100%;
+    width: 80%; /* Đặt chiều rộng của bảng là 80% */
+    margin: 15px auto; /* Căn giữa bảng */
     border-collapse: collapse;
-    margin-top: 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
     border-radius: 6px;
     overflow: hidden;
@@ -39,6 +42,95 @@ tr:hover {
     background-color: #f8f9fa;
 }
 
+table img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+table td.status {
+    text-align: center;
+    font-weight: 400;
+}
+
+.Active {
+    color: #28a745;
+    font-size: 0.9rem;
+}
+
+.Deadactive {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* Header Container Styling */
+.header-container {
+    display: flex;
+    justify-content: center; /* Căn giữa các phần tử theo chiều ngang */
+    align-items: center; /* Căn giữa các phần tử theo chiều dọc */
+    margin-bottom: 10px;
+    gap: 10px; /* Khoảng cách giữa các phần tử */
+}
+
+/* Search Container Styling */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Khoảng cách giữa ô tìm kiếm và dropdown */
+}
+
+.search-input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+/* Dropdown Styling */
+#filterCriteria {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    font-size: 0.9rem;
+    color: #495057;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#filterCriteria:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+#filterCriteria:hover {
+    background-color: #e9ecef;
+}
+
+/* Add Button Styling */
+.add-button {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-size: 0.85rem;
+}
+
+.add-button:hover {
+    background-color: #218838;
+}
+
+.add-button i {
+    margin-right: 3px;
+}
+
+/* Edit and Change Button Styling */
 .edit-btn,
 .change-btn {
     display: inline-flex;
@@ -77,114 +169,28 @@ tr:hover {
     font-size: 0.9rem;
 }
 
-table img {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-table td.status {
+/* Pagination Styling */
+.pagination {
+    margin: 20px 0;
     text-align: center;
-    font-weight: 400;
 }
 
-.Active {
-    color: #28a745;
-    font-size: 0.9rem;
-}
-
-.Deadactive {
-    color: #6c757d;
-    font-size: 0.9rem;
-}
-
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.add-button {
-    background-color: #28a745;
-    color: white;
+.pagination a {
+    display: inline-block;
+    margin: 0 5px;
     padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
     text-decoration: none;
-    transition: background-color 0.3s ease;
-    font-size: 0.85rem;
-}
-
-.add-button:hover {
-    background-color: #218838;
-}
-
-.add-button i {
-    margin-right: 3px;
-}
-
-.search-container {
-    display: flex;
-    align-items: center;
-}
-
-.search-input {
-    padding: 8px 12px;
+    color: #007bff;
     border: 1px solid #ddd;
     border-radius: 4px;
-    margin-right: 5px;
-    font-size: 0.9rem;
 }
 
-.search-button {
-    background-color: #e9ecef;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    color: #495057;
-    font-size: 0.9rem;
-}
-
-.search-button:hover {
-    background-color: #dee2e6;
-}
-/*Pagination*/
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.pagination button {
+.pagination a.active {
     background-color: #007bff;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    margin: 0 5px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
+    border-color: #007bff;
 }
 
-.pagination button:hover {
-    background-color: #0056b3;
-}
-
-.pagination button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-}
-
-.pagination button.active {
-    background-color: #0056b3;
-}
-
-.pagination #pageNumbers {
-    display: flex;
-    align-items: center;
+.pagination a:hover {
+    background-color: #ddd;
 }

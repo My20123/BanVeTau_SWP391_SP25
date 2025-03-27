@@ -98,9 +98,8 @@
                 <div class="form-group">
                     <label for="status">Status</label>
                     <select name="status" id="status" required>
-                        <option value="0" ${requestScope.cabins.status == 0 ? 'selected' : ''}>Full</option>
+                        <option value="0" ${requestScope.cabins.status == 0 ? 'selected' : ''}>Unavailable</option>
                         <option value="1" ${requestScope.cabins.status == 1 ? 'selected' : ''}>Available</option>
-                        <option value="2" ${requestScope.cabins.status == 2 ? 'selected' : ''}>Sold Out</option>
                     </select>
                     <div class="error-message" id="statusError"></div>
                 </div>
@@ -117,12 +116,12 @@
 
                 <div class="form-group">
                     <label for="ctype">Cabin Type</label>
-                    <input type="text" name="ctype" id="ctype" value="${requestScope.cabins.ctype}" required>
+                    <input type="text" name="ctype" id="ctype" value="${requestScope.cabins.ctype}" readonly>
                     <div class="error-message" id="ctypeError"></div>
                 </div>
                 <div class="form-group">
                     <label for="sid">Schedule ID</label>
-                    <input type="number" name="sid" id="sid" value="${requestScope.cabins.sid}" min="0" required>
+                    <input type="number" name="sid" id="sid" value="${requestScope.cabins.sid}" min="0" readonly>
                     <div class="error-message" id="sidError"></div>
                 </div>
 

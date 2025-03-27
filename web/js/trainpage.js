@@ -1,18 +1,17 @@
 function filterTable() {
     var input = document.getElementById("search").value.toUpperCase();
-    var filterType = document.getElementById("filterCabin").value;
+    var filterType = document.getElementById("filterTrain").value;
     var table = document.getElementById("trainTable");
     var tr = table.getElementsByTagName("tr");
 
     // Ánh xạ giá trị filter với index cột trong bảng
     var filterMapping = {
         "id": 0,
-        "num_seat": 1,
+        "type": 1,
         "status": 2,
         "seats": 3,
-        "train_id": 4,
-        "type": 5,
-        "schedule_id": 6
+        "cabins": 4,
+        "seat_ava": 5
     };
 
     var filteredRows = [];

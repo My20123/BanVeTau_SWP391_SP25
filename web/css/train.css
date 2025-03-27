@@ -1,23 +1,25 @@
-/*view*/
-
+/* Container Styling */
 .container {
     max-width: 1200px;
     margin: 0 auto;
 }
 
+/* Header Styling */
 .header {
     display: flex;
-    justify-content: center; /* Center the content */
-    align-items: center;
+    justify-content: space-between; /* Căn đều các phần tử trong header */
+    align-items: center; /* Căn giữa theo chiều dọc */
     margin-bottom: 20px;
-    margin-top: 100px; /* Add this line to move the header down */
-    gap: 20px; /* Add some space between the elements */
+    margin-top: 100px; /* Khoảng cách từ trên xuống */
+    gap: 20px; /* Khoảng cách giữa các phần tử */
 }
 
+/* Search Bar Styling */
 .search-bar {
     display: flex;
     align-items: center;
-    gap: 10px; /* Add some space between the input and select */
+    gap: 10px; /* Khoảng cách giữa ô tìm kiếm và dropdown */
+    flex-grow: 1; /* Cho phép search-bar chiếm không gian còn lại */
 }
 
 .search-bar input {
@@ -26,8 +28,44 @@
     border-radius: 5px;
     width: 250px;
     background-color: #f9f9f9;
+    font-size: 14px;
+    transition: all 0.3s ease;
 }
 
+.search-bar input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.search-bar input:hover {
+    background-color: #f0f0f0;
+}
+
+/* Dropdown Styling */
+.search-bar select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 150px; /* Đặt chiều rộng cố định cho dropdown */
+}
+
+.search-bar select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.search-bar select:hover {
+    background-color: #f0f0f0;
+}
+
+/* Add New Train Button Styling */
 .add-order-btn {
     background-color: #007bff;
     color: white;
@@ -37,8 +75,15 @@
     cursor: pointer;
     font-weight: bold;
     text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
+.add-order-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Table Container Styling */
 .table-container {
     background-color: white;
     border-radius: 8px;
@@ -46,6 +91,7 @@
     overflow-x: auto;
 }
 
+/* Table Styling */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -71,6 +117,7 @@ tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
+/* Pagination Styling */
 .pagination {
     display: flex;
     justify-content: space-between;
@@ -97,6 +144,7 @@ tr:nth-child(even) {
     background-color: #f0f0f0;
 }
 
+/* Icon Styling */
 .fa-edit {
     color: #4CAF50;
     cursor: pointer;
@@ -113,6 +161,7 @@ tr:nth-child(even) {
     color: #333;
 }
 
+/* Status Styling */
 .Active {
     color: green;
 }
@@ -120,4 +169,3 @@ tr:nth-child(even) {
 .Maintenance {
     color: red;
 }
-/*edit*/

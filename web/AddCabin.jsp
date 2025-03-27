@@ -78,6 +78,26 @@
 
                 return true;
             }
+            function updateSeats() {
+                var cabinType = document.getElementById("ctype").value;
+                var seatInput = document.getElementById("nseat");
+                var availableSeatInput = document.getElementById("aseat");
+
+                // Lấy số từ cabin type, ví dụ "AL56" -> 56
+                var seatNumber = cabinType.match(/\d+/);
+                if (seatNumber) {
+                    seatInput.value = seatNumber[0]; // Gán số ghế vào ô Number Seat
+                    availableSeatInput.value = seatNumber[0]; // Gán số ghế vào ô Available Seat
+                } else {
+                    seatInput.value = ""; // Xóa dữ liệu nếu không đúng định dạng
+                    availableSeatInput.value = "";
+                }
+            }
+
+            // Gọi hàm updateSeats khi nhập vào Cabin Type
+            document.addEventListener("DOMContentLoaded", function () {
+                document.getElementById("ctype").addEventListener("input", updateSeats);
+            });
         </script>
     </head>
     <body>
@@ -90,7 +110,6 @@
                 <div class="form-group">
                     <label for="id">Cabin ID</label>
                     <input type="text" name="id" id="id" required>
-                    <div class="error-message" id="idError"></div>
                 </div>
                 <div class="form-group">
                     <label for="nseat">Number Seat</label>
@@ -99,13 +118,10 @@
                 <div class="form-group">
                     <label for="status">Status</label>
                     <select name="status" id="status" required>
-                        <option value="0">Full</option>
+                        <option value="0">Unavailable</option>
                         <option value="1">Available</option>
-                        <option value="2">Sold Out</option>
                     </select>
-                    <div class="error-message" id="statusError"></div>
                 </div>
-
                 <div class="form-group">
                     <label for="aseat">Available Seat</label>
                     <input type="number" name="aseat" id="aseat" min="0" required>
@@ -115,18 +131,14 @@
                     <label for="tid">Train ID</label>
                     <input type="text" name="tid" id="tid" required>
                 </div>
-
                 <div class="form-group">
                     <label for="ctype">Cabin Type</label>
                     <input type="text" name="ctype" id="ctype" required>
-                    <div class="error-message" id="ctypeError"></div>
                 </div>
                 <div class="form-group">
                     <label for="sid">Schedule ID</label>
                     <input type="number" name="sid" id="sid" min="0" required>
-                    <div class="error-message" id="sidError"></div>
                 </div>
-
                 <input type="submit" value="Add Cabin">
             </form>
         </div>
