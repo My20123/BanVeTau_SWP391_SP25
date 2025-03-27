@@ -396,7 +396,7 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
-                            <a href="home" class="nav-item nav-link active">Trang chủ</a>
+                            <a href="home" class="nav-item nav-link ">Trang chủ</a>
                             <a href="ScheduleDetailSearch.jsp" class="nav-item nav-link">Lịch trình tàu</a>                            
                             <a href="routeview" class="nav-item nav-link">Các tuyến đường</a>
                             <a href="Feedback.jsp" class="nav-item nav-link">Đánh giá</a>
@@ -525,7 +525,9 @@
                                 <c:forEach var="order" items="${orderList}">
                                     <tr>
                                         <td>${status.index + 1}</td>
-                                        <td>${order.tickets.from_station} - ${order.tickets.to_station}</td>
+                                        <td>
+                                            ${order.tickets[0].from_station}-${order.tickets[0].to_station}
+                                        </td>
                                         <td><fmt:formatDate value="${order.payment_date}" pattern="dd/MM/yyyy" /></td>
                                         <td><fmt:formatNumber value="${order.total_price}" pattern="#,##0" /> VNĐ</td>
                                         <td>
@@ -544,9 +546,9 @@
                                                 <c:if test="${order.status == 1}">
                                                     <button class="btn btn-danger" onclick="openCancelModal(${order.id})">Hủy vé</button>
                                                 </c:if>
-                                                <button class="btn btn-light btn-icon" onclick="openDetailModal(${order.id})" title="Xem chi tiết">
+<!--                                                <button class="btn btn-light btn-icon" onclick="openDetailModal(${order.id})" title="Xem chi tiết">
                                                     <i class="fas fa-eye text-info"></i>
-                                                </button>
+                                                </button>-->
                                             </div>
                                         </td>
                                     </tr>

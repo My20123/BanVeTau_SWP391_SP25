@@ -159,9 +159,22 @@
         .ticket-table td {
             vertical-align: middle;
         }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        .passenger-info input.invalid {
+            border-color: #dc3545;
+        }
+        .passenger-info input.valid {
+            border-color: #28a745;
+        }
     </style>
 </head>
 <body>
+     <fmt:setLocale value="vi_VN"/>
     <!-- Include Header -->
     <jsp:include page="Header.jsp"></jsp:include>
 <div class="container-fluid position-relative p-0">
@@ -174,12 +187,21 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
-                            <a href="home" class="nav-item nav-link active">Trang chủ</a>
-                            <a href="about.html" class="nav-item nav-link ">Thông tin đặt chỗ</a>
-                            <a href="ScheduleDetailSearch.jsp" class="nav-item nav-link">Giờ tàu-Giá vé</a>                            
-                            <a href="routesview" class="nav-item nav-link">Các tuyến đường</a>
-                            <a href="TicketVerifi.jsp" class="nav-item nav-link">Kiểm tra vé</a>
+                            <a href="home" class="nav-item nav-link ">Trang chủ</a>
+                            <a href="ScheduleDetailSearch.jsp" class="nav-item nav-link">Lịch trình tàu</a>                            
+                            <a href="routeview" class="nav-item nav-link">Các tuyến đường</a>
+                            <a href="Feedback.jsp" class="nav-item nav-link">Đánh giá</a>
                             <a href="package.html" class="nav-item nav-link">Quy định</a>
+                            <!--                                                <div class="nav-item dropdown">
+                                                                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                                                                                <div class="dropdown-menu m-0">
+                                                                                    <a href="destination.html" class="dropdown-item">Destination</a>
+                                                                                    <a href="booking.html" class="dropdown-item">Booking</a>
+                                                                                    <a href="team.html" class="dropdown-item">Travel Guides</a>
+                                                                                    <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                                                                                    <a href="404.html" class="dropdown-item">404 Page</a>
+                                                                                </div>
+                                                                            </div>-->
                             <a href="contact.html" class="nav-item nav-link">Liên hệ</a>
                         </div>
                     </div>
@@ -195,26 +217,31 @@
             </div>
             
             <div class="order-body">
-                <c:if test="${not empty order}">
+                <form action="pay" method="get" id="paymentForm">
+                <c:if test="${order}">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="info-section">
                                 <h5 class="mb-4"><i class="fas fa-user me-2"></i>Thông Tin Đặt Vé</h5>
                                 <div class="passenger-info">
                                     <label><i class="fas fa-user-circle"></i> Họ và Tên Người Đặt:</label>
-                                    <input type="text" name="name" value="${account.uname}" ${empty account.uname ? '' : 'readonly'}>
+                                    <input type="text" name="name" id="name" value="${account.uname}" oninput="validateName(this)">
+                                    <div class="error-message" id="nameError"></div>
                                 </div>
                                 <div class="passenger-info">
                                     <label><i class="fas fa-id-card"></i> CCCD:</label>
-                                    <input type="text" name="cccd" value="${account.cccd}" ${empty account.cccd ? '' : 'readonly'}>
+                                    <input type="text" name="cccd" id="cccd" value="${account.cccd}" oninput="validateCCCD(this)">
+                                    <div class="error-message" id="cccdError"></div>
                                 </div>
                                 <div class="passenger-info">
                                     <label><i class="far fa-envelope"></i> Email:</label>
-                                    <input type="email" name="email" value="${account.umail}" ${empty account.umail ? '' : 'readonly'}>
+                                    <input type="email" name="email" id="email" value="${account.umail}" oninput="validateEmail(this)">
+                                    <div class="error-message" id="emailError"></div>
                                 </div>
                                 <div class="passenger-info">
                                     <label><i class="fas fa-phone"></i> SĐT:</label>
-                                    <input type="tel" name="phone" value="${account.uphone}" ${empty account.uphone ? '' : 'readonly'}>
+                                    <input type="tel" name="phone" id="phone" value="${account.uphone}" oninput="validatePhone(this)">
+                                    <div class="error-message" id="phoneError"></div>
                                 </div>
                             </div>
                         </div>
@@ -239,23 +266,24 @@
                                             <td>
                                                 <div class="passenger-info">
                                                     <label>Họ tên:</label>
-                                                    <input type="text">
+                                                    <input type="text" name="passengerName[]" class="passenger-name" oninput="validatePassengerName(this)">
+                                                    <div class="error-message"></div>
                                                 </div>
                                                 <div class="passenger-info">
                                                     <label>CCCD:</label>
-                                                    <input type="text">
+                                                    <input type="text" name="passengerCCCD[]" class="passenger-cccd" oninput="validatePassengerCCCD(this)">
+                                                    <div class="error-message"></div>
                                                 </div>
                                             </td>
                                             <td>
                                                 <strong>Ghế: </strong>${seat["seatNumber"]} ${seat["seatType"]}<br>
                                                 <strong>Tàu: </strong> ${seat["selectedTrainId"]}<br>
                                                 <strong>Cabin: </strong>${seat["selectedCabinId"]}<br>
-                                                <strong>Khởi hành:</strong>${from_date}
+                                                <strong>Khởi hành:</strong>${seat["fromTime"]}
                                             </td>
                                             <td>
-
-                                            <c:set var="totalPrice" value="${totalPrice + seat.price}" />
-                                            <fmt:formatNumber value="${seat.price}" pattern="#,##0" /> VNĐ
+                                                <c:set var="total" value="${total + seat.price}" />
+                                                <fmt:formatNumber value="${seat.price}" type="number" groupingUsed="true" />
                                             </td>
                                             <td>
                                                 <a href="javascript:void(0)" onclick="deleteTicket(this)" class="delete-btn">
@@ -270,22 +298,21 @@
                     </div>
                     
                     <div class="mt-4 text-end">
-                        <h5 class="total-amount">Tổng Tiền: <fmt:formatNumber value="${totalPrice}" pattern="#,##0"/> VNĐ</h5>
+                        <h5 class="total-amount">Tổng Tiền: <fmt:formatNumber value="${total}"/> VNĐ</h5>
                     </div>
                     
                     <div class="action-buttons">
-
-                        <a href="pay" class="btn btn-primary">
-
+                        <input type="hidden" name="amount" value="${totalPrice.toString().replace(',', '')}">
+                        <button type="submit" class="btn btn-primary">
                             <i class="fas fa-credit-card me-2"></i>Tiến Hành Thanh Toán
-                        </a>
+                        </button>
                         <a href="home" class="btn btn-outline-secondary">
                             <i class="fas fa-home me-2"></i>Quay Về Trang Chủ
                         </a>
                     </div>
                 </c:if>
                 
-                <c:if test="${empty order}">
+                <c:if test="${!order}">
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle me-2"></i>
                         Không tìm thấy thông tin đơn hàng.
@@ -294,6 +321,7 @@
                         <i class="fas fa-home me-2"></i>Quay Về Trang Chủ
                     </a>
                 </c:if>
+                </form>
             </div>
         </div>
     </div>
@@ -315,44 +343,285 @@
         function deleteTicket(element) {
             if (confirm('Bạn có chắc chắn muốn xóa vé này không?')) {
                 const row = element.closest('tr');
-                row.remove();
-                updateTotalPrice();
-            }
-        }
-
-        function updateTotalPrice() {
-            // Implement total price recalculation logic here
-            // This is a placeholder - you'll need to implement the actual calculation
-            const rows = document.querySelectorAll('tbody tr');
-            let total = 0;
-            rows.forEach(row => {
                 const priceText = row.querySelector('td:nth-child(3)').textContent;
                 const price = parseInt(priceText.replace(/[^\d]/g, ''));
-                total += price;
-            });
-            document.querySelector('.total-amount').textContent = `Tổng Tiền: ${total.toLocaleString('vi-VN')} VNĐ`;
-        }
-    </script>
-    <script>
-            function formatNumberToVND(number) {
-                return number.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
-            }
-
-            function formatVND() {
-                // Get all elements with the class name 'vnd'
-                const elements = document.getElementsByClassName('vnd');
-
-                // Loop through the elements and format the content
-                for (let i = 0; i < elements.length; i++) {
-                    const value = parseInt(elements[i].textContent, 10);
-                    if (!isNaN(value)) {
-                        elements[i].textContent = formatNumberToVND(value);
-                    }
+                console.log("Price:", price);
+                
+                // Cập nhật tổng tiền trước khi xóa
+                const totalPriceElement = document.querySelector('.total-amount');
+                const currentTotal = parseInt(totalPriceElement.textContent.replace(/[^\d]/g, ''));
+                const newTotal = currentTotal - price;
+                totalPriceElement.textContent = `Tổng Tiền: ` +newTotal.toLocaleString('vi-VN')+ ` VNĐ`;
+                console.log("Total price:", newTotal);
+                // Cập nhật giá trị amount trong form
+                const amountInput = document.querySelector('input[name="amount"]');
+                if (amountInput) {
+                    amountInput.value = newTotal;
+                }
+                
+                // Xóa hàng
+                row.remove();
+                
+                // Kiểm tra lại trùng lặp sau khi xóa
+                const allNames = document.querySelectorAll('.passenger-name');
+                const allCCCDs = document.querySelectorAll('.passenger-cccd');
+                
+                allNames.forEach(name => validatePassengerName(name));
+                allCCCDs.forEach(cccd => validatePassengerCCCD(cccd));
+                
+                // Kiểm tra nếu không còn vé nào
+                const remainingRows = document.querySelectorAll('tbody tr');
+                if (remainingRows.length === 0) {
+                    document.querySelector('.action-buttons').style.display = 'none';
                 }
             }
+        }
+    </script>
+    
+    <script>
+    function validateName(input) {
+        const name = input.value.trim();
+        const errorDiv = document.getElementById('nameError');
+        
+        if (name.length < 2) {
+            errorDiv.textContent = "Họ và Tên phải có ít nhất 2 ký tự!";
+            errorDiv.style.display = "block";
+            input.classList.add('invalid');
+            input.classList.remove('valid');
+            return false;
+        }
+        
+        const regex = /^[\p{L}\s]+$/u;
+        if (!regex.test(name)) {
+            errorDiv.textContent = "Họ và Tên chỉ được chứa chữ cái và khoảng trắng!";
+            errorDiv.style.display = "block";
+            input.classList.add('invalid');
+            input.classList.remove('valid');
+            return false;
+        }
+        
+        if (/\s{2,}/.test(name)) {
+            errorDiv.textContent = "Họ và Tên không được chứa nhiều khoảng trắng liên tiếp!";
+            errorDiv.style.display = "block";
+            input.classList.add('invalid');
+            input.classList.remove('valid');
+            return false;
+        }
+        
+        errorDiv.style.display = "none";
+        input.classList.remove('invalid');
+        input.classList.add('valid');
+        return true;
+    }
 
-            document.addEventListener('DOMContentLoaded', formatVND);
+    function validateCCCD(input) {
+        const cccd = input.value.trim();
+        const errorDiv = document.getElementById('cccdError');
+        
+        const regex = /^\d{12}$/;
+        if (!regex.test(cccd)) {
+            errorDiv.textContent = "CCCD phải có 12 chữ số!";
+            errorDiv.style.display = "block";
+            input.classList.add('invalid');
+            input.classList.remove('valid');
+            return false;
+        }
+        
+        errorDiv.style.display = "none";
+        input.classList.remove('invalid');
+        input.classList.add('valid');
+        return true;
+    }
+
+    function validateEmail(input) {
+        const email = input.value.trim();
+        const errorDiv = document.getElementById('emailError');
+        
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!regex.test(email)) {
+            errorDiv.textContent = "Email không hợp lệ!";
+            errorDiv.style.display = "block";
+            input.classList.add('invalid');
+            input.classList.remove('valid');
+            return false;
+        }
+        
+        errorDiv.style.display = "none";
+        input.classList.remove('invalid');
+        input.classList.add('valid');
+        return true;
+    }
+
+    function validatePhone(input) {
+        const phone = input.value.trim();
+        const errorDiv = document.getElementById('phoneError');
+        
+        const regex = /^(0)\d{9}$/;
+        if (!regex.test(phone)) {
+            errorDiv.textContent = "Số điện thoại phải có 10 chữ số và bắt đầu bằng 0!";
+            errorDiv.style.display = "block";
+            input.classList.add('invalid');
+            input.classList.remove('valid');
+            return false;
+        }
+        
+        errorDiv.style.display = "none";
+        input.classList.remove('invalid');
+        input.classList.add('valid');
+        return true;
+    }
+
+    // Thêm validation khi form submit
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const nameValid = validateName(document.getElementById('name'));
+        const cccdValid = validateCCCD(document.getElementById('cccd'));
+        const emailValid = validateEmail(document.getElementById('email'));
+        const phoneValid = validatePhone(document.getElementById('phone'));
+        
+        if (!nameValid || !cccdValid || !emailValid || !phoneValid) {
+            e.preventDefault();
+            alert('Vui lòng kiểm tra và sửa các thông tin không hợp lệ!');
+        }
+    });
+    </script>
+
+    <script>
+        // Thêm các hàm validation cho thông tin hành khách
+        function validatePassengerName(input) {
+            const name = input.value.trim();
+            const errorDiv = input.nextElementSibling;
+            
+            if (name.length < 2) {
+                errorDiv.textContent = "Họ và Tên phải có ít nhất 2 ký tự!";
+                errorDiv.style.display = "block";
+                input.classList.add('invalid');
+                input.classList.remove('valid');
+                return false;
+            }
+            
+            const regex = /^[\p{L}\s]+$/u;
+            if (!regex.test(name)) {
+                errorDiv.textContent = "Họ và Tên chỉ được chứa chữ cái và khoảng trắng!";
+                errorDiv.style.display = "block";
+                input.classList.add('invalid');
+                input.classList.remove('valid');
+                return false;
+            }
+            
+            if (/\s{2,}/.test(name)) {
+                errorDiv.textContent = "Họ và Tên không được chứa nhiều khoảng trắng liên tiếp!";
+                errorDiv.style.display = "block";
+                input.classList.add('invalid');
+                input.classList.remove('valid');
+                return false;
+            }
+
+            // Kiểm tra trùng lặp họ tên
+            const allNames = document.querySelectorAll('.passenger-name');
+            let isDuplicate = false;
+            allNames.forEach(otherInput => {
+                if (otherInput !== input && otherInput.value.trim().toLowerCase() === name.toLowerCase()) {
+                    isDuplicate = true;
+                }
+            });
+            
+            if (isDuplicate) {
+                errorDiv.textContent = "Họ và Tên này đã được sử dụng cho vé khác!";
+                errorDiv.style.display = "block";
+                input.classList.add('invalid');
+                input.classList.remove('valid');
+                return false;
+            }
+            
+            errorDiv.style.display = "none";
+            input.classList.remove('invalid');
+            input.classList.add('valid');
+            return true;
+        }
+
+        function validatePassengerCCCD(input) {
+            const cccd = input.value.trim();
+            const errorDiv = input.nextElementSibling;
+            
+            const regex = /^\d{12}$/;
+            if (!regex.test(cccd)) {
+                errorDiv.textContent = "CCCD phải có 12 chữ số!";
+                errorDiv.style.display = "block";
+                input.classList.add('invalid');
+                input.classList.remove('valid');
+                return false;
+            }
+
+            // Kiểm tra trùng lặp CCCD
+            const allCCCDs = document.querySelectorAll('.passenger-cccd');
+            let isDuplicate = false;
+            allCCCDs.forEach(otherInput => {
+                if (otherInput !== input && otherInput.value.trim() === cccd) {
+                    isDuplicate = true;
+                }
+            });
+            
+            if (isDuplicate) {
+                errorDiv.textContent = "CCCD này đã được sử dụng cho vé khác!";
+                errorDiv.style.display = "block";
+                input.classList.add('invalid');
+                input.classList.remove('valid');
+                return false;
+            }
+            
+            errorDiv.style.display = "none";
+            input.classList.remove('invalid');
+            input.classList.add('valid');
+            return true;
+        }
+
+        // Cập nhật validation khi submit form
+        document.querySelector('form').addEventListener('submit', function(e) {
+            let isValid = true;
+            
+            // Validate thông tin người đặt
+            isValid = validateName(document.getElementById('name')) && isValid;
+            isValid = validateCCCD(document.getElementById('cccd')) && isValid;
+            isValid = validateEmail(document.getElementById('email')) && isValid;
+            isValid = validatePhone(document.getElementById('phone')) && isValid;
+            
+            // Validate thông tin hành khách
+            const passengerNames = document.querySelectorAll('.passenger-name');
+            const passengerCCCDs = document.querySelectorAll('.passenger-cccd');
+            
+            // Kiểm tra trùng lặp giữa người đặt và hành khách
+            const bookerName = document.getElementById('name').value.trim().toLowerCase();
+            const bookerCCCD = document.getElementById('cccd').value.trim();
+            
+            passengerNames.forEach((name, index) => {
+                const passengerName = name.value.trim().toLowerCase();
+                const passengerCCCD = passengerCCCDs[index].value.trim();
+                
+                if (passengerName === bookerName) {
+                    // Nếu họ tên trùng, kiểm tra CCCD
+                    if (passengerCCCD !== bookerCCCD) {
+                        const errorDiv = name.nextElementSibling;
+                        errorDiv.textContent = "Nếu là người đặt vé, CCCD phải trùng khớp!";
+                        errorDiv.style.display = "block";
+                        name.classList.add('invalid');
+                        name.classList.remove('valid');
+                        isValid = false;
+                    }
+                }
+                isValid = validatePassengerName(name) && isValid;
+            });
+            
+            passengerCCCDs.forEach(cccd => {
+                isValid = validatePassengerCCCD(cccd) && isValid;
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('Vui lòng kiểm tra và sửa các thông tin không hợp lệ!');
+            }
+        });
         </script>
+
 
 </body>
 </html>

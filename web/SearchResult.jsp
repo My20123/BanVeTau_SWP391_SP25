@@ -228,7 +228,7 @@
                                 </div>                            
                                 <div class="train-group"> 
                                     <c:forEach items="${departSchedules}" var="schedule">
-                                        <div class="col-xs-4 col-sm-3 et-col-md-2 et-train-block ng-scope"  analytics-on="click" analytics-event="SelectTrain">
+                                        <div class="col-xs-4 col-sm-3 et-col-md-2 et-train-block ng-scope">
                                             <div class="et-train-head"  data-train-id="${schedule.getTrid()}">
                                                 <div class="row center-block" style="width: 40%; margin-bottom: 3px">
                                                     <div class="et-train-lamp text-center ng-binding" style="color:#bf8c01;">${schedule.getTrid()}</div> 
@@ -319,7 +319,7 @@
                                 </div>                            
                                 <div class="train-group"> 
                                     <c:forEach items="${return_schedules}" var="schedule">
-                                        <div class="col-xs-4 col-sm-3 et-col-md-2 et-train-block ng-scope"  analytics-on="click" analytics-event="SelectTrain">
+                                            <div class="col-xs-4 col-sm-3 et-col-md-2 et-train-block ng-scope">
                                             <div class="et-train-head"  data-train-id="${schedule.getTrid()}">
                                                 <div class="row center-block" style="width: 40%; margin-bottom: 3px">
                                                     <div class="et-train-lamp text-center ng-binding" style="color:#bf8c01;">${schedule.getTrid()}</div> 
@@ -427,7 +427,6 @@
                                         
                 </div>
 
-            </div>
         </div>
     </div>
     <jsp:include page="Footer.jsp"></jsp:include>
@@ -514,6 +513,44 @@
                                             returnPicker.min = this.value;
                                         });
                                     }
+
+                                    // Reset trạng thái tất cả các ghế về 0
+                                    fetch('updateS', {
+                                        method: 'PUT',
+                                        headers: { 
+                                            'Content-Type': 'application/json',
+                                            'Accept': 'application/json'
+                                        },
+                                        body: JSON.stringify({ 
+                                            id: -1, // Sử dụng -1 để đánh dấu đây là request reset
+                                            cabinid: "all", 
+                                            status: 0 
+                                        })
+                                    })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Network response was not ok');
+                                        }
+                                        return response.text();
+                                    })
+                                    .then(data => {
+                                        console.log("Reset trạng thái ghế thành công:", data);
+                                    })
+                                    .catch(error => {
+                                        console.error("Lỗi khi reset trạng thái ghế:", error);
+                                    });
+
+                                    // Reset selectedSeats và giỏ vé
+                                    selectedSeats = [];
+                                    const cart = document.getElementById("cartItems");
+                                    const button = document.getElementById("card-footer");
+                                    if (cart) {
+                                        cart.innerHTML = '';
+                                    }
+                                    if (button) {
+                                        button.style.display = 'none';
+                                    }
+                                    document.getElementById("selectedSeatsInput").value = JSON.stringify(selectedSeats);
                                 };
                                 let selectedTrainId = null;
                                 let selectedCabinId = null;
@@ -529,7 +566,7 @@
 
                                     const depart = "<c:out value='${depart}' />";
 const desti = "<c:out value='${desti}' />";
-console.log("depart: "+depart+",desti: "+desti);
+                                                            console.log("depart: " + depart + ",desti: " + desti);
 
 
                                     // Xóa selected class từ tất cả các cabin icons
@@ -553,12 +590,12 @@ console.log("depart: "+depart+",desti: "+desti);
                                     }
 
                                     const cabinNumber = cid.split("/")[1];
-                                    console.log("ctype: "+ctype);
+                                                            console.log("ctype: " + ctype);
 
                                     // Xác định layout cần tải dựa vào loại cabin
                                     const regex = /^(A|B)n\d{2}L(V)?$/;
 
-                                    let layoutFile = regex.test(ctype) ? "cabin_layout/Berths.jsp?cbid=" + cid + "&total=" + totalSeats + "&room=" + berthsInRoom + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId+"&depart="+depart+"&desti="+desti : "cabin_layout/Seats.jsp?cbid=" + cid + "&total=" + totalSeats + "&row=" + seatsInRow + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId+"&depart="+depart+"&desti="+desti;
+                                                            let layoutFile = regex.test(ctype) ? "cabin_layout/Berths.jsp?cbid=" + cid + "&total=" + totalSeats + "&room=" + berthsInRoom + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId + "&depart=" + depart + "&desti=" + desti : "cabin_layout/Seats.jsp?cbid=" + cid + "&total=" + totalSeats + "&row=" + seatsInRow + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId + "&depart=" + depart + "&desti=" + desti;
 
                                     console.log("scheduleid: ", selectedScheduleId);
                                     fetch(layoutFile)
@@ -605,31 +642,35 @@ console.log("depart: "+depart+",desti: "+desti);
                                     const seatNumber = seatElement.getAttribute("data-seat-number"); // Lấy số ghế
                                     const price = seatElement.getAttribute("data-seat-price") || "Không có giá"; // Lấy giá ghế
                                     const seatSurElement = seatElement.querySelector(".et-sit-sur"); // Tìm class "et-sit-sur"
+                                                            const bed = seatElement.querySelector(".et-bed");//Tìm class "et-bed"
 
                                     const depart = "<%= request.getAttribute("depart")%>";
                                     const desti = "<%= request.getAttribute("desti")%>";
-                                    
-                                    // Lấy thời gian từ schedule được chọn
-                                    const selectedTrainHead = document.querySelector('.et-train-head-selected');
-                                    let fromTime = '';
-                                    let toTime = '';
-                                    if (selectedTrainHead) {
-                                        // Lấy thời gian đi
-                                        const fromTimeElement = selectedTrainHead.querySelector('.et-train-head-info .row:first-child .ng-binding:last-child');
-                                        if (fromTimeElement) {
-                                            fromTime = fromTimeElement.textContent;
-                                        }
-                                        
-                                        // Lấy thời gian đến
-                                        const toTimeElement = selectedTrainHead.querySelector('.et-train-head-info .row:nth-child(2) .ng-binding:last-child');
-                                        if (toTimeElement) {
-                                            toTime = toTimeElement.textContent;
-                                        }
-                                    }
+
+                                                            // Lấy thời gian từ schedule được chọn
+                                                            const selectedTrainHead = document.querySelector('.et-train-head-selected');
+                                                            let fromTime = '';
+                                                            let toTime = '';
+                                                            if (selectedTrainHead) {
+                                                                // Lấy thời gian đi
+                                                                const fromTimeElement = selectedTrainHead.querySelector('.et-train-head-info .row:first-child .ng-binding:last-child');
+                                                                if (fromTimeElement) {
+                                                                    fromTime = fromTimeElement.textContent;
+                                                                }
+                                                                console.log("Fromtime: ",fromTime);
+
+                                                                // Lấy thời gian đến
+                                                                const toTimeElement = selectedTrainHead.querySelector('.et-train-head-info .row:nth-child(2) .ng-binding:last-child');
+                                                                if (toTimeElement) {
+                                                                    toTime = toTimeElement.textContent;
+                                                                }
+                                                            }
 
                                     if (!seatSurElement) {
                                         console.warn("⚠ Không tìm thấy .et-sit-sur trong seatElement");
-                                        return;
+                                                            }
+                                                            if (!bed) {
+                                                                console.warn("⚠ Không tìm thấy .et-bed trong bed");
                                     }
 
                                     // 🟢 Xác định loại ghế dựa vào `selectedCabinType`
@@ -643,29 +684,100 @@ console.log("depart: "+depart+",desti: "+desti);
                                         return;
                                     }
 
-                                    // 🟢 Kiểm tra xem ghế đã được chọn chưa
+                                                             // 🟢 Thêm ghế vào giỏ vé
                                     let existingSeat = document.querySelector(`#cartItems div[data-seat-number='` + seatNumber + `']`);
-                                    if (existingSeat) {
-                                        // Nếu đã chọn, click lại sẽ bỏ chọn ghế
-                                        existingSeat.remove();
-                                        seatSurElement.classList.remove("et-sit-buying"); // Bỏ hiệu ứng chọn
-                                    } else {
-                                        // 🟢 Thêm ghế vào giỏ vé
                                         let seatInfo = document.createElement("div");
                                         seatInfo.classList.add("cart-item");
                                         seatInfo.setAttribute("data-seat-number", seatNumber);
                                         seatInfo.innerHTML = `
-        <p>` + selectedTrainId + `: ` + depart + ` - ` + desti + `</p> 
+        <p>` + selectedCabinId.split("/")[0] + `: ` + depart + ` - ` + desti + `</p> 
             <p> ` + seatType + ` - Toa ` + selectedCabinId + ` - Chỗ ` + seatNumber + ` </p>
             <p> ` + fromTime + ` - ` + toTime + ` </p>        
-            <p> ` + price + ` VNĐ</p>
-        `;
+            <p> ` + price + ` VNĐ</p> `;
+                                                           
+                                                            // 🟢 Kiểm tra xem ghế đã được chọn chưa
+                                                             if (existingSeat) {
+                                                                // Nếu đã chọn, click lại sẽ bỏ chọn ghế
+                                                                existingSeat.remove();
+                                                                if (!bed) {
+                                                                seatSurElement.classList.remove("et-sit-buying"); // Bỏ hiệu ứng chọn
+                                                            }if (!seatSurElement) {
+                                                                bed.classList.remove("et-sit-buying"); // Bỏ hiệu ứng chọn
+                                                            } 
+                                                                const index = selectedSeats.findIndex(seat => seat.seatNumber === seatNumber && seat.selectedCabinId === selectedCabinId);
+                                                                if (index !== -1) {
+                                                                    selectedSeats.splice(index, 1);//Bỏ hiển thị trong cart
+                                                                }
+                                                                
+                                                                fetch('updateS', {
+                                                                    method: 'PUT',
+                                                                    headers: { 
+                                                                        'Content-Type': 'application/json',
+                                                                        'Accept': 'application/json'
+                                                                    },
+                                                                    body: JSON.stringify({ 
+                                                                        id: parseInt(seatNumber),
+                                                                        cabinid: selectedCabinId, 
+                                                                        status: 0 
+                                                                    })
+                                                                })
+                                                                .then(response => {
+                                                                    if (!response.ok) {
+                                                                        throw new Error('Network response was not ok');
+                                                                    }
+                                                                    return response.text();
+                                                                })
+                                                                .then(data => {
+                                                                    console.log("Cập nhật thành công:", data);
+                                                                    // Cập nhật UI mà không reload trang
+                                                                    document.getElementById("selectedSeatsInput").value = JSON.stringify(selectedSeats);
+                                                                    if (selectedSeats.length === 0) {
+                                                                        document.getElementById("card-footer").style.display = 'none';
+                                                                    }
+                                                                })
+                                                                .catch(error => {
+                                                                    console.error("Lỗi:", error);
+                                                                });
+                                                            } else {                                                       
                                         cart.appendChild(seatInfo);
-                                        seatSurElement.classList.add("et-sit-buying");
-                                        selectedSeats.push({ seatNumber, selectedCabinId, seatType, selectedTrainId, price, fromTime, toTime });
-                                        document.getElementById("selectedSeatsInput").value = JSON.stringify(selectedSeats);
-                                        console.log("🛒 Ghế đã chọn:", JSON.stringify(selectedSeats));
-                                        button.style.display='block';
+                                                                 if (!bed) {
+                                                                seatSurElement.classList.add("et-sit-buying");//hiệu ứng chọn
+                                                            }
+                                                                if (!seatSurElement) {
+                                                                bed.classList.add("et-sit-buying"); // hiệu ứng chọn
+                                                            }
+                                                                
+                                                                console.log("🛒 Ghế đã chọn:", JSON.stringify(selectedSeats));
+                                                                
+                                                                selectedSeats.push({seatNumber, selectedCabinId, seatType, selectedTrainId, price, fromTime, toTime}); //
+                                         document.getElementById("selectedSeatsInput").value = JSON.stringify(selectedSeats);
+                                                                
+                                                                fetch('updateS', {
+                                                                    method: 'PUT',
+                                                                    headers: { 
+                                                                        'Content-Type': 'application/json',
+                                                                        'Accept': 'application/json'
+                                                                    },
+                                                                    body: JSON.stringify({ 
+                                                                        id: parseInt(seatNumber),
+                                                                        cabinid: selectedCabinId, 
+                                                                        status: 1 
+                                                                    })
+                                                                })
+                                                                .then(response => {
+                                                                    if (!response.ok) {
+                                                                        throw new Error('Network response was not ok');
+                                                                    }
+                                                                    return response.text();
+                                                                })
+                                                                .then(data => {
+                                                                    console.log("Cập nhật thành công:", data);
+                                                                })
+                                                                .catch(error => {
+                                                                    console.error("Lỗi:", error);
+                                                                });
+                                                                
+                                                                button.style.display = 'block';
                                     }
                                 }
 
@@ -697,7 +809,7 @@ console.log("depart: "+depart+",desti: "+desti);
 
                                     // 🟢 Click vào Ghế → Gọi `selectSeat()`
                                     document.body.addEventListener('click', function (event) {
-                                        let seat = event.target.closest('.et-car-nm-64-sit, .et-col-1-16.et-seat-h-35');
+                                                                let seat = event.target.closest('.ng-isolate-scope');
                                         if (seat) {
                                             let seatNumber = seat.getAttribute("data-seat-number");
                                             if (!seatNumber) {

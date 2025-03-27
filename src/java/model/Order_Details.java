@@ -5,26 +5,25 @@
 package model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
  * @author tra my
  */
 public class Order_Details {
-    private int id, tid, cid, status, total_price, payment_type;
+    private int id, cid, status, total_price;
     private Date payment_date;
-    private Tickets tickets;
+    private List<Tickets> tickets;
 
     public Order_Details() {
     }
 
-    public Order_Details(int id, int tid, int cid, int status, int total_price, int payment_type, Date payment_date) {
+    public Order_Details(int id, int cid, int status, int total_price, Date payment_date) {
         this.id = id;
-        this.tid = tid;
         this.cid = cid;
         this.status = status;
         this.total_price = total_price;
-        this.payment_type = payment_type;
         this.payment_date = payment_date;
     }
 
@@ -35,15 +34,6 @@ public class Order_Details {
     public void setId(int id) {
         this.id = id;
     }
-
-    public int getTid() {
-        return tid;
-    }
-
-    public void setTid(int tid) {
-        this.tid = tid;
-    }
-
     public int getCid() {
         return cid;
     }
@@ -68,13 +58,6 @@ public class Order_Details {
         this.total_price = total_price;
     }
 
-    public int getPayment_type() {
-        return payment_type;
-    }
-
-    public void setPayment_type(int payment_type) {
-        this.payment_type = payment_type;
-    }
 
     public Date getPayment_date() {
         return payment_date;
@@ -84,13 +67,18 @@ public class Order_Details {
         this.payment_date = payment_date;
     }
 
-    public Tickets getTickets() {
+    public List<Tickets> getTickets() {
         return tickets;
     }
 
-    public void setTickets(Tickets tickets) {
+    public void setTickets(List<Tickets> tickets) {
         this.tickets = tickets;
     }
+
+    
+
+   
+
     
     
 }

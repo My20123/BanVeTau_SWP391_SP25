@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -93,7 +94,8 @@ public class DAO {
         return null;
     }
 
-    public void updateUser(int id, String uname, String uphone, String umail, String cccd, String avatar, int isAdmin, int isStaff) {
+    public void updateUser(int id, String uname, String uphone, String umail, String cccd, String avatar, int isAdmin,
+            int isStaff) {
         String query = "UPDATE Accounts SET uname = ?, uphone = ?, umail = ?, cccd = ?, avatar = ?, isAdmin = ?, isStaff = ? WHERE uID = ?";
 
         try {
@@ -157,7 +159,7 @@ public class DAO {
 
                 ps1.setInt(1, id);
                 ResultSet rs1 = ps1.executeQuery();
-                LinkedHashMap< String, Integer> thr_stations = new LinkedHashMap<>();
+                LinkedHashMap<String, Integer> thr_stations = new LinkedHashMap<>();
 
                 while (rs1.next()) {
                     thr_stations.put(rs1.getString("route_key"), rs1.getInt("value"));
@@ -255,62 +257,59 @@ public class DAO {
         return 0;
     }
 
-   public List<Refund> getFilterRefund(Integer orderid, String status, Date date) throws Exception {
-    List<Refund> refundList = new ArrayList<>();
+    public List<Refund> getFilterRefund(Integer orderid, String status, Date date) throws Exception {
+        List<Refund> refundList = new ArrayList<>();
 
-    // Dùng try-with-resources để tránh rò rỉ tài nguyên
-    try (Connection conn = new DBContext().getConnection()) {
-        StringBuilder sql = new StringBuilder(
-            "SELECT r.id, r.orderid, a.uname, r.requestdate, r.totalAmount, r.status " +
-            "FROM Refund r " +
-            "JOIN Order_Details od ON r.orderid = od.id " +
-            "JOIN Accounts a ON r.accountid1 = a.uid"
-        );
+        // Dùng try-with-resources để tránh rò rỉ tài nguyên
+        try (Connection conn = new DBContext().getConnection()) {
+            StringBuilder sql = new StringBuilder(
+                    "SELECT r.id, r.orderid, a.uname, r.requestdate, r.totalAmount, r.status " +
+                            "FROM Refund r " +
+                            "JOIN Order_Details od ON r.orderid = od.id " +
+                            "JOIN Accounts a ON r.accountid1 = a.uid");
 
-        List<Object> params = new ArrayList<>();
-        boolean hasCondition = false; // Để kiểm tra có điều kiện WHERE nào chưa
+            List<Object> params = new ArrayList<>();
+            boolean hasCondition = false; // Để kiểm tra có điều kiện WHERE nào chưa
 
-        if (orderid != null) {
-            sql.append(hasCondition ? " AND" : " WHERE").append(" r.orderid = ?");
-            params.add(orderid);
-            hasCondition = true;
-        }
-        if (status != null) {
-            sql.append(hasCondition ? " AND" : " WHERE").append(" r.status = ?");
-            params.add(status);
-            hasCondition = true;
-        }
-        if (date != null) {
-            sql.append(hasCondition ? " AND" : " WHERE").append(" r.requestdate = ?");
-            params.add(new java.sql.Date(date.getTime()));
-        }
-
-        try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-            // Gán giá trị tham số vào PreparedStatement
-            for (int i = 0; i < params.size(); i++) {
-                ps.setObject(i + 1, params.get(i));
+            if (orderid != null) {
+                sql.append(hasCondition ? " AND" : " WHERE").append(" r.orderid = ?");
+                params.add(orderid);
+                hasCondition = true;
+            }
+            if (status != null) {
+                sql.append(hasCondition ? " AND" : " WHERE").append(" r.status = ?");
+                params.add(status);
+                hasCondition = true;
+            }
+            if (date != null) {
+                sql.append(hasCondition ? " AND" : " WHERE").append(" r.requestdate = ?");
+                params.add(new java.sql.Date(date.getTime()));
             }
 
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Refund refund = new Refund(
-                        rs.getInt("id"),
-                        rs.getInt("orderid"),
-                        rs.getString("uname"),
-                        rs.getDate("requestdate"),
-                        rs.getDouble("totalAmount"),
-                        rs.getString("status")
-                    );
-                    refundList.add(refund);
+            try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+                // Gán giá trị tham số vào PreparedStatement
+                for (int i = 0; i < params.size(); i++) {
+                    ps.setObject(i + 1, params.get(i));
+                }
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Refund refund = new Refund(
+                                rs.getInt("id"),
+                                rs.getInt("orderid"),
+                                rs.getString("uname"),
+                                rs.getDate("requestdate"),
+                                rs.getDouble("totalAmount"),
+                                rs.getString("status"));
+                        refundList.add(refund);
+                    }
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return refundList;
     }
-    return refundList;
-}
-
 
     public List<Schedule> getSchedulesByPage(int page, int recordsPerPage, String trainType) {
         List<Schedule> list = new ArrayList<>();
@@ -385,7 +384,7 @@ public class DAO {
             ps.setInt(2, seatNo);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                return new Seats(rs.getInt(1), rs.getInt(3), seatNo, rs.getInt(4), cbid);
+                return new Seats(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), cbid);
             }
         } catch (Exception e) {
         }
@@ -401,7 +400,8 @@ public class DAO {
             ps.setInt(2, sid);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Cabins(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), trid, rs.getString(6), sid));
+                list.add(new Cabins(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), trid, rs.getString(6),
+                        sid));
             }
         } catch (Exception e) {
         }
@@ -466,6 +466,7 @@ public class DAO {
             e.printStackTrace();
         }
     }
+
     public boolean trainExists(String id) {
         try {
             String query = "SELECT COUNT(*) FROM trains WHERE id = ?";
@@ -711,6 +712,19 @@ public class DAO {
         }
     }
 
+    public void updateSeatStatusWithSeatN0NCabinid(int seatnumber, String cabinid, int status) {
+        String query = "UPDATE Seats SET status = ? WHERE seatNo = ? and cbid = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, status);
+            ps.setInt(2, seatnumber);
+            ps.setString(3, cabinid);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addCabin(Cabins ca) throws Exception {
         try {
             String query = "INSERT INTO Cabins (id, number_seat, status, avail_seat, trid, ctype, sid) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -751,7 +765,8 @@ public class DAO {
         return null;
     }
 
-    public void updateCabin(String id, int number_seat, int status, int avail_seat, String trid, String ctype, int sid) {
+    public void updateCabin(String id, int number_seat, int status, int avail_seat, String trid, String ctype,
+            int sid) {
         String query = "UPDATE cabins SET number_seat = ?, status = ?, avail_seat = ?, trid = ?, ctype = ?, sid = ? WHERE id = ?";
         try {
             conn = new DBContext().getConnection();
@@ -794,7 +809,8 @@ public class DAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Cabins cabin = new Cabins(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getString(6), rs.getInt(7));
+                    Cabins cabin = new Cabins(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(4),
+                            rs.getString(5), rs.getString(6), rs.getInt(7));
                     listC.add(cabin);
                 }
                 listC.sort(Comparator.comparingInt(c -> {
@@ -836,8 +852,7 @@ public class DAO {
                         rs.getString("from_station"),
                         rs.getString("to_station"),
                         rs.getTimestamp("from_time"),
-                        rs.getTimestamp("to_time")
-                );
+                        rs.getTimestamp("to_time"));
                 list.add(schedule);
             }
         } catch (Exception e) {
@@ -854,7 +869,7 @@ public class DAO {
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
 
             // Set parameters
-            stmt.setDate(1, new java.sql.Date(date.getTime()));  // Convert java.util.Date to java.sql.Date
+            stmt.setDate(1, new java.sql.Date(date.getTime())); // Convert java.util.Date to java.sql.Date
             stmt.setString(2, trid);
 
             // Execute query
@@ -877,8 +892,9 @@ public class DAO {
 
         return schedule;
     }
-    public int searchOrderIDByRefundID(int refundID){
-        int orderid=0;
+
+    public int searchOrderIDByRefundID(int refundID) {
+        int orderid = 0;
         String query = "SELECT orderid FROM refund where id = ?;";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, refundID);
@@ -886,43 +902,94 @@ public class DAO {
             while (rs.next()) {
                 orderid = rs.getInt(1);
             }
-            
+
         } catch (Exception e) {
         }
         return orderid;
     }
 
-    public boolean createBooking(int userId, String scheduleId, String cabinId,
-            double totalAmount, String paymentMethod,
-            String contactName, String contactEmail, String contactPhone) {
-        String sql = "INSERT INTO Booking (user_id, schedule_id, cabin_id, total_amount, "
-                + "payment_method, payment_status, contact_name, contact_email, "
-                + "contact_phone, booking_time, status) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?)";
+    public int searchTicketId(String fromStation, String toStation, LocalDateTime fromDate, LocalDateTime toDate,
+            int ttype, String trid, int sid, int rid, String cbid) {
+        String query = "SELECT id FROM Tickets WHERE from_station = ? AND to_station = ? AND from_date = ? AND to_date = ? "
+                + "AND ttype = ? AND trid = ? AND sid = ? AND rid = ? AND cbid = ?";
 
         try {
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, userId);
-            st.setString(2, scheduleId);
-            st.setString(3, cabinId);
-            st.setDouble(4, totalAmount);
-            st.setString(5, paymentMethod);
-            st.setString(6, "completed"); // Payment status
-            st.setString(7, contactName);
-            st.setString(8, contactEmail);
-            st.setString(9, contactPhone);
-            st.setString(10, "confirmed"); // Booking status
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, fromStation);
+            ps.setString(2, toStation);
+            ps.setTimestamp(3, Timestamp.valueOf(fromDate));
+            ps.setTimestamp(4, Timestamp.valueOf(toDate));
+            ps.setInt(5, ttype);
+            ps.setString(6, trid);
+            ps.setInt(7, sid);
+            ps.setInt(8, rid);
+            ps.setString(9, cbid);
 
-            int rowsAffected = st.executeUpdate();
-
-            if (rowsAffected > 0) {
-                // Update cabin availability or mark seats as booked
-                return updateCabinAvailability(scheduleId, cabinId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
             }
-            return false;
         } catch (SQLException e) {
-            System.out.println("Error creating booking: " + e.getMessage());
-            return false;
+            System.out.println("Lỗi khi tìm ticketID: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return -1; // Trả về -1 nếu không tìm thấy
+    }
+
+    public int createOrder(int totalPrice, Date paymentDate, int customerId) throws Exception {
+        String query = "INSERT INTO Order_details (status, total_price, payment_date, cid) VALUES (4, ?, ?, ?)";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = new DBContext().getConnection();
+            conn.setAutoCommit(false); // Bắt đầu transaction
+
+            ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, totalPrice);
+            ps.setTimestamp(2, new Timestamp(paymentDate.getTime()));
+            ps.setInt(3, customerId);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("Không thể tạo đơn hàng, không có dòng nào bị ảnh hưởng");
+            }
+
+            // Lấy orderId vừa tạo
+            rs = ps.getGeneratedKeys();
+            if (!rs.next()) {
+                throw new SQLException("Không thể lấy ID của đơn hàng vừa tạo");
+            }
+
+            int orderId = rs.getInt(1);
+            conn.commit(); // Commit transaction
+            return orderId;
+
+        } catch (SQLException e) {
+            try {
+                if (conn != null) {
+                    conn.rollback(); // Rollback nếu có lỗi
+                }
+            } catch (SQLException ex) {
+                System.out.println("Lỗi khi rollback transaction: " + ex.getMessage());
+            }
+            System.out.println("Lỗi khi tạo đơn hàng: " + e.getMessage());
+            e.printStackTrace();
+            return -1;
+        } finally {
+            try {
+                if (rs != null)
+                    rs.close();
+                if (ps != null)
+                    ps.close();
+                if (conn != null) {
+                    conn.setAutoCommit(true); // Reset auto commit
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Lỗi khi đóng kết nối: " + e.getMessage());
+            }
         }
     }
 
@@ -973,8 +1040,41 @@ public class DAO {
             return false;
         }
     }
+public int getDistance(String fromStation, String toStation, int sid){
+     String query = "select rid from Schedules where id=?";
+     int distance=0,rid;
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, sid);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                rid = rs.getInt(1);
 
-    public int updateSeatsPrice(String fromStation, String toStation, int sid, String cabinType, String cabinId, int seatNo) throws SQLException {
+                // ✅ Truy vấn khoảng cách giữa fromStation và toStation
+                String query1 = "SELECT ABS("
+                        + "    (SELECT value FROM Routes_data WHERE route_key = ? AND id = ?) - "
+                        + "    (SELECT value FROM Routes_data WHERE route_key = ? AND id = ?)"
+                        + ") AS distance";
+
+                try (PreparedStatement ps1 = conn.prepareStatement(query1)) {
+                    ps1.setString(1, toStation);
+                    ps1.setInt(2, rid);
+                    ps1.setString(3, fromStation);
+                    ps1.setInt(4, rid);
+
+                    ResultSet rs1 = ps1.executeQuery();
+                    while (rs1.next()) {
+                        distance = rs1.getInt("distance");
+                    }
+                    return distance;
+                }   }
+        } catch (Exception e) {
+        }
+        return 0; // Nếu không cập nhật được bất kỳ ghế nào
+    }
+
+
+    public int updateSeatsPrice(String fromStation, String toStation, int sid, String cabinType, String cabinId,
+            int seatNo) throws SQLException {
         int seatPrice = 0;
         int price = 0;
         int rid = 0;
@@ -1018,7 +1118,8 @@ public class DAO {
                         // ✅ Lấy tổng số ghế trong cabin
                         Pattern pattern = Pattern.compile("\\d+");
                         Matcher matcher = pattern.matcher(cabinType);
-                        int totalSeats = matcher.find() ? Integer.parseInt(matcher.group()) : 1; // Tránh lỗi `NoMatchFoundException`
+                        int totalSeats = matcher.find() ? Integer.parseInt(matcher.group()) : 1; // Tránh lỗi
+                                                                                                 // `NoMatchFoundException`
 
                         // ✅ Công thức tính giá vé
                         price = distance * 550 + seatPrice * (200 - totalSeats) / 100 + vip;
@@ -1060,74 +1161,37 @@ public class DAO {
         }
     }
 
-    public int createTicket(LocalDateTime from_time, LocalDateTime to_time, String fromStation, String toStation, int ttype, String trid, int sid, int rid, String cbid) {
-        String query = "INSERT INTO Tickets (from_station, to_station, from_date, to_date, ttype, trid,sid,rid,cbid) "
-                + "VALUES (?, ?, ?, ?, ?,?,?,?,?)";
-        Timestamp timestamp1 = Timestamp.valueOf(from_time);
-        Timestamp timestamp2 = Timestamp.valueOf(to_time);
+    public int createTicket(LocalDateTime fromDateTime, LocalDateTime toDateTime,
+            String fromStation, String toStation, int ttype, String trid,
+            int sid, int rid, String cbid) {
+        String query = "INSERT INTO Tickets (from_date, to_date, from_station, to_station, ttype, trid, sid, rid, cbid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
-            PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1, fromStation);
-            ps.setString(2, toStation);
-            ps.setTimestamp(3, timestamp1);
-            ps.setTimestamp(4, timestamp2);
+            PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ps.setTimestamp(1, Timestamp.valueOf(fromDateTime));
+            ps.setTimestamp(2, Timestamp.valueOf(toDateTime));
+            ps.setString(3, fromStation);
+            ps.setString(4, toStation);
             ps.setInt(5, ttype);
             ps.setString(6, trid);
             ps.setInt(7, sid);
             ps.setInt(8, rid);
             ps.setString(9, cbid);
 
-            int affectedRows = ps.executeUpdate();
-            if (affectedRows == 0) {
-                return -1;
-            }
+            ps.executeUpdate();
 
+            // Lấy ticketId vừa tạo
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 return rs.getInt(1);
             }
+            return -1;
         } catch (SQLException e) {
-            System.out.println("Error creating ticket: " + e.getMessage());
+            System.out.println("Lỗi khi tạo vé: " + e.getMessage());
+            e.printStackTrace();
+            return -1;
         }
-        return -1;
     }
 
-    public boolean createOrder(Order_Details order) {
-        String query = "INSERT INTO Order_Details (tid,cid,status,total_price,payment_type,payment_date) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, order.getTid());
-            ps.setInt(2, order.getCid());
-            ps.setInt(3, order.getStatus());
-            ps.setDouble(4, order.getTotal_price());
-            ps.setInt(5, order.getPayment_type());
-            ps.setTimestamp(6, new Timestamp(order.getPayment_date().getTime()));
-
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.out.println("Error creating order: " + e.getMessage());
-        }
-        return false;
-    }
-
-//    public boolean checkSeatAvailability(int trainId, String cabinId, int seatNumber) {
-//        String query = "SELECT COUNT(*) FROM Tickets WHERE train_id = ? AND cabin_id = ? AND seat_number = ?";
-//        try {
-//            PreparedStatement ps = conn.prepareStatement(query);
-//            ps.setInt(1, trainId);
-//            ps.setString(2, cabinId);
-//            ps.setInt(3, seatNumber);
-//            
-//            ResultSet rs = ps.executeQuery();
-//            if (rs.next()) {
-//                return rs.getInt(1) == 0; // Return true if seat is available (count = 0)
-//            }
-//        } catch (SQLException e) {
-//            System.out.println("Error checking seat availability: " + e.getMessage());
-//        }
-//        return false;
-//    }
     public static void main(String[] args) throws ParseException, Exception {
         DAO dao = new DAO();
         LocalDateTime now = LocalDateTime.now();
@@ -1143,39 +1207,47 @@ public class DAO {
         System.out.println(dao.searchSchedules("Sài Gòn", "Hà Nội", sdf.parse("2025-03-12")));
         System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());
         System.out.println(dao.getFilterRefund(null, null, sdf.parse("2025-03-16 00:00:00")));
-//        System.out.println(dao.createRefund(2, "My", 1022000, sdf.parse("2025-03-16")));
+        // System.out.println(dao.createRefund(2, "My", 1022000,
+        // sdf.parse("2025-03-16")));
 
-System.out.println(dao.searchOrderIDByRefundID(1));
-//        System.out.println(dao.createTicket(parsedDateTime, LocalDateTime.parse(to_time, formatter), "Hà Nội", "Sài Gòn", 1, "SE1", 2, 1, "SE1/1"));
-//        System.out.println(dao.updateSeatsPrice("Hà Nội", "Sài Gòn", 1, "A56LV", "SE1/1", 1));
-//         System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());
-//        List<Schedule> listS = dao.searchSchedules("Hà Nội", "Sài Gòn", sdf.parse("2025-03-09"));
-//        for (Schedule schedules : listS) {
-//            List<Cabins> cabins = dao.searchCabinsWithTrainID(schedules.getTrid());
-//            System.out.println(dao.searchCabinsWithTrainID(schedules.getTrid()));
-//            System.out.println("lm");
-//        }
-//        System.out.println(dao.searchRoute("Hà Nội", "Sài Gòn"));
-//        System.out.println(dao.searchAvailSeatsOfTrainWithScheduleID(64));
-//System.out.println(dao.searchSchedules("Hà Nội", "Sài Gòn", sdf.parse("2025-03-06")));
-//dao.searchCabinsWithTrainID("SE1");
-//        System.out.println(dao.searchCabinsWithTrainID("SE1").toString());
-        //  System.out.println(dao.searchSchedules(dao.searchRoute("Hà Nội", "Sài Gòn"), sdf.parse("2025-03-03")));
-//        System.out.println(dao.searchTrainIDWithRid(1));
-//        System.out.println(dao.searchCabinsWithTrainID("SE1").get(0).toString());
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        String dateString = "2025-02-22";
-//        Date parsedDate = sdf.parse(dateString);
-//        List<Schedules> list = dao.searchSchedules(dao.searchRoute("Hà Nội", "Sài Gòn"), parsedDate);
-//        for (Schedules s : list) {
-//            System.out.println(s);
-//        }
-//        System.out.println(dao.login("My", "123456"));
-//        System.out.println(list);
-//List<Accounts> listA = dao.getAllAccounts();
-//        for (Routes o : list) {
-//            System.out.println(o);
-//        }
+        // System.out.println(dao.searchOrderIDByRefundID(1));
+        // System.out.println(dao.createTicket(parsedDateTime,
+        // LocalDateTime.parse(to_time, formatter), "Hà Nội", "Sài Gòn", 1, "SE1", 2, 1,
+        // "SE1/1"));
+        // System.out.println(dao.updateSeatsPrice("Hà Nội", "Sài Gòn", 1, "A56LV",
+        // "SE1/1", 1));
+        // System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());
+        // List<Schedule> listS = dao.searchSchedules("Hà Nội", "Sài Gòn",
+        // sdf.parse("2025-03-09"));
+        // for (Schedule schedules : listS) {
+        // List<Cabins> cabins = dao.searchCabinsWithTrainID(schedules.getTrid());
+        // System.out.println(dao.searchCabinsWithTrainID(schedules.getTrid()));
+        // System.out.println("lm");
+        // }
+        // System.out.println(dao.searchRoute("Hà Nội", "Sài Gòn"));
+        // System.out.println(dao.searchAvailSeatsOfTrainWithScheduleID(64));
+        // System.out.println(dao.searchSchedules("Hà Nội", "Sài Gòn",
+        // sdf.parse("2025-03-06")));
+        // dao.searchCabinsWithTrainID("SE1");
+        // System.out.println(dao.searchCabinsWithTrainID("SE1").toString());
+        // System.out.println(dao.searchSchedules(dao.searchRoute("Hà Nội", "Sài Gòn"),
+        // sdf.parse("2025-03-03")));
+        // System.out.println(dao.searchTrainIDWithRid(1));
+        // System.out.println(dao.searchCabinsWithTrainID("SE1").get(0).toString());
+        // SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        // String dateString = "2025-02-22";
+        // Date parsedDate = sdf.parse(dateString);
+        // List<Schedules> list = dao.searchSchedules(dao.searchRoute("Hà Nội", "Sài
+        // Gòn"), parsedDate);
+        // for (Schedules s : list) {
+        // System.out.println(s);
+        // }
+        // System.out.println(dao.login("My", "123456"));
+        // System.out.println(list);
+        // List<Accounts> listA = dao.getAllAccounts();
+        // for (Routes o : list) {
+        // System.out.println(o);
+        // }
     }
 
     public void addFeedback(int accountId, int rate, String comment) {
@@ -1239,7 +1311,8 @@ System.out.println(dao.searchOrderIDByRefundID(1));
                 rid = routeRs.getInt("id");
             } else {
                 // If route doesn't exist, create new one
-                PreparedStatement insertRouteStmt = conn.prepareStatement(insertRoute, PreparedStatement.RETURN_GENERATED_KEYS);
+                PreparedStatement insertRouteStmt = conn.prepareStatement(insertRoute,
+                        PreparedStatement.RETURN_GENERATED_KEYS);
                 insertRouteStmt.setString(1, schedule.getFromStation());
                 insertRouteStmt.setString(2, schedule.getToStation());
                 insertRouteStmt.executeUpdate();
@@ -1475,4 +1548,142 @@ System.out.println(dao.searchOrderIDByRefundID(1));
         }
         return list;
     }
+
+    public void resetAllSeatStatus() {
+        try {
+            String sql = "UPDATE Seats SET status = 0 where status = 1";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi reset trạng thái ghế: " + e.getMessage());
+        }
+    }
+
+    public boolean createOrderUser(int orderId, String fullname, String cccd, String email, String phone) {
+        String query = "INSERT INTO Order_user (fullname, cccd, email, phone, oid) VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, fullname);
+            ps.setString(2, cccd);
+            ps.setString(3, email);
+            ps.setString(4, phone);
+            ps.setInt(5, orderId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi tạo Order_user: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean createTicketUser(int ticketId, String fullname, String cccd) {
+        String query = "INSERT INTO Ticket_user (fullname, cccd, tid) VALUES (?, ?, ?)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, fullname);
+            ps.setString(2, cccd);
+            ps.setInt(3, ticketId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi tạo Ticket_user: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<OrderUser> getOrderUsersByOrderId(int orderId) {
+        List<OrderUser> list = new ArrayList<>();
+        String query = "SELECT * FROM Order_user WHERE oid = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                OrderUser ou = new OrderUser();
+                ou.setId(rs.getInt("id"));
+                ou.setFullname(rs.getString("fullname"));
+                ou.setCccd(rs.getString("cccd"));
+                ou.setEmail(rs.getString("email"));
+                ou.setPhone(rs.getString("phone"));
+                ou.setOrderId(rs.getInt("oid"));
+                list.add(ou);
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi lấy thông tin Order_user: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<TicketUser> getTicketUsersByTicketId(int ticketId) {
+        List<TicketUser> list = new ArrayList<>();
+        String query = "SELECT * FROM Ticket_user WHERE tid = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, ticketId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                TicketUser tu = new TicketUser();
+                tu.setId(rs.getInt("id"));
+                tu.setFullname(rs.getString("fullname"));
+                tu.setCccd(rs.getString("cccd"));
+                tu.setTicketId(rs.getInt("tid"));
+                list.add(tu);
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi lấy thông tin Ticket_user: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public boolean createOrderTicket(int orderId, int ticketId) {
+        String query = "INSERT INTO Order_Tickets (order_id, ticket_id) VALUES (?, ?)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, orderId);
+            ps.setInt(2, ticketId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi tạo Order_Tickets: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateOrderStatus(int orderId, int status) {
+        String query = "UPDATE Order_details SET status = ? WHERE id = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, status);
+            ps.setInt(2, orderId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi cập nhật trạng thái đơn hàng: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public int searchSeatId(int seatNumber, String cabinId) {
+        String query = "SELECT id FROM Seats WHERE seatNo = ? AND cbid = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, seatNumber);
+            ps.setString(2, cabinId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi tìm seatId: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return -1; // Trả về -1 nếu không tìm thấy
+    }
+
 }
