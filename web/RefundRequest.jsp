@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+    <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
@@ -303,7 +303,7 @@
 
             <!-- Search Container -->
             <div class="search-container">
-                <form action="RefundServlet" method="GET" class="row g-3">
+                <form action="viewRefund" method="GET" class="row g-3">
                     <input type="hidden" name="action" value="search">
                     <div class="col-md-4">
                         <div class="input-group">
@@ -311,7 +311,7 @@
                                 <i class="fas fa-search text-muted"></i>
                             </span>
                             <input type="text" name="searchId" class="form-control border-start-0" 
-                                   placeholder="Tìm kiếm theo mã hoàn tiền hoặc mã đơn hàng"
+                                   placeholder="Tìm kiếm theo mã đơn hàng"
                                    value="${param.searchId != null ? param.searchId : ''}">
                         </div>
                     </div>
@@ -388,11 +388,11 @@
                                                             </button>
                                                         </div>
                                                     </c:if>
-                                                    <button onclick="viewRefundDetails('${refund.refundId}')" 
+<!--                                                    <button onclick="viewRefundDetails('${refund.refundId}')" 
                                                             class="btn btn-light btn-icon ms-2" 
                                                             title="Xem chi tiết">
                                                         <i class="fas fa-eye text-info"></i>
-                                                    </button>
+                                                    </button>-->
                                                 </div>
                                             </td>
                                         </tr>

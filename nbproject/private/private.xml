@@ -3,8 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Github/BanVeTau_SWP391_SP25/src/java/dal/DAO.java</file>
-            <file>file:/D:/Github/BanVeTau_SWP391_SP25/src/java/model/Cabins.java</file>
+            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/controller/PaymentServlet.java</file>
+            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/controller/CancelOrderServlet.java</file>
+            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/controller/OrderHistoryController.java</file>
+            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/dal/DAO.java</file>
+            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/dal/DBContext.java</file>
+            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/controller/BookingServlet.java</file>
+            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/web/Order.jsp</file>
+            <file>file:/C:/Users/tra%20my/OneDrive/Documents/NetBeansProjects/WebApplication1/src/java/dal/OrderDetailDAO.java</file>
         </group>
     </open-files>
 </project-private>

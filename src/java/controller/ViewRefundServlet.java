@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
@@ -27,17 +28,17 @@ import java.util.logging.Logger;
  *
  * @author tra my
  */
-@WebServlet(name = "ViewRefundServlet", urlPatterns = { "/viewRefund" })
+@WebServlet(name = "ViewRefundServlet", urlPatterns = {"/viewRefund"})
 public class ViewRefundServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -46,9 +47,27 @@ public class ViewRefundServlet extends HttpServlet {
 
         try {
             DAO dao = new DAO();
+            String orderIDString = request.getParameter("searchId");
+            String status = request.getParameter("status");
+            String dateString = request.getParameter("date");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date=null;
+            if (dateString != null && !dateString.isEmpty()) {
+                try {
+                    date = sdf.parse(dateString);
+                } catch (Exception e) {
+                }
+            }
+            Integer orderId = null;
+            if (orderIDString != null && !orderIDString.isEmpty()) {
+                try {
+                    orderId = Integer.valueOf(orderIDString);
+                } catch (NumberFormatException e) {
+                }
+            }
 
             // Lấy danh sách yêu cầu hoàn tiền
-            refundRequests = dao.getALlRefund();
+            refundRequests = dao.getFilterRefund(orderId, status, date);
 
             if (refundRequests == null) {
                 Logger.getLogger(ViewRefundServlet.class.getName()).log(

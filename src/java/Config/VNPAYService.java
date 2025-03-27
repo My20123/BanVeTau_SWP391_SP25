@@ -3,12 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Config;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
 /**
  *
  * @author tra my
@@ -17,7 +19,7 @@ public class VNPAYService {
     private static final String vnp_TmnCode = "8J91G1B7";
     private static final String vnp_HashSecret = "5GBIR7M2POSS1I6B1CG9TE8QURG1POSV";
     private static final String vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    private static final String returnUrl = "http://WebApplication5/vnpay_return";
+    private static final String returnUrl = "http://localhost:8080/SWP_prjBanVeTau/pay-success";
 
     public static String createPaymentUrl(long amount, String orderId) {
         try {
@@ -35,11 +37,11 @@ public class VNPAYService {
             params.put("vnp_ReturnUrl", returnUrl);
             params.put("vnp_CreateDate", new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
 
-//            https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=1806000&vnp_Command=pay&vnp_CreateDate=20210801153333&vnp_CurrCode=VND&vnp_IpAddr=127.0.0.1&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+%3A5&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fdomainmerchant.vn%2FReturnUrl&vnp_TmnCode=DEMOV210&vnp_TxnRef=5&vnp_Version=2.1.0&vnp_SecureHash=3e0d61a0c0534b2e36680b3f7277743e8784cc4e1d68fa7d276e79c23be7d6318d338b477910a27992f5057bb1582bd44bd82ae8009ffaf6d141219218625c42
+            // https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=1806000&vnp_Command=pay&vnp_CreateDate=20210801153333&vnp_CurrCode=VND&vnp_IpAddr=127.0.0.1&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang+%3A5&vnp_OrderType=other&vnp_ReturnUrl=https%3A%2F%2Fdomainmerchant.vn%2FReturnUrl&vnp_TmnCode=DEMOV210&vnp_TxnRef=5&vnp_Version=2.1.0&vnp_SecureHash=3e0d61a0c0534b2e36680b3f7277743e8784cc4e1d68fa7d276e79c23be7d6318d338b477910a27992f5057bb1582bd44bd82ae8009ffaf6d141219218625c42
             // Sắp xếp tham số theo thứ tự alphabet
             List<String> keys = new ArrayList<>(params.keySet());
             Collections.sort(keys);
-            
+
             StringBuilder query = new StringBuilder();
             StringBuilder hashData = new StringBuilder();
 
@@ -64,8 +66,7 @@ public class VNPAYService {
         }
     }
 
-    
-     public static String hmacSHA512(final String key, final String data) {
+    public static String hmacSHA512(final String key, final String data) {
         try {
 
             if (key == null || data == null) {
@@ -87,6 +88,7 @@ public class VNPAYService {
             return "";
         }
     }
+
     public static String getRandomNumber(int len) {
         Random rnd = new Random();
         String chars = "0123456789";

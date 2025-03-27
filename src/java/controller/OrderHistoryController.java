@@ -10,7 +10,7 @@ import java.util.List;
 import model.Accounts;
 import model.Order_Details;
 
-@WebServlet(name = "OrderHistoryController", urlPatterns = {"/order-history"})
+@WebServlet(name = "OrderHistoryController", urlPatterns = { "/order-history" })
 public class OrderHistoryController extends HttpServlet {
 
     private static final int PAGE_SIZE = 10; // Number of orders per page
