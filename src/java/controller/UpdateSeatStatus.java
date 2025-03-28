@@ -93,7 +93,7 @@ public class UpdateSeatStatus extends HttpServlet {
         String cbid = request.getParameter("cbid");
 
         DAO d = new DAO();
-        d.updateSeatStatus(id,seatNo, status,price,cbid);
+        d.updateSeat(id,seatNo, status,price,cbid);
         response.sendRedirect("ManageSeat");
     }
 

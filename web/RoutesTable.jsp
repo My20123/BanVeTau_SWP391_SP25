@@ -41,11 +41,11 @@
     </head>
     <body>
         <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+<!--        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
-        </div>
+        </div>-->
         <!-- Spinner End -->
         <jsp:include page="Header.jsp"></jsp:include>
             <!-- Navbar & Hero Start -->
@@ -60,21 +60,10 @@
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
                             <a href="home" class="nav-item nav-link ">Trang chủ</a>
-                            <a href="about.html" class="nav-item nav-link ">Thông tin đặt chỗ</a>
-                            <a href="ScheduleDetailSearch.jsp" class="nav-item nav-link">Giờ tàu-Giá vé</a>                            
+                            <a href="ScheduleDetailSearch.jsp" class="nav-item nav-link">Lịch trình tàu</a>                            
                             <a href="routeview" class="nav-item nav-link active">Các tuyến đường</a>
-                            <a href="TicketVerifi.jsp" class="nav-item nav-link ">Kiểm tra vé</a>
+                            <a href="Feedback.jsp" class="nav-item nav-link">Đánh giá</a>
                             <a href="package.html" class="nav-item nav-link">Quy định</a>
-                            <!--                                                <div class="nav-item dropdown">
-                                                                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                                                                                <div class="dropdown-menu m-0">
-                                                                                    <a href="destination.html" class="dropdown-item">Destination</a>
-                                                                                    <a href="booking.html" class="dropdown-item">Booking</a>
-                                                                                    <a href="team.html" class="dropdown-item">Travel Guides</a>
-                                                                                    <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                                                                    <a href="404.html" class="dropdown-item">404 Page</a>
-                                                                                </div>
-                                                                            </div>-->
                             <a href="contact.html" class="nav-item nav-link">Liên hệ</a>
                         </div>
                     </div>
@@ -89,21 +78,11 @@
                             <div class="col-sm-6">
                                 <h2>Các tuyến đường</h2>
                             </div>
-                            <!--                        <div class="col-sm-6">
-                                                        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Product</span></a>
-                                                    </div>-->
                         </div>
                     </div>
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <!--                            <th>
-                                                                <span class="custom-checkbox">
-                                                                    <input type="checkbox" id="selectAll">
-                                                                    <label for="selectAll"></label>
-                                                                </span>
-                                                            </th>-->
-
                                 <th>Tên tuyến</th>
                                 <th>Các chặng</th>
                                 <th>Mác tàu</th>
@@ -111,32 +90,19 @@
                         </thead>
                         <tbody>
                         <c:forEach items="${listR}" var="o">
-                            <c:set var="trains_names" value="${dao.searchTrainsWithRid(o.id)}" />
+                            <c:set var="trains_names" value="${dao.searchTrainIDWithRid(o.id)}" />
                             <c:set var="thr_stations" value="${o.thr_station.keySet().toString()}" />
                             <tr>
                                 <td>${o.from_station}-${o.to_station}</td>
-                                
-                                    <td>${thr_stations}</td>
-                                     
-                                
-                                    <td>
+                                <td>${thr_stations}</td>
+                                <td>
                                         ${trains_names}
-                                    </td>
+                                </td>
                                  
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
-<!--                <div class="clearfix">
-                    <div class="hint-text">Showing <b>${listP.size()}</b> out of <b>${totalProducts}</b> entries</div>
-                    <ul class="pagination">
-                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}"><a href="managerproduct?page=${currentPage - 1}" class="page-link">Previous</a></li>
-                            <c:forEach begin="1" end="${totalPages}" var="i">
-                            <li class="page-item ${currentPage == i ? 'active' : ''}"><a href="managerproduct?page=${i}" class="page-link">${i}</a></li>
-                            </c:forEach>
-                        <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}"><a href="managerproduct?page=${currentPage + 1}" class="page-link">Next</a></li>
-                    </ul>
-                </div>-->
             </div>
             <a href="home"><button type="button" class="btn btn-primary">Back to home</button>
         </div>

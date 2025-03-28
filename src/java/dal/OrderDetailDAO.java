@@ -126,8 +126,6 @@ public class OrderDetailDAO extends DBContext {
         List<Order_Details> orders = new ArrayList<>();
         StringBuilder sql = new StringBuilder(
                 "SELECT od.* FROM Order_details od " +
-                        "JOIN Order_Tickets ot ON od.id = ot.order_id " +
-                        "JOIN Tickets t ON ot.ticket_id = t.id " +
                         "WHERE od.cid = ?");
 
         if (status != null) {
@@ -287,4 +285,8 @@ public class OrderDetailDAO extends DBContext {
         }
         return null;
     }
+
+//    public int deleteOrdersWithStatus4() {
+//        
+//    }
 }

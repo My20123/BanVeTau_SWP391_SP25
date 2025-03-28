@@ -93,16 +93,6 @@
                             <a href="routeview" class="nav-item nav-link">Các tuyến đường</a>
                             <a href="Feedback.jsp" class="nav-item nav-link">Đánh giá</a>
                             <a href="package.html" class="nav-item nav-link">Quy định</a>
-                            <!--                                                <div class="nav-item dropdown">
-                                                                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                                                                                <div class="dropdown-menu m-0">
-                                                                                    <a href="destination.html" class="dropdown-item">Destination</a>
-                                                                                    <a href="booking.html" class="dropdown-item">Booking</a>
-                                                                                    <a href="team.html" class="dropdown-item">Travel Guides</a>
-                                                                                    <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                                                                    <a href="404.html" class="dropdown-item">404 Page</a>
-                                                                                </div>
-                                                                            </div>-->
                             <a href="contact.html" class="nav-item nav-link">Liên hệ</a>
                         </div>
                     </div>

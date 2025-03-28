@@ -639,7 +639,7 @@ public class DAO {
     public String searchTrainIDWithRid(int rid) {
         String trids = "";
         try {
-            String query = "SELECT trid FROM Schedules where rid = ?;";
+            String query = "SELECT distinct trid FROM Schedules where rid = ?;";
             PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, rid);
@@ -774,7 +774,7 @@ public class DAO {
         return null;
     }
 
-    public void updateSeatStatus(int seatId, int seatNo, int status, int price, String cbid) {
+    public void updateSeat(int seatId, int seatNo, int status, int price, String cbid) {
         String query = "UPDATE Seats SET seatNo =?, status = ?,price = ?, cbid = ? WHERE id = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
@@ -783,6 +783,17 @@ public class DAO {
             ps.setInt(3, price);
             ps.setString(4, cbid);
             ps.setInt(5, seatId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void updateSeatStatus(int id,int status){
+        String query = "UPDATE Seats SET status = ? WHERE id=? ;";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, status);
+            ps.setInt(2, id);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -1281,9 +1292,9 @@ public int getDistance(String fromStation, String toStation, int sid){
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        System.out.println(dao.searchSchedules("Sài Gòn", "Hà Nội", sdf.parse("2025-03-12")));
-        System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());
-        System.out.println(dao.getFilterRefund(null, null, sdf.parse("2025-03-16 00:00:00")));
+      //  System.out.println(dao.searchSchedules("Sài Gòn", "Hà Nội", sdf.parse("2025-03-12")));
+        System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE3/1", 5).toString());
+        //System.out.println(dao.getFilterRefund(null, null, sdf.parse("2025-03-16 00:00:00")));
         // System.out.println(dao.createRefund(2, "My", 1022000,
         // sdf.parse("2025-03-16")));
 

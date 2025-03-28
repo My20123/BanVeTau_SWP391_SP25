@@ -526,7 +526,7 @@
                                     <tr>
                                         <td>${status.index + 1}</td>
                                         <td>
-                                            ${order.tickets[0].from_station}-${order.tickets[0].to_station}
+                                            ${order.tickets[0].from_station}-${order.tickets[0].to_station}<br>
                                         </td>
                                         <td><fmt:formatDate value="${order.payment_date}" pattern="dd/MM/yyyy" /></td>
                                         <td><fmt:formatNumber value="${order.total_price}" pattern="#,##0" /> VNĐ</td>
