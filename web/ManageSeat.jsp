@@ -32,6 +32,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+        <script src="js/seatpage.js"></script>
     </head>
     <body>
         <!-- Spinner Start -->
@@ -51,77 +52,96 @@
                         <span class="fa fa-bars"></span>
                     </button>
                     <div class="navbar-nav ms-auto py-0">
-                            <a href="home" class="nav-item nav-link active" style="color: #ffa500;">Trang chủ</a>
-                            <a href="manageschedule" class="nav-item nav-link" style="color: white;">Quản lí lịch trình</a>
+                        <a href="home" class="nav-item nav-link active" style="color: #ffa500;">Trang chủ</a>
+                        <a href="manageschedule" class="nav-item nav-link" style="color: white;">Quản lí lịch trình</a>
 
-                            <a href="viewT" class="nav-item nav-link" style="color: white;">Quản lí tàu</a>
-                            <a href="viewC" class="nav-item nav-link" style="color: white;">Quản lí cabin</a>   
-                            <a href="ManageSeat" class="nav-item nav-link" style="color: white;">Quản lí ghế</a>   
- 
-                            <a href="viewRefund" class="nav-item nav-link" style="color: white;">Quản lí refund</a> 
-                            <a href="" class="nav-item nav-link" style="color: white;">Quản lí vé tàu</a>
-                        </div>
+                        <a href="viewT" class="nav-item nav-link" style="color: white;">Quản lí tàu</a>
+                        <a href="viewC" class="nav-item nav-link" style="color: white;">Quản lí cabin</a>   
+                        <a href="ManageSeat" class="nav-item nav-link" style="color: white;">Quản lí ghế</a>   
+
+                        <a href="viewRefund" class="nav-item nav-link" style="color: white;">Quản lí refund</a> 
+                        <a href="" class="nav-item nav-link" style="color: white;">Quản lí vé tàu</a>
                     </div>
-                </nav>
             </div>
-            <!-- Back to Top -->
-            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-            
-            <div class="container">
-                <div class="header">
-                   
-                    
-                    
-                </div>
-                <div class="table-container">
-                    <table id="trainTable">
-                        <thead>
-                            <tr>
-                                <th>Seat ID</th>
-                                <th>Seat No</th>   
-                                <th>Seat status</th>
-                                <th>Price</th>
-                                <th>Cabin ID</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${seatsList}" var="s">
-                            <tr>
-                                <td>${s.id}</td>
-                                <td>${s.seatNo}</td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${s.status == 0}">Available</c:when>
-                                        <c:when test="${s.status == 1}">Buying</c:when>
-                                        <c:otherwise>Bought</c:otherwise>
-                                    </c:choose>
-                                </td>
-                                <td>${s.price}</td>
-                                <td>${s.cabinid}</td>
-                                <td>
-                                    <a href="updateS?id=${s.id}"><i class="fas fa-edit"></i></a>                                  
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-            
-        </div>
-             <jsp:include page="Footer.jsp"></jsp:include>
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/wow/wow.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="lib/tempusdominus/js/moment.min.js"></script>
-        <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+        </nav>
+    </div>
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
-        <!-- Template Javascript -->
-        <script src="js/main.js"></script>
-    </body>
+    <div class="container">
+        <div class="header">
+            <div class="search-bar">
+                <input type="text" id="search" placeholder="Search..." onkeyup="filterTable()">                       
+                <select id="filterSeat" onchange="filterTable()"> 
+                <option value="all">All</option>
+                <option value="id">Seat ID</option>
+                <option value="seatNo">Seat No</option>
+                <option value="status">Seat Status</option>
+                <option value="price">Price</option>
+                <option value="cabin_id">Cabin ID</option>
+            </select>
+
+
+        </div>
+
+        <a href="AddSeat.jsp" class="add-order-btn">+ Add New Seat</a>
+    </div>
+    <div class="table-container">
+        <table id="trainTable">
+            <thead>
+                <tr>
+                    <th>Seat ID</th>
+                    <th>Seat No</th>   
+                    <th>Seat status</th>
+                    <th>Price</th>
+                    <th>Cabin ID</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach items="${seatsList}" var="s">
+                    <tr>
+                        <td>${s.id}</td>
+                        <td>${s.seatNo}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${s.status == 0}">Available</c:when>
+                                <c:otherwise>Unavailable</c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td>${s.price}</td>
+                        <td>${s.cabinid}</td>
+                        <td>
+                            <a href="updateS?id=${s.id}"><i class="fas fa-edit"></i></a>                                  
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination">
+        <p>Showing 10 result per page</p>
+        <div>
+            <button onclick="prevPage()">&lt;</button>
+            <button class="active" onclick="goToPage(1)">1</button>
+            <button onclick="goToPage(2)">2</button>
+            <button onclick="nextPage()">&gt;</button>
+        </div>
+    </div>
+</div>
+<jsp:include page="Footer.jsp"></jsp:include>
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/wow/wow.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="lib/tempusdominus/js/moment.min.js"></script>
+<script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<!-- Template Javascript -->
+<script src="js/main.js"></script>
+</body>
 </html>

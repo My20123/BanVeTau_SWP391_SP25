@@ -87,10 +87,13 @@ public class UpdateSeatStatus extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
+        int seatNo = Integer.parseInt(request.getParameter("seatNo"));
         int status = Integer.parseInt(request.getParameter("status"));
+        int price = Integer.parseInt(request.getParameter("price"));
+        String cbid = request.getParameter("cbid");
 
         DAO d = new DAO();
-        d.updateSeatStatus(id, status);
+        d.updateSeatStatus(id,seatNo, status,price,cbid);
         response.sendRedirect("ManageSeat");
     }
 

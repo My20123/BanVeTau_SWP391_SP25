@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import model.*;
@@ -124,6 +126,46 @@ public class DAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Accounts> getAccountsByPage(int page, int recordsPerPage) {
+        List<Accounts> list = new ArrayList<>();
+        String query = "SELECT * FROM accounts LIMIT ? OFFSET ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, recordsPerPage);
+            ps.setInt(2, (page - 1) * recordsPerPage);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Accounts(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getInt(6),
+                        rs.getInt(7),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getBoolean(10)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public int getTotalAccounts() {
+        String query = "SELECT COUNT(*) FROM accounts";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public List getAllStations() {
@@ -680,6 +722,38 @@ public class DAO {
         return list;
     }
 
+    public void addSeat(Seats se) throws Exception {
+        try {
+            String query = "INSERT INTO Seats (id, seatNo, status, price, cbid) VALUES (?, ?, ?, ?, ?)";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, se.getId());
+            ps.setInt(2, se.getSeatNo());
+            ps.setInt(3, se.getStatus());
+            ps.setInt(4, se.getPrice());
+            ps.setString(5, se.getCabinid());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getLastSeatNoByCabinId(String cabinId) {
+        String query = "SELECT MAX(seatNo) FROM Seats WHERE cbid = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, cabinId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1); // Lấy số ghế cao nhất
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0; // Nếu chưa có ghế, bắt đầu từ 1
+    }
+
     public Seats GetSeatById(String id) {
         try {
             String query = "SELECT * FROM seats WHERE id = ?";
@@ -700,12 +774,15 @@ public class DAO {
         return null;
     }
 
-    public void updateSeatStatus(int seatId, int status) {
-        String query = "UPDATE Seats SET status = ? WHERE id = ?";
+    public void updateSeatStatus(int seatId, int seatNo, int status, int price, String cbid) {
+        String query = "UPDATE Seats SET seatNo =?, status = ?,price = ?, cbid = ? WHERE id = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, status);
-            ps.setInt(2, seatId);
+            ps.setInt(1, seatNo);
+            ps.setInt(2, status);
+            ps.setInt(3, price);
+            ps.setString(4, cbid);
+            ps.setInt(5, seatId);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

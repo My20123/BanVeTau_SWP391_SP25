@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Cabins;
+import model.Seats;
 
 /**
  *
@@ -63,30 +64,39 @@ public class AddCabin extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        String id = request.getParameter("id");
-        int number_seat = Integer.parseInt(request.getParameter("nseat"));
-        int status = Integer.parseInt(request.getParameter("status"));
-        int avail_seat = Integer.parseInt(request.getParameter("aseat"));
-        String trid = request.getParameter("tid");
-        String ctype = request.getParameter("ctype");
-        int sid = Integer.parseInt(request.getParameter("sid"));
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+throws ServletException, IOException {
+    String id = request.getParameter("id"); // Cabin ID nhập vào
+    int number_seat = Integer.parseInt(request.getParameter("nseat"));
+    int status = Integer.parseInt(request.getParameter("status"));
+    int avail_seat = Integer.parseInt(request.getParameter("aseat"));
+    String trid = request.getParameter("tid");
+    String ctype = request.getParameter("ctype");
+    int sid = Integer.parseInt(request.getParameter("sid"));
 
-        DAO d = new DAO();
-        if (d.GetCabinById(id) != null) {
-            request.setAttribute("error", "Cabin ID already exists.");
-            request.getRequestDispatcher("AddCabin.jsp").forward(request, response);
-        } else {
-            Cabins cabin = new Cabins(id, number_seat, status, avail_seat, trid, ctype, sid);
-            try {
-                d.addCabin(cabin);
-            } catch (Exception e) {
-                e.printStackTrace();
+    DAO d = new DAO();
+    if (d.GetCabinById(id) != null) {
+        request.setAttribute("error", "Cabin ID already exists.");
+        request.getRequestDispatcher("AddCabin.jsp").forward(request, response);
+    } else {
+        Cabins cabin = new Cabins(id, number_seat, status, avail_seat, trid, ctype, sid);
+        try {
+            d.addCabin(cabin); // Thêm cabin vào DB
+
+            // Thêm ghế cho cabin mới
+            for (int i = 1; i <= number_seat; i++) {
+                Seats seat = new Seats(0, i, 0, 1158900, id); 
+                // id (auto tăng), seatNo (bắt đầu từ 1), status = 1 (default), price cố định, cbid = id
+                d.addSeat(seat);
             }
-            response.sendRedirect("viewC");
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        response.sendRedirect("viewC"); // Chuyển hướng về danh sách cabin
     }
+}
+
 
     /** 
      * Returns a short description of the servlet.

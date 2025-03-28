@@ -33,22 +33,35 @@ public class ManageAcc extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Accounts user = (Accounts) session.getAttribute("acc");
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    HttpSession session = request.getSession();
+    Accounts user = (Accounts) session.getAttribute("acc");
 
-        if (user != null && user.getIsAdmin() == 1) {
-            DAO d = new DAO();
-            List<Accounts> list = d.getAllAccounts();
-            request.setAttribute("uAcc", list);
-            RequestDispatcher dis = request.getRequestDispatcher("ManageAcc.jsp");
-            dis.forward(request, response);
-        } else {
-            response.sendRedirect("404.html");
-        }
+    if (user != null && user.getIsAdmin() == 1) {
+        DAO d = new DAO();
+
+        // Lấy tham số trang hiện tại
+        String pageParam = request.getParameter("page");
+        int page = (pageParam != null) ? Integer.parseInt(pageParam) : 1;
+        int recordsPerPage = 8; // Số bản ghi trên mỗi trang
+
+        // Lấy danh sách tài khoản theo trang
+        List<Accounts> list = d.getAccountsByPage(page, recordsPerPage);
+        int totalRecords = d.getTotalAccounts();
+        int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);
+
+        // Gửi dữ liệu đến JSP
+        request.setAttribute("uAcc", list);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+
+        RequestDispatcher dis = request.getRequestDispatcher("ManageAcc.jsp");
+        dis.forward(request, response);
+    } else {
+        response.sendRedirect("404.html");
     }
-
+}
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

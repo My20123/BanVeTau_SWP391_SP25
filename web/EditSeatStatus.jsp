@@ -65,22 +65,36 @@
 </head>
 <body>
     <div class="form-container">
-        <h2>Edit Cabin</h2>
+        <h2>Edit Seat</h2>
         <form action="updateS" method="post">
             <div class="form-group">
                 <label for="id">Seat ID</label>
                 <input type="text" name="id" id="id" value="${requestScope.seat.id}" readonly>
                 <div class="error-message" id="idError"></div>
             </div>
+                <div class="form-group">
+                <label for="id">Seat ID</label>
+                <input type="text" name="seatNo" id="id" value="${requestScope.seat.seatNo}" readonly>
+                <div class="error-message" id="idError"></div>
+            </div>
             <div class="form-group">
                 <label for="status">Status</label>
                 <select name="status" id="status" required>
                     <option value="0" ${requestScope.seat.status == 0 ? 'selected' : ''}>Available</option>
-                    <option value="1" ${requestScope.seat.status == 1 ? 'selected' : ''}>Buying</option>
-                    <option value="2" ${requestScope.seat.status == 2 ? 'selected' : ''}>Bought</option>
+                    <option value="1" ${requestScope.seat.status == 1 ? 'selected' : ''}>Unavailable</option>                    
                 </select>
             </div>
-            <input type="submit" value="Update Seat Status">
+                <div class="form-group">
+                <label for="id">Price</label>
+                <input type="text" name="price" id="id" value="${requestScope.seat.price}" >
+                <div class="error-message" id="idError"></div>
+            </div>
+                <div class="form-group">
+                <label for="id">Cabin id</label>
+                <input type="text" name="cbid" id="id" value="${requestScope.seat.cabinid}" readonly>
+                <div class="error-message" id="idError"></div>
+            </div>
+            <input type="submit" value="Update Seat">
         </form>
     </div>
 </body>
