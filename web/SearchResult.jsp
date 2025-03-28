@@ -110,11 +110,11 @@
     </head>
     <body >
         <!--                 Spinner Start -->
-                 <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div> 
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div> 
         <!--                 Spinner End -->
         <jsp:include page="Header.jsp"></jsp:include>
             <!-- Navbar & Hero Start -->
@@ -128,21 +128,11 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
-                            <a href="home" class="nav-item nav-link active">Trang chủ</a>
+                            <a href="home" class="nav-item nav-link ">Trang chủ</a>
                             <a href="ScheduleDetailSearch.jsp" class="nav-item nav-link">Lịch trình tàu</a>                            
                             <a href="routeview" class="nav-item nav-link">Các tuyến đường</a>
                             <a href="Feedback.jsp" class="nav-item nav-link">Đánh giá</a>
                             <a href="package.html" class="nav-item nav-link">Quy định</a>
-                            <!--                                                <div class="nav-item dropdown">
-                                                                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                                                                                <div class="dropdown-menu m-0">
-                                                                                    <a href="destination.html" class="dropdown-item">Destination</a>
-                                                                                    <a href="booking.html" class="dropdown-item">Booking</a>
-                                                                                    <a href="team.html" class="dropdown-item">Travel Guides</a>
-                                                                                    <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                                                                    <a href="404.html" class="dropdown-item">404 Page</a>
-                                                                                </div>
-                                                                            </div>-->
                             <a href="contact.html" class="nav-item nav-link">Liên hệ</a>
                         </div>
                     </div>
@@ -315,102 +305,98 @@
 
                             <div class="showCabin"></div>
 
+                            <c:if test="${trip_type == 'roundTrip'}">
 
-<c:if test="${trip_type == 'roundTrip'}">
-   
-    <div class="row et-page-header">
+                                <div class="row et-page-header">
                                     <span class="et-main-label ng-binding" style="margin-top: 30px"> 
-
-                                    <i class="fas fa-train me-2"></i><strong class="ng-binding">Chiều về:</strong> ngày ${return_date} từ ${desti} đến ${depart} <i class="fas fa-long-arrow-alt-right mx-2"></i></span>
-                            </div>
-                            <div class="row et-train-list">
-                                <div class="previous-train et-col-md-1 text-center">
-                                    <div class="et-pre-train ng-scope et-arrow-disabled" ng-class="{'et-arrow-disabled': !canShiftBack}" ng-click="chuyenTruoc(true)" tooltip="Tàu trước">
-                                        <div class="et-arrow-left"></div>
-                                    </div>
-                                </div>                            
-                                <div class="train-group"> 
-                                    <c:forEach items="${return_schedules}" var="schedule">
-
-                                            <div class="col-xs-4 col-sm-3 et-col-md-2 et-train-block ng-scope">
-
-                                            <div class="et-train-head"  data-train-id="${schedule.getTrid()}">
-                                                <div class="row center-block" style="width: 40%; margin-bottom: 3px">
-                                                    <div class="et-train-lamp text-center ng-binding" style="color:#bf8c01;">${schedule.getTrid()}</div> 
-                                                </div> 
-                                                <div class="et-train-head-info">
-                                                    <div class="row et-no-margin">
-                                                        <span class="pull-left et-bold ng-binding">TG đi</span> 
-                                                        <span class="pull-right"></span> 
-                                                        <span class="pull-right ng-binding">${schedule.getFromTime()}</span>
+                                        <i class="fas fa-train me-2"></i><strong class="ng-binding">Chiều về:</strong> ngày ${return_date} từ ${desti} đến ${depart} <i class="fas fa-long-arrow-alt-right mx-2"></i></span>
+                                </div>
+                                <div class="row et-train-list">
+                                    <div class="previous-train et-col-md-1 text-center">
+                                        <div class="et-pre-train ng-scope et-arrow-disabled" ng-class="{'et-arrow-disabled': !canShiftBack}" ng-click="chuyenTruoc(true)" tooltip="Tàu trước">
+                                            <div class="et-arrow-left"></div>
+                                        </div>
+                                    </div>                            
+                                    <div class="train-group"> 
+                                        <c:forEach items="${return_schedules}" var="schedule">
+                                            <div class="col-xs-4 col-sm-3 et-col-md-2 et-train-block ng-scope"  analytics-on="click" analytics-event="SelectTrain">
+                                                <div class="et-train-head"  data-train-id="${schedule.getTrid()}">
+                                                    <div class="row center-block" style="width: 40%; margin-bottom: 3px">
+                                                        <div class="et-train-lamp text-center ng-binding" style="color:#bf8c01;">${schedule.getTrid()}</div> 
+                                                    </div> 
+                                                    <div class="et-train-head-info">
+                                                        <div class="row et-no-margin">
+                                                            <span class="pull-left et-bold ng-binding">TG đi</span> 
+                                                            <span class="pull-right"></span> 
+                                                            <span class="pull-right ng-binding">${schedule.getFromTime()}</span>
+                                                        </div>
+                                                        <div class="row et-no-margin">
+                                                            <span class="pull-left et-bold ng-binding">TG đến</span> 
+                                                            <span class="pull-right"></span> 
+                                                            <span class="pull-right ng-binding">${schedule.getToTime()}</span></div>
+                                                        <div class="row et-no-margin">
+                                                            <div class="et-col-50 text-center">
+                                                                <div class="et-text-sm ng-binding">SL chỗ trống</div>
+                                                                <div class="et-text-large et-bold pull-right ng-binding" style="margin-right: 5px">${dao.searchAvailSeatsOfTrainWithScheduleID(schedule.getId())}</div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="row et-no-margin">
-                                                        <span class="pull-left et-bold ng-binding">TG đến</span> 
-                                                        <span class="pull-right"></span> 
-                                                        <span class="pull-right ng-binding">${schedule.getToTime()}</span></div>
-                                                    <div class="row et-no-margin">
-                                                        <div class="et-col-50 text-center">
-                                                            <div class="et-text-sm ng-binding">SL chỗ trống</div>
-                                                            <div class="et-text-large et-bold pull-right ng-binding" style="margin-right: 5px">${dao.searchAvailSeatsOfTrainWithScheduleID(schedule.getId())}</div>
+                                                        <div class="et-col-50">
+                                                            <span class="et-train-lamp-bellow-left"></span>
+                                                        </div>
+                                                        <div class="et-col-50">
+                                                            <span class="et-train-lamp-bellow-right"></span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row et-no-margin">
-                                                    <div class="et-col-50">
-                                                        <span class="et-train-lamp-bellow-left"></span>
-                                                    </div>
-                                                    <div class="et-col-50">
-                                                        <span class="et-train-lamp-bellow-right"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="et-train-base"></div>
-                                            <div class="et-train-base-2"></div>
-                                            <div class="et-train-base-3"></div>
-                                            <div class="et-train-base-4"></div>
-                                            <div class="et-train-base-5"></div>
-                                        </div>   
-                                    </c:forEach>     
-                                </div>
-
-                                <div class="next-train col-md-1 text-center pull-right">
-                                    <div class="et-next-train ng-scope" ng-class="{'et-arrow-disabled': !canShiftForward}" ng-click="chuyenSau(true)" tooltip="Tàu sau">
-                                        <div class="et-arrow-right"></div>
+                                                <div class="et-train-base"></div>
+                                                <div class="et-train-base-2"></div>
+                                                <div class="et-train-base-3"></div>
+                                                <div class="et-train-base-4"></div>
+                                                <div class="et-train-base-5"></div>
+                                            </div>   
+                                        </c:forEach>     
                                     </div>
-                                </div>
-                            </div>                    
-                            <div class="row" style="margin-left:-10PX">
-                                <!-- Cabin List -->
-                                <c:forEach items="${return_schedules}" var="schedule" varStatus="status">
-                                    <div id="cabin-container-${schedule.getTrid()}" class="col-md-12 et-no-margin" style="display:none;">
-                                        <div class="et-car-block">
-                                            <div class="et-car-icon">
-                                                <img src="img/train2.png">
-                                            </div>
-                                            <div class="text-center text-info et-car-label ng-binding">${schedule.getTrid()}</div>
+
+                                    <div class="next-train col-md-1 text-center pull-right">
+                                        <div class="et-next-train ng-scope" ng-class="{'et-arrow-disabled': !canShiftForward}" ng-click="chuyenSau(true)" tooltip="Tàu sau">
+                                            <div class="et-arrow-right"></div>
                                         </div>
-                                        <c:forEach items="${dao.searchCabinsWithTrainID(schedule.getTrid())}" var="cabin"> 
-                                            <div class="et-car-block ng-scope">
-                                                <div data-cabin-type="${cabin.getCtype()}" data-cabin-id="${cabin.getId()}" data-schedule-id="${schedule.getId()}"
-                                                     class="caIcon et-car-icon ${cabin.getStatus() == 1 && !cabin.isSelected() ? 'et-car-icon-avaiable' : ''}
-                                                     ${cabin.getStatus() == 0 && !cabin.isSelected() ? 'et-car-icon-full' : ''}
-                                                     ${cabin.getStatus() == 2 && !cabin.isSelected() ? 'et-car-icon-sold-out' : ''}
-                                                     ${cabin.isChonChoTuDong() && !cabin.isSelected() ? 'et-car-icon-other' : ''}"
-                                                     style="<c:out value='display: block;' escapeXml='false'/>">
-                                                    <img src="img/trainCar2.png" ng-show="!toa.IsChonChoTuDong">
-                                                    <img src="img/trainCarAuto.png" ng-show="toa.IsChonChoTuDong" class="ng-hide">
-                                                </div>
-                                                <c:set var="cabinNumber" value="${fn:split(cabin.getId(), '/')[1]}" />
-
-                                                <div class="text-center text-info et-car-label ng-binding">${cabinNumber}</div>
-                                            </div>
-                                        </c:forEach>
                                     </div>
-                                </c:forEach>
-                            </div>
+                                </div>                    
+                                <div class="row" style="margin-left:-10PX">
+                                    <!-- Cabin List -->
+                                    <c:forEach items="${return_schedules}" var="schedule" varStatus="status">
+                                        <div id="cabin-container-${schedule.getTrid()}" class="col-md-12 et-no-margin" style="display:none;">
+                                            <div class="et-car-block">
+                                                <div class="et-car-icon">
+                                                    <img src="img/train2.png">
+                                                </div>
+                                                <div class="text-center text-info et-car-label ng-binding">${schedule.getTrid()}</div>
+                                            </div>
+                                            <c:forEach items="${dao.searchCabinsWithTrainID(schedule.getTrid())}" var="cabin"> 
+                                                <div class="et-car-block ng-scope">
+                                                    <div data-cabin-type="${cabin.getCtype()}" data-cabin-id="${cabin.getId()}" data-schedule-id="${schedule.getId()}"
+                                                         class="caIcon et-car-icon ${cabin.getStatus() == 1 && !cabin.isSelected() ? 'et-car-icon-avaiable' : ''}
+                                                         ${cabin.getStatus() == 0 && !cabin.isSelected() ? 'et-car-icon-full' : ''}
+                                                         ${cabin.getStatus() == 2 && !cabin.isSelected() ? 'et-car-icon-sold-out' : ''}
+                                                         ${cabin.isChonChoTuDong() && !cabin.isSelected() ? 'et-car-icon-other' : ''}"
+                                                         style="<c:out value='display: block;' escapeXml='false'/>">
+                                                        <img src="img/trainCar2.png" ng-show="!toa.IsChonChoTuDong">
+                                                        <img src="img/trainCarAuto.png" ng-show="toa.IsChonChoTuDong" class="ng-hide">
+                                                    </div>
+                                                    <c:set var="cabinNumber" value="${fn:split(cabin.getId(), '/')[1]}" />
 
-                            <div class="showCabin"></div>
-</c:if>
+                                                    <div class="text-center text-info et-car-label ng-binding">${cabinNumber}</div>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+
+                                <div class="showCabin"></div>
+                            </c:if>
 
 
                             <div class="et-col-md-12 table-bordered list-ticket-deskhop"  style="margin-top: 20px; padding: 5px"><div class="et-col-md-12"><div class="et-col-md-4 et-no-padding"><div class="et-col-md-12"><div class="et-col-md-12" style="padding:0px"><div class="et-col-md-12" style="padding:6px 0px 0px 0px"><div class="et-car-block" style="height:36px"><div class="et-car-icon et-car-icon-avaiable"><img src="img/trainCar2.png"></div></div><span style="padding-left:6px" class="ng-binding">Toa còn vé</span></div></div><div class="et-col-md-12 text-center et-no-padding ng-binding" style="margin-top: -20px;display:none">Toa còn vé</div></div></div><div class="et-col-md-3 et-no-padding" style="display:none"><div class="et-col-md-12"><div class="et-col-md-12" style="padding:0px"><div class="et-col-md-12" style="padding:6px 0px 0px 0px;"><div class="et-car-block" style="height:36px"><div class="et-car-icon et-car-icon-full"><img src="img/trainCar2.png"></div></div><span style="padding-left:6px" class="ng-binding">Toa chưa bán</span></div></div><div class="et-col-md-12 et-no-padding text-center ng-binding" style="margin-top: -20px;display:none">Toa chưa bán</div></div></div><div class="et-col-md-4 et-no-padding"><div class="et-col-md-12"><div class="et-col-md-12" style="padding:0px"><div class="et-col-md-12" style="padding:6px 0px 0px 0px;"><div class="et-car-block" style="height:36px"><div class="et-car-icon et-car-icon-selected"><img src="img/trainCar2.png"></div></div><span style="padding-left:6px" class="ng-binding">Toa đang chọn</span></div></div><div class="et-col-md-12 et-no-padding text-center ng-binding" style="margin-top: -20px;display:none">Toa đang chọn</div></div></div><div class="et-col-md-4 et-no-padding"><div class="et-col-md-12"><div class="et-col-md-12" style="padding:0px"><div class="et-col-md-12" style="padding:6px 0px 0px 0px;"><div class="et-car-block" style="height:36px"><div class="et-car-icon et-car-icon-sold-out"><img src="img/trainCar2.png"></div></div><span style="padding-left:6px" class="ng-binding">Toa hết vé</span></div></div><div class="et-col-md-12 text-center et-no-padding ng-binding" style="margin-top: -20px;display:none">Toa hết vé</div></div></div></div><div class="et-col-md-12 table-bordered"></div><div class="et-col-md-12 et-legend" style="padding:0px"><div class="et-col-md-4" style="padding: 0px"><div class="et-col-md-4" style="padding: 0px"><div class="row"><div class="et-car-nm-64-sit et-col-md-6" style="padding-right:0px"><div class="et-col-16 et-sit-side"></div><div class="et-col-64 et-sit-sur-outer"><div class="et-sit-sur text-center"></div></div></div><div class="et-bed-left et-col-md-3 et-no-padding" style="width:30%"><div class="et-bed-outer"><div class="et-bed text-center"></div><div class="et-bed-illu"></div></div></div></div></div><div class="et-col-md-8" style="padding: 0px"><div class="et-legend-label ng-binding" style="margin-left:-6px">Chỗ trống</div></div></div><div class="et-col-md-4" style="padding: 0px"><div class="et-col-md-4" style="padding: 0px"><div class="row"><div class="et-car-nm-64-sit et-col-md-6" style="padding-right:0px"><div class="et-col-16 et-sit-side"></div><div class="et-col-64 et-sit-sur-outer"><div class="et-sit-sur text-center et-sit-longer"></div></div></div><div class="et-bed-left et-col-md-3 et-no-padding" style="width:30%"><div class="et-bed-outer"><div class="et-bed text-center et-sit-longer"></div><div class="et-bed-illu"></div></div></div></div></div><div class="et-col-md-8" style="padding: 0px"><div class="et-legend-label ng-binding" style="margin-left:-6px">Chỗ chưa cắt chặng</div></div></div><div class="et-col-md-4" style="padding: 0px"><div class="et-col-md-4" style="padding: 0px"><div class="row"><div class="et-car-nm-64-sit et-col-md-6" style="padding-right:0px"><div class="et-col-16 et-sit-side"></div><div class="et-col-64 et-sit-sur-outer"><div class="et-sit-sur text-center et-sit-blocked"></div></div></div><div class="et-bed-left et-col-md-3 et-no-padding" style="width:30%"><div class="et-bed-outer"><div class="et-bed text-center et-sit-blocked"></div><div class="et-bed-illu"></div></div></div></div></div><div class="et-col-md-8" style="padding: 0px"><div class="et-legend-label ng-binding" style="margin-left:-6px">Chỗ đã bán, không bán</div></div></div></div></div>
@@ -438,410 +424,411 @@
                             </div>
                         </div>
                     </div>
-                                        
+
                 </div>
 
+            </div>
         </div>
-    </div>
-    <jsp:include page="Footer.jsp"></jsp:include>
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/wow/wow.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="lib/tempusdominus/js/moment.min.js"></script>
-        <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+        <jsp:include page="Footer.jsp"></jsp:include>
+            <!-- JavaScript Libraries -->
+            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="lib/wow/wow.min.js"></script>
+            <script src="lib/easing/easing.min.js"></script>
+            <script src="lib/waypoints/waypoints.min.js"></script>
+            <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+            <script src="lib/tempusdominus/js/moment.min.js"></script>
+            <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+            <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-        <!-- Template Javascript -->
-        <script src="js/main.js"></script>
-        <script>
-// Form validation
-// Form validation
-                                function validateForm() {
-                                    const fromStationElem = document.getElementById('from_station');
-                                    const toStationElem = document.getElementById('to_station');
-                                    const departDateElem = document.getElementById('datepicker');
-                                    const returnDateElem = document.getElementById('return_datepicker');
-                                    if (!fromStationElem || !toStationElem || !departDateElem) {
-                                        alert('Có lỗi xảy ra: Một số trường không tìm thấy trên trang.');
-                                        return false;
-                                    }
+            <!-- Template Javascript -->
+            <script src="js/main.js"></script>
+            <script>
 
-                                    const fromStation = fromStationElem.value.trim();
-                                    const toStation = toStationElem.value.trim();
-                                    const departDate = departDateElem.value;
-                                    const returnDate = returnDateElem ? returnDateElem.value : '';
-                                    if (!fromStation || !toStation) {
-                                        alert('Vui lòng chọn ga đi và ga đến.');
-                                        return false;
-                                    }
+                                                            // Form validation
+                                                            function validateForm() {
+                                                                const fromStationElem = document.getElementById('from_station');
+                                                                const toStationElem = document.getElementById('to_station');
+                                                                const departDateElem = document.getElementById('datepicker');
+                                                                const returnDateElem = document.getElementById('return_datepicker');
+                                                                if (!fromStationElem || !toStationElem || !departDateElem) {
+                                                                    alert('Có lỗi xảy ra: Một số trường không tìm thấy trên trang.');
+                                                                    return false;
+                                                                }
 
-                                    if (fromStation === toStation) {
-                                        alert('Ga đi và ga đến không được trùng nhau.');
-                                        return false;
-                                    }
+                                                                const fromStation = fromStationElem.value.trim();
+                                                                const toStation = toStationElem.value.trim();
+                                                                const departDate = departDateElem.value;
+                                                                const returnDate = returnDateElem ? returnDateElem.value : '';
+                                                                if (!fromStation || !toStation) {
+                                                                    alert('Vui lòng chọn ga đi và ga đến.');
+                                                                    return false;
+                                                                }
 
-                                    const today = new Date();
-                                    today.setHours(0, 0, 0, 0);
-                                    const depart = new Date(departDate);
-                                    if (depart < today) {
-                                        alert('Ngày đi không thể là ngày trong quá khứ.');
-                                        return false;
-                                    }
+                                                                if (fromStation === toStation) {
+                                                                    alert('Ga đi và ga đến không được trùng nhau.');
+                                                                    return false;
+                                                                }
 
-                                    if (returnDate) {
-                                        const returnD = new Date(returnDate);
-                                        if (returnD < depart) {
-                                            alert('Ngày về phải sau ngày đi.');
-                                            return false;
-                                        }
-                                    }
-                                    return true;
-                                }
-                                ;
+                                                                const today = new Date();
+                                                                today.setHours(0, 0, 0, 0);
+                                                                const depart = new Date(departDate);
+                                                                if (depart < today) {
+                                                                    alert('Ngày đi không thể là ngày trong quá khứ.');
+                                                                    return false;
+                                                                }
 
-// Swap station values
-                                function swapData() {
-                                    const fromStationElem = document.getElementById('from_station');
-                                    const toStationElem = document.getElementById('to_station');
-                                    if (fromStationElem && toStationElem) {
-                                        [fromStationElem.value, toStationElem.value] = [toStationElem.value, fromStationElem.value];
-                                    }
-                                }
-                                ;
+                                                                if (returnDate) {
+                                                                    const returnD = new Date(returnDate);
+                                                                    if (returnD < depart) {
+                                                                        alert('Ngày về phải sau ngày đi.');
+                                                                        return false;
+                                                                    }
+                                                                }
+                                                                return true;
+                                                            }
+                                                            ;
 
-// Set min date for datepickers
-                                window.onload = function () {
-                                    const today = new Date().toISOString().split('T')[0];
-                                    const departPicker = document.getElementById('datepicker');
-                                    const returnPicker = document.getElementById('return_datepicker');
-                                    if (departPicker)
-                                        departPicker.min = today;
-                                    if (returnPicker)
-                                        returnPicker.min = today;
-                                    if (departPicker && returnPicker) {
-                                        departPicker.addEventListener('change', function () {
-                                            returnPicker.min = this.value;
-                                        });
-                                    }
+                                                            // Swap station values
+                                                            function swapData() {
+                                                                const fromStationElem = document.getElementById('from_station');
+                                                                const toStationElem = document.getElementById('to_station');
+                                                                if (fromStationElem && toStationElem) {
+                                                                    [fromStationElem.value, toStationElem.value] = [toStationElem.value, fromStationElem.value];
+                                                                }
+                                                            }
+                                                            ;
 
-                                    // Reset trạng thái tất cả các ghế về 0
-                                    fetch('updateS', {
-                                        method: 'PUT',
-                                        headers: { 
-                                            'Content-Type': 'application/json',
-                                            'Accept': 'application/json'
-                                        },
-                                        body: JSON.stringify({ 
-                                            id: -1, // Sử dụng -1 để đánh dấu đây là request reset
-                                            cabinid: "all", 
-                                            status: 0 
-                                        })
-                                    })
-                                    .then(response => {
-                                        if (!response.ok) {
-                                            throw new Error('Network response was not ok');
-                                        }
-                                        return response.text();
-                                    })
-                                    .then(data => {
-                                        console.log("Reset trạng thái ghế thành công:", data);
-                                    })
-                                    .catch(error => {
-                                        console.error("Lỗi khi reset trạng thái ghế:", error);
-                                    });
+                                                            // Set min date for datepickers
+                                                            window.onload = function () {
+                                                                const today = new Date().toISOString().split('T')[0];
+                                                                const departPicker = document.getElementById('datepicker');
+                                                                const returnPicker = document.getElementById('return_datepicker');
+                                                                if (departPicker)
+                                                                    departPicker.min = today;
+                                                                if (returnPicker)
+                                                                    returnPicker.min = today;
+                                                                if (departPicker && returnPicker) {
+                                                                    departPicker.addEventListener('change', function () {
+                                                                        returnPicker.min = this.value;
+                                                                    });
+                                                                }
 
-                                    // Reset selectedSeats và giỏ vé
-                                    selectedSeats = [];
+                                                                // Reset trạng thái tất cả các ghế về 0
+                                                                fetch('updateS', {
+                                                                    method: 'PUT',
+                                                                    headers: {
+                                                                        'Content-Type': 'application/json',
+                                                                        'Accept': 'application/json'
+                                                                    },
+                                                                    body: JSON.stringify({
+                                                                        id: -1, // Sử dụng -1 để đánh dấu đây là request reset
+                                                                        cabinid: "all",
+                                                                        status: 0
+                                                                    })
+                                                                })
+                                                                        .then(response => {
+                                                                            if (!response.ok) {
+                                                                                throw new Error('Network response was not ok');
+                                                                            }
+                                                                            return response.text();
+                                                                        })
+                                                                        .then(data => {
+                                                                            console.log("Reset trạng thái ghế thành công:", data);
+                                                                        })
+                                                                        .catch(error => {
+                                                                            console.error("Lỗi khi reset trạng thái ghế:", error);
+                                                                        });
+
+                                                                // Reset selectedSeats và giỏ vé
+                                                                selectedSeats = [];
+                                                                const cart = document.getElementById("cartItems");
+                                                                const button = document.getElementById("card-footer");
+                                                                if (cart) {
+                                                                    cart.innerHTML = '';
+                                                                }
+                                                                if (button) {
+                                                                    button.style.display = 'none';
+                                                                }
+                                                                document.getElementById("selectedSeatsInput").value = JSON.stringify(selectedSeats);
+                                                            };
+                                                            let selectedTrainId = null;
+                                                            let selectedCabinId = null;
+                                                            let selectedCabinType = null;
+                                                            let selectedScheduleId = null;
+                                                            let selectedSeats = [];
+
+                                                            // Function to select cabin (gọi sau khi đã chọn train)
+                                                            function selectCabin(cid, ctype, carIcon) {
+                                                                if (!ctype || !carIcon)
+                                                                    return;
+                                                                selectedCabinId = cid; // Lưu cabinId đã chọn
+                                                                selectedCabinType = ctype; // Lưu cabinType đã chọn
+
+                                                                const depart = "<c:out value='${depart}' />";
+                                                                const desti = "<c:out value='${desti}' />";
+                                                                console.log("depart: " + depart + ",desti: " + desti);
+
+
+                                                                // Xóa selected class từ tất cả các cabin icons
+                                                                document.querySelectorAll('.et-car-block .caIcon.et-car-icon').forEach(icon => {
+                                                                    icon.classList.remove('et-car-icon-selected');
+                                                                });
+
+                                                                // Thêm selected class vào cabin được chọn
+                                                                carIcon.classList.add('et-car-icon-selected');
+
+                                                                const totalSeats = ctype.replace(/^(A|B)n?(\d{2})L(V)?$/, "$2");
+                                                                let seatsInRow; // Khai báo biến trước
+
+                                                                if (!ctype.includes("n")) {
+                                                                    seatsInRow = ctype.includes("A") ? 4 : (ctype.includes("B") ? 6 : 0);
+                                                                }
+                                                                let berthsInRoom; // Khai báo biến trước
+
+                                                                if (ctype.includes("n")) {
+                                                                    berthsInRoom = ctype.includes("A") ? 4 : (ctype.includes("B") ? 6 : 0);
+                                                                }
+
+                                                                const cabinNumber = cid.split("/")[1];
+                                                                console.log("ctype: " + ctype);
+
+                                                                // Xác định layout cần tải dựa vào loại cabin
+                                                                const regex = /^(A|B)n\d{2}L(V)?$/;
+
+                                                                let layoutFile = regex.test(ctype) ? "cabin_layout/Berths.jsp?cbid=" + cid + "&total=" + totalSeats + "&room=" + berthsInRoom + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId + "&depart=" + depart + "&desti=" + desti : "cabin_layout/Seats.jsp?cbid=" + cid + "&total=" + totalSeats + "&row=" + seatsInRow + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId + "&depart=" + depart + "&desti=" + desti;
+
+                                                                console.log("scheduleid: ", selectedScheduleId);
+                                                                fetch(layoutFile)
+                                                                        .then(response => response.text())
+                                                                        .then(data => {
+                                                                            const showCabinDiv = document.querySelector(".showCabin");
+                                                                            if (showCabinDiv) {
+                                                                                showCabinDiv.innerHTML = data; // Chèn nội dung từ JSP vào div
+                                                                            } else {
+                                                                                console.error("Không tìm thấy phần tử div có class 'showCabin'");
+                                                                            }
+                                                                        })
+                                                                        .catch(error => {
+                                                                            console.error(`Lỗi khi fetch ${layoutFile}:`, error);
+                                                                        });
+                                                            }
+
+                                                            // 🟢 Function chọn train và cập nhật cabin khả dụng
+                                                            function selectTrain(trainId, trainHead, isInitialLoad = false) {
+                                                                if (!trainId || !trainHead)
+                                                                    return;
+                                                                selectedTrainId = trainId; // Lưu trainId đã chọn
+                                                                console.log(selectedTrainId);
+                                                                // Cập nhật trạng thái chọn tàu
+                                                                document.querySelectorAll('.et-train-head').forEach(h => h.classList.remove('et-train-head-selected'));
+                                                                trainHead.classList.add('et-train-head-selected');
+
+                                                                // Ẩn tất cả cabin
+                                                                document.querySelectorAll('.col-md-12.et-no-margin').forEach(container => {
+                                                                    container.style.display = 'none';
+                                                                });
+
+                                                                // Hiển thị cabin của train được chọn
+                                                                const selectedCabinContainer = document.getElementById(`cabin-container-` + trainId);
+
+                                                                if (selectedCabinContainer) {
+                                                                    selectedCabinContainer.style.display = 'block';
+                                                                } else {
+                                                                    console.error(`Không tìm thấy cabin-container-${trainId}`);
+                                                            }
+                                                            }
+                                                            // 🟢 Function chọn ghế
+                                                            function selectSeat(seatElement) {
+                                                                const seatNumber = seatElement.getAttribute("data-seat-number"); // Lấy số ghế
+                                                                const price = seatElement.getAttribute("data-seat-price") || "Không có giá"; // Lấy giá ghế
+                                                                const seatSurElement = seatElement.querySelector(".et-sit-sur"); // Tìm class "et-sit-sur"
+                                                                const bed = seatElement.querySelector(".et-bed");//Tìm class "et-bed"
+
+                                                                const depart = "<%= request.getAttribute("depart")%>";
+                                                                const desti = "<%= request.getAttribute("desti")%>";
+
+                                                                // Lấy thời gian từ schedule được chọn
+                                                                const selectedTrainHead = document.querySelector('.et-train-head-selected');
+                                                                let fromTime = '';
+                                                                let toTime = '';
+                                                                if (selectedTrainHead) {
+                                                                    // Lấy thời gian đi
+                                                                    const fromTimeElement = selectedTrainHead.querySelector('.et-train-head-info .row:first-child .ng-binding:last-child');
+                                                                    if (fromTimeElement) {
+                                                                        fromTime = fromTimeElement.textContent;
+                                                                    }
+                                                                    console.log("Fromtime: ", fromTime);
+
+                                                                    // Lấy thời gian đến
+                                                                    const toTimeElement = selectedTrainHead.querySelector('.et-train-head-info .row:nth-child(2) .ng-binding:last-child');
+                                                                    if (toTimeElement) {
+                                                                        toTime = toTimeElement.textContent;
+                                                                    }
+                                                                }
+
+                                                                if (!seatSurElement) {
+                                                                    console.warn("⚠ Không tìm thấy .et-sit-sur trong seatElement");
+                                                                }
+                                                                if (!bed) {
+                                                                    console.warn("⚠ Không tìm thấy .et-bed trong bed");
+                                                                }
+// 🟢 Xác định loại ghế dựa vào `selectedCabinType`
+                                    let seatType = selectedCabinType && selectedCabinType.includes("n") ? "Giường nằm" : "Ngồi mềm";
+
+// 🟢 Tìm giỏ vé
                                     const cart = document.getElementById("cartItems");
                                     const button = document.getElementById("card-footer");
-                                    if (cart) {
-                                        cart.innerHTML = '';
-                                    }
-                                    if (button) {
-                                        button.style.display = 'none';
-                                    }
-                                    document.getElementById("selectedSeatsInput").value = JSON.stringify(selectedSeats);
-                                };
-                                let selectedTrainId = null;
-                                let selectedCabinId = null;
-                                let selectedCabinType = null;
-                                let selectedScheduleId = null;
-                                let selectedSeats = [];
-// Function to select cabin (gọi sau khi đã chọn train)
-                                function selectCabin(cid, ctype, carIcon) {
-                                    if (!ctype || !carIcon)
+                                    if (!cart) {
+                                        console.error("❌ Không tìm thấy phần tử Giỏ vé");
                                         return;
-                                    selectedCabinId = cid; // Lưu cabinId đã chọn
-                                    selectedCabinType = ctype; // Lưu cabinType đã chọn
-
-                                    const depart = "<c:out value='${depart}' />";
-const desti = "<c:out value='${desti}' />";
-                                                            console.log("depart: " + depart + ",desti: " + desti);
-
-
-                                    // Xóa selected class từ tất cả các cabin icons
-                                    document.querySelectorAll('.et-car-block .caIcon.et-car-icon').forEach(icon => {
-                                        icon.classList.remove('et-car-icon-selected');
-                                    });
-
-                                    // Thêm selected class vào cabin được chọn
-                                    carIcon.classList.add('et-car-icon-selected');
-
-                                    const totalSeats = ctype.replace(/^(A|B)n?(\d{2})L(V)?$/, "$2");
-                                    let seatsInRow; // Khai báo biến trước
-
-                                    if (!ctype.includes("n")) {
-                                        seatsInRow = ctype.includes("A") ? 4 : (ctype.includes("B") ? 6 : 0);
                                     }
-                                    let berthsInRoom; // Khai báo biến trước
+                                                                // 🟢 Thêm ghế vào giỏ vé
+                                                                let existingSeat = document.querySelector(`#cartItems div[data-seat-number='` + seatNumber + `']`);
+                                                                let seatInfo = document.createElement("div");
+                                                                seatInfo.classList.add("cart-item");
+                                                                seatInfo.setAttribute("data-seat-number", seatNumber);
+                                                                seatInfo.innerHTML = `
+            <p>` + selectedCabinId.split("/")[0] + `: ` + depart + ` - ` + desti + `</p> 
+                <p> ` + seatType + ` - Toa ` + selectedCabinId + ` - Chỗ ` + seatNumber + ` </p>
+                <p> ` + fromTime + ` - ` + toTime + ` </p>        
+                <p> ` + price + ` VNĐ</p> `;
 
-                                    if (ctype.includes("n")) {
-                                        berthsInRoom = ctype.includes("A") ? 4 : (ctype.includes("B") ? 6 : 0);
-                                    }
-
-                                    const cabinNumber = cid.split("/")[1];
-                                                            console.log("ctype: " + ctype);
-
-                                    // Xác định layout cần tải dựa vào loại cabin
-                                    const regex = /^(A|B)n\d{2}L(V)?$/;
-
-                                                            let layoutFile = regex.test(ctype) ? "cabin_layout/Berths.jsp?cbid=" + cid + "&total=" + totalSeats + "&room=" + berthsInRoom + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId + "&depart=" + depart + "&desti=" + desti : "cabin_layout/Seats.jsp?cbid=" + cid + "&total=" + totalSeats + "&row=" + seatsInRow + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId + "&depart=" + depart + "&desti=" + desti;
-
-                                    console.log("scheduleid: ", selectedScheduleId);
-                                    fetch(layoutFile)
-                                            .then(response => response.text())
-                                            .then(data => {
-                                                const showCabinDiv = document.querySelector(".showCabin");
-                                                if (showCabinDiv) {
-                                                    showCabinDiv.innerHTML = data; // Chèn nội dung từ JSP vào div
-                                                } else {
-                                                    console.error("Không tìm thấy phần tử div có class 'showCabin'");
-                                                }
-                                            })
-                                            .catch(error => {
-                                                console.error(`Lỗi khi fetch ${layoutFile}:`, error);
-                                            });
-                                }
-
-// 🟢 Function chọn train và cập nhật cabin khả dụng
-                                function selectTrain(trainId, trainHead, isInitialLoad = false) {
-                                    if (!trainId || !trainHead)
-                                        return;
-                                    selectedTrainId = trainId; // Lưu trainId đã chọn
-                                    console.log(selectedTrainId);
-                                    // Cập nhật trạng thái chọn tàu
-                                    document.querySelectorAll('.et-train-head').forEach(h => h.classList.remove('et-train-head-selected'));
-                                    trainHead.classList.add('et-train-head-selected');
-
-                                    // Ẩn tất cả cabin
-                                    document.querySelectorAll('.col-md-12.et-no-margin').forEach(container => {
-                                        container.style.display = 'none';
-                                    });
-
-                                    // Hiển thị cabin của train được chọn
-                                    const selectedCabinContainer = document.getElementById(`cabin-container-` + trainId);
-
-                                    if (selectedCabinContainer) {
-                                        selectedCabinContainer.style.display = 'block';
-                                    } else {
-                                        console.error(`Không tìm thấy cabin-container-${trainId}`);
-                                }
-                                }
-// 🟢 Function chọn ghế
-                                function selectSeat(seatElement) {
-                                    const seatNumber = seatElement.getAttribute("data-seat-number"); // Lấy số ghế
-                                    const price = seatElement.getAttribute("data-seat-price") || "Không có giá"; // Lấy giá ghế
-                                    const seatSurElement = seatElement.querySelector(".et-sit-sur"); // Tìm class "et-sit-sur"
-                                                            const bed = seatElement.querySelector(".et-bed");//Tìm class "et-bed"
-
-                                    const depart = "<%= request.getAttribute("depart")%>";
-                                    const desti = "<%= request.getAttribute("desti")%>";
-
-                                                            // Lấy thời gian từ schedule được chọn
-                                                            const selectedTrainHead = document.querySelector('.et-train-head-selected');
-                                                            let fromTime = '';
-                                                            let toTime = '';
-                                                            if (selectedTrainHead) {
-                                                                // Lấy thời gian đi
-                                                                const fromTimeElement = selectedTrainHead.querySelector('.et-train-head-info .row:first-child .ng-binding:last-child');
-                                                                if (fromTimeElement) {
-                                                                    fromTime = fromTimeElement.textContent;
-                                                                }
-                                                                console.log("Fromtime: ",fromTime);
-
-                                                                // Lấy thời gian đến
-                                                                const toTimeElement = selectedTrainHead.querySelector('.et-train-head-info .row:nth-child(2) .ng-binding:last-child');
-                                                                if (toTimeElement) {
-                                                                    toTime = toTimeElement.textContent;
-                                                                }
-                                                            }
-
-                                    if (!seatSurElement) {
-                                        console.warn("⚠ Không tìm thấy .et-sit-sur trong seatElement");
-                                                            }
-                                                            if (!bed) {
-                                                                console.warn("⚠ Không tìm thấy .et-bed trong bed");
-                                    }
-
-                                                                // Lấy thời gian đến
-                                                                const toTimeElement = selectedTrainHead.querySelector('.et-train-head-info .row:nth-child(2) .ng-binding:last-child');
-                                                                if (toTimeElement) {
-                                                                    toTime = toTimeElement.textContent;
-                                                                }
-                                                            }
-
-                                                            if (!seatSurElement) {
-                                                                console.warn("⚠ Không tìm thấy .et-sit-sur trong seatElement");
-                                                                return;
-                                                            }
-
-                                                             // 🟢 Thêm ghế vào giỏ vé
-                                    let existingSeat = document.querySelector(`#cartItems div[data-seat-number='` + seatNumber + `']`);
-                                        let seatInfo = document.createElement("div");
-                                        seatInfo.classList.add("cart-item");
-                                        seatInfo.setAttribute("data-seat-number", seatNumber);
-                                        seatInfo.innerHTML = `
-        <p>` + selectedCabinId.split("/")[0] + `: ` + depart + ` - ` + desti + `</p> 
-            <p> ` + seatType + ` - Toa ` + selectedCabinId + ` - Chỗ ` + seatNumber + ` </p>
-            <p> ` + fromTime + ` - ` + toTime + ` </p>        
-            <p> ` + price + ` VNĐ</p> `;
-                                                           
-                                                            // 🟢 Kiểm tra xem ghế đã được chọn chưa
-                                                             if (existingSeat) {
-                                                                // Nếu đã chọn, click lại sẽ bỏ chọn ghế
-                                                                existingSeat.remove();
-                                                                if (!bed) {
-                                                                seatSurElement.classList.remove("et-sit-buying"); // Bỏ hiệu ứng chọn
-                                                            }if (!seatSurElement) {
-                                                                bed.classList.remove("et-sit-buying"); // Bỏ hiệu ứng chọn
-                                                            } 
-                                                                const index = selectedSeats.findIndex(seat => seat.seatNumber === seatNumber && seat.selectedCabinId === selectedCabinId);
-                                                                if (index !== -1) {
-                                                                    selectedSeats.splice(index, 1);//Bỏ hiển thị trong cart
-                                                                }
-                                                                
-                                                                fetch('updateS', {
-                                                                    method: 'PUT',
-                                                                    headers: { 
-                                                                        'Content-Type': 'application/json',
-                                                                        'Accept': 'application/json'
-                                                                    },
-                                                                    body: JSON.stringify({ 
-                                                                        id: parseInt(seatNumber),
-                                                                        cabinid: selectedCabinId, 
-                                                                        status: 0 
-                                                                    })
-                                                                })
-                                                                .then(response => {
-                                                                    if (!response.ok) {
-                                                                        throw new Error('Network response was not ok');
+                                                                // 🟢 Kiểm tra xem ghế đã được chọn chưa
+                                                                if (existingSeat) {
+                                                                    // Nếu đã chọn, click lại sẽ bỏ chọn ghế
+                                                                    existingSeat.remove();
+                                                                    if (!bed) {
+                                                                        seatSurElement.classList.remove("et-sit-buying"); // Bỏ hiệu ứng chọn
                                                                     }
-                                                                    return response.text();
-                                                                })
-                                                                .then(data => {
-                                                                    console.log("Cập nhật thành công:", data);
-                                                                    // Cập nhật UI mà không reload trang
+                                                                    if (!seatSurElement) {
+                                                                        bed.classList.remove("et-sit-buying"); // Bỏ hiệu ứng chọn
+                                                                    }
+                                                                    const index = selectedSeats.findIndex(seat => seat.seatNumber === seatNumber && seat.selectedCabinId === selectedCabinId);
+                                                                    if (index !== -1) {
+                                                                        selectedSeats.splice(index, 1);//Bỏ hiển thị trong cart
+                                                                    }
+
+                                                                    fetch('updateS', {
+                                                                        method: 'PUT',
+                                                                        headers: {
+                                                                            'Content-Type': 'application/json',
+                                                                            'Accept': 'application/json'
+                                                                        },
+                                                                        body: JSON.stringify({
+                                                                            id: parseInt(seatNumber),
+                                                                            cabinid: selectedCabinId,
+                                                                            status: 0
+                                                                        })
+                                                                    })
+                                                                            .then(response => {
+                                                                                if (!response.ok) {
+                                                                                    throw new Error('Network response was not ok');
+                                                                                }
+                                                                                return response.text();
+                                                                            })
+                                                                            .then(data => {
+                                                                                console.log("Cập nhật thành công:", data);
+                                                                                // Cập nhật UI mà không reload trang
+                                                                                document.getElementById("selectedSeatsInput").value = JSON.stringify(selectedSeats);
+                                                                                if (selectedSeats.length === 0) {
+                                                                                    document.getElementById("card-footer").style.display = 'none';
+                                                                                }
+                                                                            })
+                                                                            .catch(error => {
+                                                                                console.error("Lỗi:", error);
+                                                                            });
+                                                                } else {
+                                                                    cart.appendChild(seatInfo);
+                                                                    if (!bed) {
+                                                                        seatSurElement.classList.add("et-sit-buying");//hiệu ứng chọn
+                                                                    }
+                                                                    if (!seatSurElement) {
+                                                                        bed.classList.add("et-sit-buying"); // hiệu ứng chọn
+                                                                    }
+
+                                                                    console.log("🛒 Ghế đã chọn:", JSON.stringify(selectedSeats));
+
+                                                                    selectedSeats.push({seatNumber, selectedCabinId, seatType, selectedTrainId, price, fromTime, toTime}); //
                                                                     document.getElementById("selectedSeatsInput").value = JSON.stringify(selectedSeats);
-                                                                    if (selectedSeats.length === 0) {
-                                                                        document.getElementById("card-footer").style.display = 'none';
-                                                                    }
-                                                                })
-                                                                .catch(error => {
-                                                                    console.error("Lỗi:", error);
-                                                                });
-                                                            } else {                                                       
-                                        cart.appendChild(seatInfo);
-                                                                 if (!bed) {
-                                                                seatSurElement.classList.add("et-sit-buying");//hiệu ứng chọn
-                                                            }
-                                                                if (!seatSurElement) {
-                                                                bed.classList.add("et-sit-buying"); // hiệu ứng chọn
-                                                            }
-                                                                
-                                                                console.log("🛒 Ghế đã chọn:", JSON.stringify(selectedSeats));
-                                                                
-                                                                selectedSeats.push({seatNumber, selectedCabinId, seatType, selectedTrainId, price, fromTime, toTime}); //
-                                         document.getElementById("selectedSeatsInput").value = JSON.stringify(selectedSeats);
-                                                                
-                                                                fetch('updateS', {
-                                                                    method: 'PUT',
-                                                                    headers: { 
-                                                                        'Content-Type': 'application/json',
-                                                                        'Accept': 'application/json'
-                                                                    },
-                                                                    body: JSON.stringify({ 
-                                                                        id: parseInt(seatNumber),
-                                                                        cabinid: selectedCabinId, 
-                                                                        status: 1 
+
+                                                                    fetch('updateS', {
+                                                                        method: 'PUT',
+                                                                        headers: {
+                                                                            'Content-Type': 'application/json',
+                                                                            'Accept': 'application/json'
+                                                                        },
+                                                                        body: JSON.stringify({
+                                                                            id: parseInt(seatNumber),
+                                                                            cabinid: selectedCabinId,
+                                                                            status: 1
+                                                                        })
                                                                     })
-                                                                })
-                                                                .then(response => {
-                                                                    if (!response.ok) {
-                                                                        throw new Error('Network response was not ok');
+                                                                            .then(response => {
+                                                                                if (!response.ok) {
+                                                                                    throw new Error('Network response was not ok');
+                                                                                }
+                                                                                return response.text();
+                                                                            })
+                                                                            .then(data => {
+                                                                                console.log("Cập nhật thành công:", data);
+                                                                            })
+                                                                            .catch(error => {
+                                                                                console.error("Lỗi:", error);
+                                                                            });
+
+                                                                    button.style.display = 'block';
+                                                                }
+                                                            }
+
+
+                                                            // 🟢 Lắng nghe sự kiện click trên trainHead & cập nhật danh sách cabin
+
+                                                            document.addEventListener('DOMContentLoaded', function () {
+                                                                // 🟢 Click vào Train Head → Chọn tàu
+                                                                document.body.addEventListener('click', function (event) {
+                                                                    let trainHead = event.target.closest('.et-train-head');
+                                                                    if (trainHead) {
+                                                                        selectTrain(trainHead.getAttribute('data-train-id'), trainHead);
                                                                     }
-                                                                    return response.text();
-                                                                })
-                                                                .then(data => {
-                                                                    console.log("Cập nhật thành công:", data);
-                                                                })
-                                                                .catch(error => {
-                                                                    console.error("Lỗi:", error);
                                                                 });
-                                                                
-                                                                button.style.display = 'block';
-                                    }
-                                }
 
-// 🟢 Lắng nghe sự kiện click trên trainHead & cập nhật danh sách cabin
+                                                                // 🟢 Click vào Cabin → Chọn Cabin & Hiển thị ghế
+                                                                document.body.addEventListener('click', function (event) {
+                                                                    let carIcon = event.target.closest('.et-car-icon');
+                                                                    if (carIcon) {
+                                                                        let cabinType = carIcon.getAttribute("data-cabin-type");
+                                                                        let cabinId = carIcon.getAttribute("data-cabin-id");
+                                                                        let scheduleId = carIcon.getAttribute("data-schedule-id");
 
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    // 🟢 Click vào Train Head → Chọn tàu
-                                    document.body.addEventListener('click', function (event) {
-                                        let trainHead = event.target.closest('.et-train-head');
-                                        if (trainHead) {
-                                            selectTrain(trainHead.getAttribute('data-train-id'), trainHead);
-                                        }
-                                    });
+                                                                        if (scheduleId) {
+                                                                            selectedScheduleId = scheduleId;
+                                                                        }
+                                                                        selectCabin(cabinId, cabinType, carIcon);
+                                                                    }
+                                                                });
 
-                                    // 🟢 Click vào Cabin → Chọn Cabin & Hiển thị ghế
-                                    document.body.addEventListener('click', function (event) {
-                                        let carIcon = event.target.closest('.et-car-icon');
-                                        if (carIcon) {
-                                            let cabinType = carIcon.getAttribute("data-cabin-type");
-                                            let cabinId = carIcon.getAttribute("data-cabin-id");
-                                            let scheduleId = carIcon.getAttribute("data-schedule-id");
+                                                                // 🟢 Click vào Ghế → Gọi `selectSeat()`
+                                                                document.body.addEventListener('click', function (event) {
+                                                                    let seat = event.target.closest('.ng-isolate-scope');
+                                                                    if (seat) {
+                                                                        let seatNumber = seat.getAttribute("data-seat-number");
+                                                                        if (!seatNumber) {
+                                                                            console.warn("⚠ Không tìm thấy số ghế (data-seat-number)");
+                                                                            return;
+                                                                        }
+                                                                        selectSeat(seat);
+                                                                        console.log("💺 Ghế được chọn:", seatNumber);
+                                                                    }
+                                                                });
+                                                            });
 
-                                            if (scheduleId) {
-                                                selectedScheduleId = scheduleId;
-                                            }
-                                            selectCabin(cabinId, cabinType, carIcon);
-                                        }
-                                    });
-
-                                    // 🟢 Click vào Ghế → Gọi `selectSeat()`
-                                    document.body.addEventListener('click', function (event) {
-                                                                let seat = event.target.closest('.ng-isolate-scope');
-                                        if (seat) {
-                                            let seatNumber = seat.getAttribute("data-seat-number");
-                                            if (!seatNumber) {
-                                                console.warn("⚠ Không tìm thấy số ghế (data-seat-number)");
-                                                return;
-                                            }
-                                            selectSeat(seat);
-                                            console.log("💺 Ghế được chọn:", seatNumber);
-                                        }
-                                    });
-                                });
-    </script>
+        </script>
 
 
 
-    <!-- Add Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</body>
+        <!-- Add Font Awesome for icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    </body>
 
 </html>  

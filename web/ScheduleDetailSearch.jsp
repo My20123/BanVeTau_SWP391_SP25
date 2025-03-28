@@ -175,13 +175,12 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
-                            <a href="home" class="nav-item nav-link" style="color: white;">Trang chủ</a>
-                            <a href="about.html" class="nav-item nav-link" style="color: white;">Thông tin đặt chỗ</a>
-                            <a href="ScheduleDetailSearch.jsp" class="nav-item nav-link active" style="color: #ffa500;">Giờ tàu-Giá vé</a>                            
-                            <a href="routeview" class="nav-item nav-link" style="color: white;">Các tuyến đường</a>
-                            <a href="TicketVerifi.jsp" class="nav-item nav-link" style="color: white;">Kiểm tra vé</a>
-                            <a href="package.html" class="nav-item nav-link" style="color: white;">Quy định</a>                        
-                            <a href="contact.html" class="nav-item nav-link" style="color: white;">Liên hệ</a>
+                           <a href="home" class="nav-item nav-link ">Trang chủ</a>
+                            <a href="ScheduleDetailSearch.jsp" class="nav-item nav-link active">Lịch trình tàu</a>                            
+                            <a href="routeview" class="nav-item nav-link">Các tuyến đường</a>
+                            <a href="Feedback.jsp" class="nav-item nav-link">Đánh giá</a>
+                            <a href="package.html" class="nav-item nav-link">Quy định</a>
+                            <a href="contact.html" class="nav-item nav-link">Liên hệ</a>
                         </div>
                     </div>
                 </nav>

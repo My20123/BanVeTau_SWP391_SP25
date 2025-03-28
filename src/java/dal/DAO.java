@@ -639,7 +639,7 @@ public class DAO {
     public String searchTrainIDWithRid(int rid) {
         String trids = "";
         try {
-            String query = "SELECT trid FROM Schedules where rid = ?;";
+            String query = "SELECT distinct trid FROM Schedules where rid = ?;";
             PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, rid);
@@ -1292,9 +1292,9 @@ public int getDistance(String fromStation, String toStation, int sid){
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        System.out.println(dao.searchSchedules("Sài Gòn", "Hà Nội", sdf.parse("2025-03-12")));
-        System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE1/1", 1).toString());
-        System.out.println(dao.getFilterRefund(null, null, sdf.parse("2025-03-16 00:00:00")));
+      //  System.out.println(dao.searchSchedules("Sài Gòn", "Hà Nội", sdf.parse("2025-03-12")));
+        System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE3/1", 5).toString());
+        //System.out.println(dao.getFilterRefund(null, null, sdf.parse("2025-03-16 00:00:00")));
         // System.out.println(dao.createRefund(2, "My", 1022000,
         // sdf.parse("2025-03-16")));
 

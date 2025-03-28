@@ -52,19 +52,16 @@
                         <span class="fa fa-bars"></span>
                     </button>
                     <div class="navbar-nav ms-auto py-0">
-                        <a href="home" class="nav-item nav-link active" style="color: #ffa500;">Trang chủ</a>
-                        <a href="manageschedule" class="nav-item nav-link" style="color: white;">Quản lí lịch trình</a>
-
-                        <a href="viewT" class="nav-item nav-link" style="color: white;">Quản lí tàu</a>
-                        <a href="viewC" class="nav-item nav-link" style="color: white;">Quản lí cabin</a>   
-                        <a href="ManageSeat" class="nav-item nav-link" style="color: white;">Quản lí ghế</a>   
-
-                        <a href="viewRefund" class="nav-item nav-link" style="color: white;">Quản lí refund</a> 
-                        <a href="" class="nav-item nav-link" style="color: white;">Quản lí vé tàu</a>
-                    </div>
+                        <a href="manageschedule" class="nav-item nav-link " style="color: #ffa500;">Quản lí lịch trình</a>
+                            <a href="viewT" class="nav-item nav-link active" style="color: white;">Quản lí tàu</a> 
+                            <a href="viewC" class="nav-item nav-link" style="color: white;">Quản lí cabin</a> 
+                            <a href="ManageSeat" class="nav-item nav-link" style="color: white;">Quản lí ghế</a> 
+                            <a href="" class="nav-item nav-link" style="color: white;">Quản lí vé tàu</a>
+                            <a href="viewRefund" class="nav-item nav-link" style="color: white;">Quản lí hoàn tiền</a>
+                    </div> 
+                </nav>
             </div>
-        </nav>
-    </div>
+       
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
