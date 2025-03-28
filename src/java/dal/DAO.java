@@ -774,7 +774,7 @@ public class DAO {
         return null;
     }
 
-    public void updateSeatStatus(int seatId, int seatNo, int status, int price, String cbid) {
+    public void updateSeat(int seatId, int seatNo, int status, int price, String cbid) {
         String query = "UPDATE Seats SET seatNo =?, status = ?,price = ?, cbid = ? WHERE id = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
@@ -783,6 +783,17 @@ public class DAO {
             ps.setInt(3, price);
             ps.setString(4, cbid);
             ps.setInt(5, seatId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void updateSeatStatus(int id,int status){
+        String query = "UPDATE Seats SET status = ? WHERE id=? ;";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, status);
+            ps.setInt(2, id);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
