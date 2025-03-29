@@ -24,7 +24,7 @@ public class DBContext {
     private final String user = "root";
 
 
-    private final String password = "12345678";
+    private final String password = "khanh123";
 
     public static void main(String[] args) {
         try {

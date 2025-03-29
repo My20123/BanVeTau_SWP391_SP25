@@ -168,6 +168,144 @@ public class DAO {
         return 0;
     }
 
+    public List<Tickets> getTicketsByRange(int page, int ticketsPerPage) {
+        List<Tickets> tickets = new ArrayList<>();
+        String sql = "SELECT * FROM tickets WHERE id BETWEEN ? AND ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, (page - 1) * ticketsPerPage);
+            ps.setInt(2, ticketsPerPage);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Tickets ticket = new Tickets();
+                ticket.setId(rs.getInt("id"));
+                ticket.setFrom_station(rs.getString("from_station"));
+                ticket.setTo_station(rs.getString("to_station"));
+
+                Timestamp fromTimeStamp = rs.getTimestamp("from_date");
+                Timestamp toTimeStamp = rs.getTimestamp("to_date");
+
+                ticket.setFrom_time(fromTimeStamp != null ? fromTimeStamp.toLocalDateTime() : null);
+                ticket.setTo_time(toTimeStamp != null ? toTimeStamp.toLocalDateTime() : null);
+
+                ticket.setTtype(rs.getInt("ttype"));
+                ticket.setTrid(rs.getString("trid"));
+                ticket.setSid(rs.getInt("sid"));
+                ticket.setRid(rs.getInt("rid"));
+                ticket.setCbid(rs.getString("cbid"));
+
+                tickets.add(ticket);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tickets;
+    }
+
+    public int getTotalTickets() {
+        int total = 0;
+        String query = "SELECT COUNT(*) FROM tickets";
+        try (PreparedStatement ps = conn.prepareStatement(query);) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
+
+    public List<Tickets> searchTicketById(int ticketId) {
+        List<Tickets> tickets = new ArrayList<>();
+        String sql = "SELECT * FROM tickets WHERE id = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Tickets ticket = new Tickets();
+                ticket.setId(rs.getInt("id"));
+                ticket.setFrom_station(rs.getString("from_station"));
+                ticket.setTo_station(rs.getString("to_station"));
+
+                // Chuyển đổi Timestamp sang LocalDateTime
+                Timestamp fromTimeStamp = rs.getTimestamp("from_date");
+                Timestamp toTimeStamp = rs.getTimestamp("to_date");
+
+                ticket.setFrom_time(fromTimeStamp != null ? fromTimeStamp.toLocalDateTime() : null);
+                ticket.setTo_time(toTimeStamp != null ? toTimeStamp.toLocalDateTime() : null);
+
+                ticket.setTtype(rs.getInt("ttype"));
+                ticket.setTrid(rs.getString("trid"));
+                ticket.setSid(rs.getInt("sid"));
+                ticket.setRid(rs.getInt("rid"));
+                ticket.setCbid(rs.getString("cbid"));
+
+                tickets.add(ticket);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tickets;
+    }
+
+    public Tickets getTicketDetail(int ticketId) {
+        Tickets ticket = null;
+        String sql = "SELECT * FROM order_details d JOIN tickets t ON d.tid = t.id WHERE t.id = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                ticket = new Tickets();
+                ticket.setId(rs.getInt("id"));
+                ticket.setFrom_station(rs.getString("from_station"));
+                ticket.setTo_station(rs.getString("to_station"));
+
+                Timestamp fromTimeStamp = rs.getTimestamp("from_date");
+                Timestamp toTimeStamp = rs.getTimestamp("to_date");
+
+                ticket.setFrom_time(fromTimeStamp != null ? fromTimeStamp.toLocalDateTime() : null);
+                ticket.setTo_time(toTimeStamp != null ? toTimeStamp.toLocalDateTime() : null);
+
+                ticket.setTtype(rs.getInt("ttype"));
+                ticket.setTrid(rs.getString("trid"));
+                ticket.setSid(rs.getInt("sid"));
+                ticket.setRid(rs.getInt("rid"));
+                ticket.setCbid(rs.getString("cbid"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ticket;
+    }
+
+    public void updateTicketStatus(int ticketId) {
+        String sql = "UPDATE tickets SET ttype = CASE WHEN ttype = 1 THEN 2 ELSE 1 END WHERE id = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ticketId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void dmain(String[] args) {
+        DAO dao = new DAO();
+        int startId = 0;
+        int endId = 5;
+        List<Tickets> ticketList = dao.getTicketsByRange(startId, endId);
+        for (Tickets t : ticketList) {
+            System.out.println(t);
+        }
+
+    }
+
     public List getAllStations() {
         List<String> list = new ArrayList<>();
         try {
@@ -305,10 +443,10 @@ public class DAO {
         // Dùng try-with-resources để tránh rò rỉ tài nguyên
         try (Connection conn = new DBContext().getConnection()) {
             StringBuilder sql = new StringBuilder(
-                    "SELECT r.id, r.orderid, a.uname, r.requestdate, r.totalAmount, r.status " +
-                            "FROM Refund r " +
-                            "JOIN Order_Details od ON r.orderid = od.id " +
-                            "JOIN Accounts a ON r.accountid1 = a.uid");
+                    "SELECT r.id, r.orderid, a.uname, r.requestdate, r.totalAmount, r.status "
+                    + "FROM Refund r "
+                    + "JOIN Order_Details od ON r.orderid = od.id "
+                    + "JOIN Accounts a ON r.accountid1 = a.uid");
 
             List<Object> params = new ArrayList<>();
             boolean hasCondition = false; // Để kiểm tra có điều kiện WHERE nào chưa
@@ -788,7 +926,8 @@ public class DAO {
             e.printStackTrace();
         }
     }
-    public void updateSeatStatus(int id,int status){
+
+    public void updateSeatStatus(int id, int status) {
         String query = "UPDATE Seats SET status = ? WHERE id=? ;";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
@@ -1067,10 +1206,12 @@ public class DAO {
             return -1;
         } finally {
             try {
-                if (rs != null)
+                if (rs != null) {
                     rs.close();
-                if (ps != null)
+                }
+                if (ps != null) {
                     ps.close();
+                }
                 if (conn != null) {
                     conn.setAutoCommit(true); // Reset auto commit
                     conn.close();
@@ -1128,9 +1269,10 @@ public class DAO {
             return false;
         }
     }
-public int getDistance(String fromStation, String toStation, int sid){
-     String query = "select rid from Schedules where id=?";
-     int distance=0,rid;
+
+    public int getDistance(String fromStation, String toStation, int sid) {
+        String query = "select rid from Schedules where id=?";
+        int distance = 0, rid;
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, sid);
             ResultSet rs = ps.executeQuery();
@@ -1154,12 +1296,12 @@ public int getDistance(String fromStation, String toStation, int sid){
                         distance = rs1.getInt("distance");
                     }
                     return distance;
-                }   }
+                }
+            }
         } catch (Exception e) {
         }
         return 0; // Nếu không cập nhật được bất kỳ ghế nào
     }
-
 
     public int updateSeatsPrice(String fromStation, String toStation, int sid, String cabinType, String cabinId,
             int seatNo) throws SQLException {
@@ -1207,7 +1349,7 @@ public int getDistance(String fromStation, String toStation, int sid){
                         Pattern pattern = Pattern.compile("\\d+");
                         Matcher matcher = pattern.matcher(cabinType);
                         int totalSeats = matcher.find() ? Integer.parseInt(matcher.group()) : 1; // Tránh lỗi
-                                                                                                 // `NoMatchFoundException`
+                        // `NoMatchFoundException`
 
                         // ✅ Công thức tính giá vé
                         price = distance * 550 + seatPrice * (200 - totalSeats) / 100 + vip;
@@ -1292,7 +1434,7 @@ public int getDistance(String fromStation, String toStation, int sid){
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-      //  System.out.println(dao.searchSchedules("Sài Gòn", "Hà Nội", sdf.parse("2025-03-12")));
+        //  System.out.println(dao.searchSchedules("Sài Gòn", "Hà Nội", sdf.parse("2025-03-12")));
         System.out.println(dao.get1SeatWithCabinIdNSeatN0("SE3/1", 5).toString());
         //System.out.println(dao.getFilterRefund(null, null, sdf.parse("2025-03-16 00:00:00")));
         // System.out.println(dao.createRefund(2, "My", 1022000,
