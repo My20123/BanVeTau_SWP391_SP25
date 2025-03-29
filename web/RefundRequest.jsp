@@ -280,7 +280,7 @@
                             <a href="viewT" class="nav-item nav-link " style="color: white;">Quản lí tàu</a> 
                             <a href="viewC" class="nav-item nav-link" style="color: white;">Quản lí cabin</a> 
                             <a href="ManageSeat" class="nav-item nav-link" style="color: white;">Quản lí ghế</a> 
-                            <a href="" class="nav-item nav-link" style="color: white;">Quản lí vé tàu</a>
+                            <a href="ticketController" class="nav-item nav-link" style="color: white;">Quản lí vé tàu</a>
                             <a href="viewRefund" class="nav-item nav-link active" style="color: white;">Quản lí hoàn tiền</a>
                         </div>
                     </div>
