@@ -1,9 +1,11 @@
 package dal;
 
+import java.lang.System.Logger.Level;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import model.Order_Details;
 import model.Tickets;
 
@@ -209,18 +211,24 @@ public class OrderDetailDAO extends DBContext {
         return 0;
     }
 
-    public void updateOrderStatus(int orderId, int status) {
+    public boolean updateOrderStatus(int orderId, int status) throws Exception {
         String sql = "UPDATE Order_details SET status = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, status);
             ps.setInt(2, orderId);
 
-            ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                return true;  // Cập nhật thành công
+            } else {
+                return false; // Không có dòng nào bị ảnh hưởng
+            }
+
+        } catch (SQLException e) {
+            return false; // Xử lý lỗi
         }
     }
 
@@ -287,14 +295,33 @@ public class OrderDetailDAO extends DBContext {
     }
 
     public void deleteOrdersWithStatus4() {
-       String query="SET SQL_SAFE_UPDATES = 0;\n" +
-"DELETE FROM Order_details WHERE status = 4;\n" +
-"SET SQL_SAFE_UPDATES = 1;"; 
-       try(Connection conn = getConnection();
-                PreparedStatement ps = conn.prepareStatement(query)){
-           ps.executeUpdate();
-       }catch(Exception e){
-          e.printStackTrace(); 
-       }
+    String disableSafeMode = "SET SQL_SAFE_UPDATES = 0;";
+    String deleteQuery = "DELETE FROM Order_details WHERE status = 4;";
+    String enableSafeMode = "SET SQL_SAFE_UPDATES = 1;";
+
+    try (Connection conn = getConnection();
+         Statement stmt = conn.createStatement()) { 
+        
+        // Tắt chế độ SQL_SAFE_UPDATES
+        stmt.executeUpdate(disableSafeMode);
+        
+        // Xóa dữ liệu có status = 4
+        int rowsDeleted = stmt.executeUpdate(deleteQuery);
+        System.out.println("Deleted " + rowsDeleted + " rows.");
+
+        // Bật lại SQL_SAFE_UPDATES
+        stmt.executeUpdate(enableSafeMode);
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+    public static void main(String[] args)  {
+        OrderDetailDAO orderdao= new OrderDetailDAO();
+        try {
+            System.out.println(orderdao.updateOrderStatus(19, 3));
+        } catch (Exception ex) {
+            Logger.getLogger(OrderDetailDAO.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
     }
 }

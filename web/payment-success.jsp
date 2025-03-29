@@ -221,6 +221,7 @@
                 </div>
             </div>
                     <c:forEach var="seat" items="${selectedSeats}">
+                        <c:forEach var="ticket" items="${seat.tickets}">
             <div class="ticket-info">
                 <div class="info-item">
                     <div class="info-label">Ghế</div>
@@ -248,10 +249,10 @@
 
             <div class="journey-details">
                 <div class="station-info">
-                    <div class="station-name">${fromStation}</div>
+                    <div class="station-name">${ticket.from_station}</div>
                     <div class="station-time">
                         <div>Khởi hành: ${departureTime}</div>
-                        <div>Ga đi: ${fromStation}</div>
+                        <div>Ga đi: Ga ${ticket.from_station}</div>
                     </div>
                 </div>
                 <div class="station-info text-end">
@@ -261,7 +262,7 @@
                     </div>
                 </div>
             </div>
-</c:forEach>
+</c:forEach></c:forEach>
             <div class="border-top pt-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="text-muted">Tổng tiền</div>

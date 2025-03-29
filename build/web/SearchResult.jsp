@@ -296,7 +296,6 @@
                                                     <img src="img/trainCarAuto.png" ng-show="toa.IsChonChoTuDong" class="ng-hide">
                                                 </div>
                                                 <c:set var="cabinNumber" value="${fn:split(cabin.getId(), '/')[1]}" />
-
                                                 <div class="text-center text-info et-car-label ng-binding">${cabinNumber}</div>
                                             </div>
                                         </c:forEach>
@@ -304,15 +303,14 @@
                                 </c:forEach>
                             </div>
 
-                            <div class="showCabin"></div>
+                            <div id="showCabinDepart" class="showCabin"></div>
 
                             <c:if test="${trip_type == 'roundTrip'}">
-
                                 <div class="row et-page-header">
-                                    <span class="et-main-label ng-binding" style="margin-top: 30px"> 
+                                    <span class="et-main-label ng-binding " style="margin-top: 30px"> 
                                         <i class="fas fa-train me-2"></i><strong class="ng-binding">Chiều về:</strong> ngày ${return_date} từ ${desti} đến ${depart} <i class="fas fa-long-arrow-alt-right mx-2"></i></span>
                                 </div>
-                                <div class="row et-train-list">
+                                <div class="row et-train-list return_way">
                                     <div class="previous-train et-col-md-1 text-center">
                                         <div class="et-pre-train ng-scope et-arrow-disabled" ng-class="{'et-arrow-disabled': !canShiftBack}" ng-click="chuyenTruoc(true)" tooltip="Tàu trước">
                                             <div class="et-arrow-left"></div>
@@ -320,8 +318,8 @@
                                     </div>                            
                                     <div class="train-group"> 
                                         <c:forEach items="${return_schedules}" var="schedule">
-                                            <div class="col-xs-4 col-sm-3 et-col-md-2 et-train-block ng-scope"  analytics-on="click" analytics-event="SelectTrain">
-                                                <div class="et-train-head"  data-train-id="${schedule.getTrid()}">
+                                            <div class="col-xs-4 col-sm-3 et-col-md-2 et-train-block ng-scope">
+                                                <div class="et-train-head" data-train-id="${schedule.getTrid()}">
                                                     <div class="row center-block" style="width: 40%; margin-bottom: 3px">
                                                         <div class="et-train-lamp text-center ng-binding" style="color:#bf8c01;">${schedule.getTrid()}</div> 
                                                     </div> 
@@ -388,7 +386,6 @@
                                                         <img src="img/trainCarAuto.png" class="ng-hide">
                                                     </div>
                                                     <c:set var="cabinNumber" value="${fn:split(cabin.getId(), '/')[1]}" />
-
                                                     <div class="text-center text-info et-car-label ng-binding">${cabinNumber}</div>
                                                 </div>
                                             </c:forEach>
@@ -396,7 +393,7 @@
                                     </c:forEach>
                                 </div>
 
-                                <div class="showCabin"></div>
+                                <div id="showCabinReturn" class="showCabin"></div>
                             </c:if>
 
 
@@ -570,7 +567,6 @@
                                                                 const desti = "<c:out value='${desti}' />";
                                                                 console.log("depart: " + depart + ",desti: " + desti);
 
-
                                                                 // Xóa selected class từ tất cả các cabin icons
                                                                 document.querySelectorAll('.et-car-block .caIcon.et-car-icon').forEach(icon => {
                                                                     icon.classList.remove('et-car-icon-selected');
@@ -593,21 +589,34 @@
 
                                                                 const cabinNumber = cid.split("/")[1];
                                                                 console.log("ctype: " + ctype);
+                                                                const selectedTrainHead = document.querySelector('.et-train-head-selected');
+                                                                 console.log("selectedTrainHead",selectedTrainHead);
+                                                                 const isReturnTrain = selectedTrainHead.closest('.et-train-list').classList.contains('return_way') ;           
+                                                                            console.log("isReturnTrain",isReturnTrain);
+                                                                console.log("scheduleid: ", selectedScheduleId);
 
                                                                 // Xác định layout cần tải dựa vào loại cabin
                                                                 const regex = /^(A|B)n\d{2}L(V)?$/;
 
                                                                 let layoutFile = regex.test(ctype) ? "cabin_layout/Berths.jsp?cbid=" + cid + "&total=" + totalSeats + "&room=" + berthsInRoom + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId + "&depart=" + depart + "&desti=" + desti : "cabin_layout/Seats.jsp?cbid=" + cid + "&total=" + totalSeats + "&row=" + seatsInRow + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId + "&depart=" + depart + "&desti=" + desti;
 
-                                                                console.log("scheduleid: ", selectedScheduleId);
                                                                 fetch(layoutFile)
                                                                         .then(response => response.text())
                                                                         .then(data => {
-                                                                            const showCabinDiv = document.querySelector(".showCabin");
+                                                                            // Xác định khu vực hiển thị dựa vào vị trí của cabin được chọn
+                                                                            let showCabinDiv;
+                                                                            
+                                                                            // Chọn div hiển thị phù hợp
+                                                                            if (isReturnTrain) {
+                                                                                showCabinDiv = document.getElementById("showCabinReturn");
+                                                                            } else {
+                                                                                showCabinDiv = document.getElementById("showCabinDepart");
+                                                                            }
+
                                                                             if (showCabinDiv) {
                                                                                 showCabinDiv.innerHTML = data; // Chèn nội dung từ JSP vào div
                                                                             } else {
-                                                                                console.error("Không tìm thấy phần tử div có class 'showCabin'");
+                                                                                console.error("Không tìm thấy phần tử div hiển thị cabin phù hợp");
                                                                             }
                                                                         })
                                                                         .catch(error => {
@@ -641,6 +650,16 @@
                                                             }
                                                             // 🟢 Function chọn ghế
                                                             function selectSeat(seatElement) {
+                                                                // Kiểm tra trạng thái ghế
+                                                                const seatStatus = seatElement.getAttribute("data-seat-status");
+                                                                console.log("seatStatus",seatStatus);
+                                                                
+                                                                // Nếu ghế đã bán hoặc có class et-sit-bought thì không cho phép thao tác
+                                                                if (seatStatus == "2") {
+                                                                    alert("Ghế này đã được đặt, vui lòng chọn ghế khác!");
+                                                                    return;
+                                                                }
+
                                                                 const seatNumber = seatElement.getAttribute("data-seat-number"); // Lấy số ghế
                                                                 const price = seatElement.getAttribute("data-seat-price") || "Không có giá"; // Lấy giá ghế
                                                                 const seatSurElement = seatElement.querySelector(".et-sit-sur"); // Tìm class "et-sit-sur"

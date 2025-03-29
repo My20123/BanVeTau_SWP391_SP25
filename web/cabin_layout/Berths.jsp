@@ -70,7 +70,7 @@ String cbid = request.getParameter("cbid");
             } else if (seat.getStatus() == 2) {
                 seatClass = "et-sit-bought"; // Ghế đã bán
             }%>
-                <div class="et-col-1-16 et-seat-h-35 ng-isolate-scope" data-seat-number="<%=i%>" data-seat-price="<%=seatPrice%>">
+                <div class="et-col-1-16 et-seat-h-35 ng-isolate-scope" data-seat-number="<%=i%>" data-seat-price="<%=seatPrice%>" data-seat-status="<%=seat.getStatus()%>">
                     <div class="et-bed-right" >
                         <div class="et-bed-outer">
                             <div class="et-bed text-center <%=seatClass%>" >
@@ -96,7 +96,7 @@ Seats seat=dao.get1SeatWithCabinIdNSeatN0(cbid, i);
                 seatClass = "et-sit-bought"; // Ghế đã bán
             }%>
 
-            <div class="et-col-1-16 et-seat-h-35 ng-isolate-scope" data-seat-number="<%=i%>" data-seat-price="<%=seatPrice%>">
+            <div class="et-col-1-16 et-seat-h-35 ng-isolate-scope" data-seat-number="<%=i%>" data-seat-price="<%=seatPrice%>" data-seat-status="<%=seat.getStatus()%>">
                 <div class="et-bed-left" >
                     <div class="et-bed-outer">
                         <div class="et-bed text-center  <%=seatClass%>" >
@@ -125,7 +125,7 @@ Seats seat=dao.get1SeatWithCabinIdNSeatN0(cbid, i);
             } else if (seat.getStatus() == 2) {
                 seatClass = "et-sit-bought"; // Ghế đã bán
             }%>
-            <div class="et-col-1-16 et-seat-h-35 ng-isolate-scope" data-seat-number="<%=i%>" data-seat-price="<%=seatPrice%>">
+            <div class="et-col-1-16 et-seat-h-35 ng-isolate-scope" data-seat-number="<%=i%>" data-seat-price="<%=seatPrice%>" data-seat-status="<%=seat.getStatus()%>">
                 <div class="et-bed-right" >
                     <div class="et-bed-outer">
                         <div class="et-bed text-center <%=seatClass%>" >
@@ -154,7 +154,7 @@ Seats seat=dao.get1SeatWithCabinIdNSeatN0(cbid, i);
                 seatClass = "et-sit-bought"; // Ghế đã bán
             }%>
 
-            <div class="et-col-1-16 et-seat-h-35 ng-isolate-scope" data-seat-number="<%=i%>" data-seat-price="<%=seatPrice%>">
+            <div class="et-col-1-16 et-seat-h-35 ng-isolate-scope" data-seat-number="<%=i%>" data-seat-price="<%=seatPrice%>" data-seat-status="<%=seat.getStatus()%>">
                 <div class="et-bed-left" >
                     <div class="et-bed-outer">
                         <div class="et-bed text-center <%=seatClass%>" >
@@ -184,7 +184,7 @@ Seats seat=dao.get1SeatWithCabinIdNSeatN0(cbid, i);
             } else if (seat.getStatus() == 2) {
                 seatClass = "et-sit-bought"; // Ghế đã bán
             }%>
-            <div class="et-col-1-16 et-seat-h-35 ng-isolate-scope" data-seat-number="<%=i%>" data-seat-price="<%=seatPrice%>">
+            <div class="et-col-1-16 et-seat-h-35 ng-isolate-scope" data-seat-number="<%=i%>" data-seat-price="<%=seatPrice%>" data-seat-status="<%=seat.getStatus()%>">
                 <div class="et-bed-right" >
                     <div class="et-bed-outer">
                         <div class="et-bed text-center <%=seatClass%>" >
@@ -213,7 +213,7 @@ Seats seat=dao.get1SeatWithCabinIdNSeatN0(cbid, i);
                 seatClass = "et-sit-bought"; // Ghế đã bán
             }%>
 
-            <div class="et-col-1-16 et-seat-h-35 ng-isolate-scope" data-seat-number="<%=i%>" data-seat-price="<%=seatPrice%>">
+            <div class="et-col-1-16 et-seat-h-35 ng-isolate-scope" data-seat-number="<%=i%>" data-seat-price="<%=seatPrice%>" data-seat-status="<%=seat.getStatus()%>">
                 <div class="et-bed-left" >
                     <div class="et-bed-outer">
                         <div class="et-bed text-center <%=seatClass%>" >

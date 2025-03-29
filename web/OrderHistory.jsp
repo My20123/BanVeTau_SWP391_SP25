@@ -522,9 +522,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach var="order" items="${orderList}">
+                                <c:forEach var="order" items="${orderList}" varStatus="loop">
                                     <tr>
-                                        <td>${status.index + 1}</td>
+                                        <td>${loop.index + 1}</td>
                                         <td>
                                             ${order.tickets[0].from_station}-${order.tickets[0].to_station}<br>
                                         </td>
@@ -582,73 +582,38 @@
 
                 <!-- Modal Chi Tiết Đơn Hàng -->
                 <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header bg-primary text-white">
                                 <h5 class="modal-title" id="detailModalLabel">Chi Tiết Vé Tàu</h5>
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body p-4">
-                                <div class="ticket-header border-bottom pb-3 mb-3">
-                                    <div class="d-flex justify-content-between align-items-center">
+                                <div class="ticket-container">
+                                    <div class="ticket-header">
                                         <div>
-                                            <h6 class="text-muted mb-1">Số vé</h6>
-                                            <div class="d-flex align-items-center">
-                                                <span id="trainNo" class="h5 mb-0 me-2"></span>
-                                                <span class="badge bg-success">E-ticket</span>
-                                            </div>
-                                        </div>
-                                        <div class="text-end">
-                                            <h6 class="text-muted mb-1">Ngày</h6>
-                                            <span id="ticketDate" class="h6"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="ticket-details">
-                                    <div class="row g-3">
-                                        <div class="col-6">
-                                            <h6 class="text-muted">Người lớn</h6>
-                                            <span id="adultCount" class="h6">1</span>
-                                        </div>
-                                        <div class="col-6">
-                                            <h6 class="text-muted">Trẻ em</h6>
-                                            <span id="childCount" class="h6">0</span>
-                                        </div>
-                                        <div class="col-6">
-                                            <h6 class="text-muted">Hạng</h6>
-                                            <span id="ticketClass" class="h6"></span>
-                                        </div>
-                                        <div class="col-6">
-                                            <h6 class="text-muted">Loại vé</h6>
-                                            <span id="ticketQuota" class="h6">GENERAL</span>
+                                            <h5 class="mb-0 text-primary">Thông tin vé tàu</h5>
+                                            <small class="text-muted">Mã đặt vé: #<span id="orderId"></span></small>
                                         </div>
                                     </div>
 
-                                    <div class="journey-details mt-4">
-                                        <div class="d-flex align-items-center mb-3">
-                                            <div class="station-info flex-grow-1">
-                                                <h6 class="text-muted mb-1">Ga đi</h6>
-                                                <p id="fromStation" class="h6 mb-0"></p>
-                                                <small id="departureTime" class="text-muted"></small>
-                                            </div>
-                                            <div class="journey-icon px-3">
-                                                <i class="fas fa-train text-primary h4"></i>
-                                            </div>
-                                            <div class="station-info flex-grow-1 text-end">
-                                                <h6 class="text-muted mb-1">Ga đến</h6>
-                                                <p id="toStation" class="h6 mb-0"></p>
-                                                <small id="arrivalTime" class="text-muted"></small>
-                                            </div>
+                                    <div class="payment-info">
+                                        <div class="payment-info-item">
+                                            <span class="payment-info-label">Số tiền:</span>
+                                            <span class="payment-info-value" id="totalPrice"></span>
+                                        </div>
+                                        <div class="payment-info-item">
+                                            <span class="payment-info-label">Ngày thanh toán:</span>
+                                            <span class="payment-info-value" id="paymentDate"></span>
+                                        </div>
+                                        <div class="payment-info-item">
+                                            <span class="payment-info-label">Trạng thái:</span>
+                                            <span class="payment-info-value" id="orderStatus"></span>
                                         </div>
                                     </div>
 
-                                    <div class="price-details mt-4 pt-3 border-top">
-                                        <h6 class="text-muted mb-2">Tổng tiền</h6>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span id="totalPrice" class="h4 mb-0"></span>
-                                            <small class="text-muted">(Đã bao gồm thuế)</small>
-                                        </div>
+                                    <div id="ticketsContainer">
+                                        <!-- Tickets will be inserted here -->
                                     </div>
                                 </div>
                             </div>
@@ -694,39 +659,14 @@
                 document.getElementById('status').value = '';
                 window.location.href = 'order-history';
             }
+            
             function openCancelModal(orderId) {
                 document.getElementById("orderId").value = orderId;
                 var cancelModal = new bootstrap.Modal(document.getElementById("cancelModal"));
                 cancelModal.show();
             }
-            function openDetailModal(orderId) {
-                // Gọi API để lấy thông tin chi tiết đơn hàng
-                fetch(`get-order-detail?id=${orderId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Cập nhật thông tin vé
-                        document.getElementById('trainNo').textContent = data.trainNo;
-                        document.getElementById('ticketDate').textContent = data.departureDate;
-                        document.getElementById('fromStation').textContent = data.fromStation;
-                        document.getElementById('toStation').textContent = data.toStation;
-                        document.getElementById('departureTime').textContent = data.departureTime;
-                        document.getElementById('arrivalTime').textContent = data.arrivalTime;
-                        document.getElementById('ticketClass').textContent = data.ticketClass;
-                        document.getElementById('totalPrice').textContent = new Intl.NumberFormat('vi-VN', {
-                            style: 'currency',
-                            currency: 'VND'
-                        }).format(data.totalPrice);
-                        
-                        // Mở modal
-                        var detailModal = new bootstrap.Modal(document.getElementById("detailModal"));
-                        detailModal.show();
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Có lỗi xảy ra khi tải thông tin chi tiết!');
-                    });
-            }
+            
+           
         </script>
     </body>
 </html>
-
