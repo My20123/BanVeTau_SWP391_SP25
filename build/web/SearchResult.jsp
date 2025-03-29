@@ -141,12 +141,12 @@
                 </div>
                 <div >
                     <div class="container py-5" style="width: 100%;margin-left: auto;box-sizing: border-box;margin-right: auto;display: block;padding-left: 16px;padding-right: 16px;height: 80px;margin: auto;background: #ffffff;border-radius: 10px;position: absolute; left: 0;right: 0;top: 90px;padding: 8px;box-shadow: 0px 5px 20px 0px #0000001A;display: -webkit-box;display: -webkit-flex;display: -ms-flexbox; display: flex; -webkit-align-items: center;-webkit-box-align: center;-ms-flex-align: center; align-items: center;">
-                        <form action="searchtrain" method="post" id="ticket-form" onsubmit="return validateForm()">
+                        <form action="searchtrain" method="get" id="ticket-form" onsubmit="return validateForm()">
                             <div class="train-search__data">
                                 <div class="date-picker">
                                     <div class="SingleDatePickerInput SingleDatePickerInput_1" >
                                         <div class="DateInput DateInput_1" style="display: flex;justify-content: normal;width: auto;margin: 0 auto;">
-                                            <p>Thời gian đi <input type="date" id="datepicker" name="depart_date" value="${from_date}"></p>
+                                            <p>Thời gian đi <input type="date" id="datepicker" name="from_date" value="${from_date}"></p>
                                         <div class="search-stations__divider"></div>
                                         <p style="margin-left: 5px;">Thời gian về <input type="date" id="return_datepicker" name="return_date" value="${return_date}"></p>
                                     </div>
@@ -154,7 +154,7 @@
                             </div>
                             <div class="search-stations">
                                 <div class="station-select">
-                                    <div class=" css-aakg73-container">
+                                    <div class="css-aakg73-container">
                                         <span id="react-select-2-live-region" class="css-7pg0cj-a11yText"></span>
                                         <span aria-live="polite" aria-atomic="false" aria-relevant="additions text" class="css-7pg0cj-a11yText"></span>
                                         <div class="react-select__control css-cv0q10">
@@ -162,7 +162,7 @@
                                                 <div class="react-select__placeholder css-1jqq78o-placeholder" id="react-select-2-placeholder" style="margin-left: 25px;">Ga đi</div>
                                                 <div class="search-station-input-wrapper">
                                                     <div class="react-select__input-container css-19bb58m" data-value="">
-                                                        <input class="react-select__input" list="stations"  id="from_station"  value="${depart}" style="color: inherit; background: 0px center; opacity: 1;  width: 250px; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px;margin-left:40px; outline: 0px; padding: 0px;">
+                                                        <input class="react-select__input" list="stations" id="from_station" name="depart" value="${depart}" style="color: inherit; background: 0px center; opacity: 1; width: 250px; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px;margin-left:40px; outline: 0px; padding: 0px;">
                                                         <datalist id="stations">
                                                             <c:forEach items="${listS}" var="station">
                                                                 <option value="${station}">${station}</option>
@@ -182,7 +182,7 @@
                                     </button>
                                 </div>
                                 <div class="station-select">
-                                    <div class=" css-aakg73-container">
+                                    <div class="css-aakg73-container">
                                         <span id="react-select-3-live-region" class="css-7pg0cj-a11yText"></span>
                                         <span aria-live="polite" aria-atomic="false" aria-relevant="additions text" class="css-7pg0cj-a11yText"></span>
                                         <div class="react-select__control css-cv0q10">
@@ -190,7 +190,7 @@
                                                 <div class="react-select__placeholder css-1jqq78o-placeholder" id="react-select-3-placeholder" style="margin-left: 25px;">Ga đến</div>
                                                 <div class="search-station-input-wrapper">
                                                     <div class="react-select__input-container css-19bb58m" data-value="">
-                                                        <input class="react-select__input" list="stations" id="to_station" value="${desti}" style="color: inherit; background: 0px center; opacity: 1; width: 250px; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px; margin-left:40px ;outline: 0px; padding: 0px;">
+                                                        <input class="react-select__input" list="stations" id="to_station" name="desti" value="${desti}" style="color: inherit; background: 0px center; opacity: 1; width: 250px; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px; margin-left:40px ;outline: 0px; padding: 0px;">
                                                         <datalist id="stations">
                                                             <c:forEach items="${listS}" var="station">
                                                                 <option value="${station}">${station}</option>
@@ -203,9 +203,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <input type="hidden" name="trip_type" value="${trip_type}">
                             <button class="train-search__submit-btn" type="submit">Tìm kiếm</button>
-                        </div>
-                    </form>
+                      </div>
+                    </form>                   
                 </div>
             </div>
 
@@ -383,8 +384,8 @@
                                                          ${cabin.getStatus() == 2 && !cabin.isSelected() ? 'et-car-icon-sold-out' : ''}
                                                          ${cabin.isChonChoTuDong() && !cabin.isSelected() ? 'et-car-icon-other' : ''}"
                                                          style="<c:out value='display: block;' escapeXml='false'/>">
-                                                        <img src="img/trainCar2.png" ng-show="!toa.IsChonChoTuDong">
-                                                        <img src="img/trainCarAuto.png" ng-show="toa.IsChonChoTuDong" class="ng-hide">
+                                                        <img src="img/trainCar2.png">
+                                                        <img src="img/trainCarAuto.png" class="ng-hide">
                                                     </div>
                                                     <c:set var="cabinNumber" value="${fn:split(cabin.getId(), '/')[1]}" />
 

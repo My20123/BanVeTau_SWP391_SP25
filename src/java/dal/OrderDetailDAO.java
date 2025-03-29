@@ -286,7 +286,15 @@ public class OrderDetailDAO extends DBContext {
         return null;
     }
 
-//    public int deleteOrdersWithStatus4() {
-//        
-//    }
+    public void deleteOrdersWithStatus4() {
+       String query="SET SQL_SAFE_UPDATES = 0;\n" +
+"DELETE FROM Order_details WHERE status = 4;\n" +
+"SET SQL_SAFE_UPDATES = 1;"; 
+       try(Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(query)){
+           ps.executeUpdate();
+       }catch(Exception e){
+          e.printStackTrace(); 
+       }
+    }
 }

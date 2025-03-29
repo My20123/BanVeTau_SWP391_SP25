@@ -55,6 +55,7 @@ public class OrderHistoryController extends HttpServlet {
 
         OrderDetailDAO orderDAO = new OrderDetailDAO();
         DAO dao = new DAO();
+        orderDAO.deleteOrdersWithStatus4();
         int totalRecords = orderDAO.countFilteredOrdersForUser(userId, status, keyword);
         int totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
 
