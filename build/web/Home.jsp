@@ -189,7 +189,7 @@
                                                                         <div class="date-picker">
                                                                             <div class="SingleDatePickerInput SingleDatePickerInput_1">
                                                                                 <div class="DateInput DateInput_1">
-                                                                                    <p>Thời gian đi <input type="date" id="input_from_round" name="input_from" onchange="updateMinReturnDate()"></p>
+                                                                                    <p>Thời gian đi <input type="date" id="input_from_round" name="input_from_round" onchange="updateMinReturnDate()"></p>
                                                                                     <p>Thời gian về <input type="date" id="input_to" name="input_to"></p>
                                                                                 </div>
                                                                             </div>
@@ -202,7 +202,7 @@
                                                                                             <div class="react-select__placeholder css-1jqq78o-placeholder" id="react-select-2-placeholder" style="margin-left: 25px;">Ga đi</div>
                                                                                             <div class="search-station-input-wrapper">
                                                                                                 <div class="react-select__input-container css-19bb58m" data-value="">
-                                                                                                 <input class="react-select__input" name="from_station" list="stations" id="from_station_round" spellcheck="false" tabindex="0" type="text" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" aria-describedby="react-select-2-placeholder" style="color: inherit; background: 0px center; opacity: 1;  width: 250px; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px;margin-left:40px; outline: 0px; padding: 0px;">
+                                                                                                 <input class="react-select__input_round" name="from_station_round" list="stations" id="from_station_round" spellcheck="false" tabindex="0" type="text" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" aria-describedby="react-select-2-placeholder" style="color: inherit; background: 0px center; opacity: 1;  width: 250px; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px;margin-left:40px; outline: 0px; padding: 0px;">
                                                                                                 <datalist id="stations">
                                                                                                     <c:forEach items="${listS}" var="o">
                                                                                                         <option value="${o}">
@@ -228,7 +228,7 @@
                                                                                         <div class="react-select__placeholder css-1jqq78o-placeholder" id="react-select-3-placeholder" style="margin-left: 25px;">Ga đến</div>
                                                                                         <div class="search-station-input-wrapper">
                                                                                             <div class="react-select__input-container css-19bb58m" data-value="">
-                                                                                                <input class="react-select__input" name="to_station" list="stations" autocapitalize="none" autocomplete="off" autocorrect="off" id="to_station_round" spellcheck="false" tabindex="0" type="text" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" aria-describedby="react-select-3-placeholder" style="color: inherit; background: 0px center; opacity: 1; width: 250px; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px; margin-left:40px ;outline: 0px; padding: 0px;">
+                                                                                                <input class="react-select__input" name="to_station_round" list="stations" autocapitalize="none" autocomplete="off" autocorrect="off" id="to_station_round" spellcheck="false" tabindex="0" type="text" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" aria-describedby="react-select-3-placeholder" style="color: inherit; background: 0px center; opacity: 1; width: 250px; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px; margin-left:40px ;outline: 0px; padding: 0px;">
                                                                                                 <datalist id="stations">
                                                                                                     <c:forEach items="${listS}" var="o">
                                                                                                         <option value="${o}">
@@ -329,6 +329,7 @@
                         document.getElementById('input_from_round').value = fromDate;
                         document.getElementById('from_station_round').value = fromStation;
                         document.getElementById('to_station_round').value = toStation;
+                        
                     } else {
                         oneWayContent.style.display = 'block';
                         roundTripContent.style.display = 'none';

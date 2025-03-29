@@ -407,6 +407,21 @@
             input.classList.remove('valid');
             return false;
         }
+
+        // Kiểm tra viết hoa chữ cái đầu mỗi từ
+        const words = name.split(' ');
+        const isValidFormat = words.every(word => {
+            if (word.length === 0) return true;
+            return word[0] === word[0].toUpperCase() && word.slice(1) === word.slice(1).toLowerCase();
+        });
+
+        if (!isValidFormat) {
+            errorDiv.textContent = "Họ và Tên phải viết hoa chữ cái đầu của mỗi từ!";
+            errorDiv.style.display = "block";
+            input.classList.add('invalid');
+            input.classList.remove('valid');
+            return false;
+        }
         
         errorDiv.style.display = "none";
         input.classList.remove('invalid');
@@ -516,17 +531,42 @@
                 return false;
             }
 
-            // Kiểm tra trùng lặp họ tên
-            const allNames = document.querySelectorAll('.passenger-name');
+            // Kiểm tra viết hoa chữ cái đầu mỗi từ
+            const words = name.split(' ');
+            const isValidFormat = words.every(word => {
+                if (word.length === 0) return true;
+                return word[0] === word[0].toUpperCase() && word.slice(1) === word.slice(1).toLowerCase();
+            });
+
+            if (!isValidFormat) {
+                errorDiv.textContent = "Họ và Tên phải viết hoa chữ cái đầu của mỗi từ!";
+                errorDiv.style.display = "block";
+                input.classList.add('invalid');
+                input.classList.remove('valid');
+                return false;
+            }
+
+            // Lấy ngày khởi hành của vé hiện tại
+            const currentRow = input.closest('tr');
+            const departureTime = currentRow.querySelector('td:nth-child(2)').textContent.match(/Khởi hành:(.*?)(?=\s|$)/)[1].trim();
+            
+            // Kiểm tra trùng lặp họ tên với các vé khác có cùng ngày khởi hành
+            const allRows = document.querySelectorAll('tbody tr');
             let isDuplicate = false;
-            allNames.forEach(otherInput => {
-                if (otherInput !== input && otherInput.value.trim().toLowerCase() === name.toLowerCase()) {
-                    isDuplicate = true;
+            allRows.forEach(row => {
+                if (row !== currentRow) {
+                    const otherName = row.querySelector('.passenger-name').value.trim().toLowerCase();
+                    const otherDepartureTime = row.querySelector('td:nth-child(2)').textContent.match(/Khởi hành:(.*?)(?=\s|$)/)[1].trim();
+                    
+                    // Không cho phép trùng tên khi cùng ngày khởi hành
+                    if (otherDepartureTime === departureTime && otherName === name.toLowerCase()) {
+                        isDuplicate = true;
+                    }
                 }
             });
             
             if (isDuplicate) {
-                errorDiv.textContent = "Họ và Tên này đã được sử dụng cho vé khác!";
+                errorDiv.textContent = "Họ và Tên này đã được sử dụng cho vé khác cùng ngày khởi hành!";
                 errorDiv.style.display = "block";
                 input.classList.add('invalid');
                 input.classList.remove('valid');
@@ -552,17 +592,61 @@
                 return false;
             }
 
-            // Kiểm tra trùng lặp CCCD
-            const allCCCDs = document.querySelectorAll('.passenger-cccd');
+            // Lấy thông tin của vé hiện tại
+            const currentRow = input.closest('tr');
+            const currentName = currentRow.querySelector('.passenger-name').value.trim().toLowerCase();
+            const departureTime = currentRow.querySelector('td:nth-child(2)').textContent.match(/Khởi hành:(.*?)(?=\s|$)/)[1].trim();
+            
+            // Kiểm tra trùng lặp CCCD với các vé khác
+            const allRows = document.querySelectorAll('tbody tr');
             let isDuplicate = false;
-            allCCCDs.forEach(otherInput => {
-                if (otherInput !== input && otherInput.value.trim() === cccd) {
-                    isDuplicate = true;
+            let errorMessage = "";
+            
+            // Đầu tiên kiểm tra trùng CCCD cùng ngày
+            allRows.forEach(row => {
+                if (row !== currentRow) {
+                    const otherCCCD = row.querySelector('.passenger-cccd').value.trim();
+                    const otherDepartureTime = row.querySelector('td:nth-child(2)').textContent.match(/Khởi hành:(.*?)(?=\s|$)/)[1].trim();
+                    
+                    if (otherDepartureTime === departureTime && otherCCCD === cccd) {
+                        isDuplicate = true;
+                        errorMessage = "CCCD này đã được sử dụng cho vé khác cùng ngày khởi hành!";
+                    }
                 }
             });
             
+            // Nếu không trùng CCCD cùng ngày, kiểm tra trùng tên
+            if (!isDuplicate) {
+                let hasMatchingName = false;
+                let matchingCCCD = null;
+                
+                // Tìm vé có tên trùng và đã có CCCD
+                allRows.forEach(row => {
+                    if (row !== currentRow) {
+                        const otherName = row.querySelector('.passenger-name').value.trim().toLowerCase();
+                        const otherCCCD = row.querySelector('.passenger-cccd').value.trim();
+                        const otherDepartureTime = row.querySelector('td:nth-child(2)').textContent.match(/Khởi hành:(.*?)(?=\s|$)/)[1].trim();
+                        
+                        if (otherName === currentName && otherDepartureTime !== departureTime) {
+                            hasMatchingName = true;
+                            if (otherCCCD) {
+                                matchingCCCD = otherCCCD;
+                            }
+                        }
+                    }
+                });
+                
+                // Nếu tìm thấy vé có tên trùng và đã có CCCD
+                if (hasMatchingName && matchingCCCD) {
+                    if (cccd !== matchingCCCD) {
+                        isDuplicate = true;
+                        errorMessage = "CCCD phải trùng khớp khi cùng tên!";
+                    }
+                }
+            }
+            
             if (isDuplicate) {
-                errorDiv.textContent = "CCCD này đã được sử dụng cho vé khác!";
+                errorDiv.textContent = errorMessage;
                 errorDiv.style.display = "block";
                 input.classList.add('invalid');
                 input.classList.remove('valid');

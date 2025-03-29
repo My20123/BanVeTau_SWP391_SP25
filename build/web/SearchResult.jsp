@@ -141,12 +141,12 @@
                 </div>
                 <div >
                     <div class="container py-5" style="width: 100%;margin-left: auto;box-sizing: border-box;margin-right: auto;display: block;padding-left: 16px;padding-right: 16px;height: 80px;margin: auto;background: #ffffff;border-radius: 10px;position: absolute; left: 0;right: 0;top: 90px;padding: 8px;box-shadow: 0px 5px 20px 0px #0000001A;display: -webkit-box;display: -webkit-flex;display: -ms-flexbox; display: flex; -webkit-align-items: center;-webkit-box-align: center;-ms-flex-align: center; align-items: center;">
-                        <form action="searchtrain" method="post" id="ticket-form" onsubmit="return validateForm()">
+                        <form action="searchtrain" method="get" id="ticket-form" onsubmit="return validateForm()">
                             <div class="train-search__data">
                                 <div class="date-picker">
                                     <div class="SingleDatePickerInput SingleDatePickerInput_1" >
                                         <div class="DateInput DateInput_1" style="display: flex;justify-content: normal;width: auto;margin: 0 auto;">
-                                            <p>Thời gian đi <input type="date" id="datepicker" name="depart_date" value="${from_date}"></p>
+                                            <p>Thời gian đi <input type="date" id="datepicker" name="from_date" value="${from_date}"></p>
                                         <div class="search-stations__divider"></div>
                                         <p style="margin-left: 5px;">Thời gian về <input type="date" id="return_datepicker" name="return_date" value="${return_date}"></p>
                                     </div>
@@ -154,7 +154,7 @@
                             </div>
                             <div class="search-stations">
                                 <div class="station-select">
-                                    <div class=" css-aakg73-container">
+                                    <div class="css-aakg73-container">
                                         <span id="react-select-2-live-region" class="css-7pg0cj-a11yText"></span>
                                         <span aria-live="polite" aria-atomic="false" aria-relevant="additions text" class="css-7pg0cj-a11yText"></span>
                                         <div class="react-select__control css-cv0q10">
@@ -162,7 +162,7 @@
                                                 <div class="react-select__placeholder css-1jqq78o-placeholder" id="react-select-2-placeholder" style="margin-left: 25px;">Ga đi</div>
                                                 <div class="search-station-input-wrapper">
                                                     <div class="react-select__input-container css-19bb58m" data-value="">
-                                                        <input class="react-select__input" list="stations"  id="from_station"  value="${depart}" style="color: inherit; background: 0px center; opacity: 1;  width: 250px; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px;margin-left:40px; outline: 0px; padding: 0px;">
+                                                        <input class="react-select__input" list="stations" id="from_station" name="depart" value="${depart}" style="color: inherit; background: 0px center; opacity: 1; width: 250px; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px;margin-left:40px; outline: 0px; padding: 0px;">
                                                         <datalist id="stations">
                                                             <c:forEach items="${listS}" var="station">
                                                                 <option value="${station}">${station}</option>
@@ -182,7 +182,7 @@
                                     </button>
                                 </div>
                                 <div class="station-select">
-                                    <div class=" css-aakg73-container">
+                                    <div class="css-aakg73-container">
                                         <span id="react-select-3-live-region" class="css-7pg0cj-a11yText"></span>
                                         <span aria-live="polite" aria-atomic="false" aria-relevant="additions text" class="css-7pg0cj-a11yText"></span>
                                         <div class="react-select__control css-cv0q10">
@@ -190,7 +190,7 @@
                                                 <div class="react-select__placeholder css-1jqq78o-placeholder" id="react-select-3-placeholder" style="margin-left: 25px;">Ga đến</div>
                                                 <div class="search-station-input-wrapper">
                                                     <div class="react-select__input-container css-19bb58m" data-value="">
-                                                        <input class="react-select__input" list="stations" id="to_station" value="${desti}" style="color: inherit; background: 0px center; opacity: 1; width: 250px; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px; margin-left:40px ;outline: 0px; padding: 0px;">
+                                                        <input class="react-select__input" list="stations" id="to_station" name="desti" value="${desti}" style="color: inherit; background: 0px center; opacity: 1; width: 250px; grid-area: 1 / 2; font: inherit; min-width: 2px; border: 0px; margin: 0px; margin-left:40px ;outline: 0px; padding: 0px;">
                                                         <datalist id="stations">
                                                             <c:forEach items="${listS}" var="station">
                                                                 <option value="${station}">${station}</option>
@@ -203,9 +203,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <input type="hidden" name="trip_type" value="${trip_type}">
                             <button class="train-search__submit-btn" type="submit">Tìm kiếm</button>
-                        </div>
-                    </form>
+                      </div>
+                    </form>                   
                 </div>
             </div>
 
@@ -295,7 +296,6 @@
                                                     <img src="img/trainCarAuto.png" ng-show="toa.IsChonChoTuDong" class="ng-hide">
                                                 </div>
                                                 <c:set var="cabinNumber" value="${fn:split(cabin.getId(), '/')[1]}" />
-
                                                 <div class="text-center text-info et-car-label ng-binding">${cabinNumber}</div>
                                             </div>
                                         </c:forEach>
@@ -303,15 +303,14 @@
                                 </c:forEach>
                             </div>
 
-                            <div class="showCabin"></div>
+                            <div id="showCabinDepart" class="showCabin"></div>
 
                             <c:if test="${trip_type == 'roundTrip'}">
-
                                 <div class="row et-page-header">
-                                    <span class="et-main-label ng-binding" style="margin-top: 30px"> 
+                                    <span class="et-main-label ng-binding " style="margin-top: 30px"> 
                                         <i class="fas fa-train me-2"></i><strong class="ng-binding">Chiều về:</strong> ngày ${return_date} từ ${desti} đến ${depart} <i class="fas fa-long-arrow-alt-right mx-2"></i></span>
                                 </div>
-                                <div class="row et-train-list">
+                                <div class="row et-train-list return_way">
                                     <div class="previous-train et-col-md-1 text-center">
                                         <div class="et-pre-train ng-scope et-arrow-disabled" ng-class="{'et-arrow-disabled': !canShiftBack}" ng-click="chuyenTruoc(true)" tooltip="Tàu trước">
                                             <div class="et-arrow-left"></div>
@@ -319,8 +318,8 @@
                                     </div>                            
                                     <div class="train-group"> 
                                         <c:forEach items="${return_schedules}" var="schedule">
-                                            <div class="col-xs-4 col-sm-3 et-col-md-2 et-train-block ng-scope"  analytics-on="click" analytics-event="SelectTrain">
-                                                <div class="et-train-head"  data-train-id="${schedule.getTrid()}">
+                                            <div class="col-xs-4 col-sm-3 et-col-md-2 et-train-block ng-scope">
+                                                <div class="et-train-head" data-train-id="${schedule.getTrid()}">
                                                     <div class="row center-block" style="width: 40%; margin-bottom: 3px">
                                                         <div class="et-train-lamp text-center ng-binding" style="color:#bf8c01;">${schedule.getTrid()}</div> 
                                                     </div> 
@@ -383,11 +382,10 @@
                                                          ${cabin.getStatus() == 2 && !cabin.isSelected() ? 'et-car-icon-sold-out' : ''}
                                                          ${cabin.isChonChoTuDong() && !cabin.isSelected() ? 'et-car-icon-other' : ''}"
                                                          style="<c:out value='display: block;' escapeXml='false'/>">
-                                                        <img src="img/trainCar2.png" ng-show="!toa.IsChonChoTuDong">
-                                                        <img src="img/trainCarAuto.png" ng-show="toa.IsChonChoTuDong" class="ng-hide">
+                                                        <img src="img/trainCar2.png">
+                                                        <img src="img/trainCarAuto.png" class="ng-hide">
                                                     </div>
                                                     <c:set var="cabinNumber" value="${fn:split(cabin.getId(), '/')[1]}" />
-
                                                     <div class="text-center text-info et-car-label ng-binding">${cabinNumber}</div>
                                                 </div>
                                             </c:forEach>
@@ -395,7 +393,7 @@
                                     </c:forEach>
                                 </div>
 
-                                <div class="showCabin"></div>
+                                <div id="showCabinReturn" class="showCabin"></div>
                             </c:if>
 
 
@@ -569,7 +567,6 @@
                                                                 const desti = "<c:out value='${desti}' />";
                                                                 console.log("depart: " + depart + ",desti: " + desti);
 
-
                                                                 // Xóa selected class từ tất cả các cabin icons
                                                                 document.querySelectorAll('.et-car-block .caIcon.et-car-icon').forEach(icon => {
                                                                     icon.classList.remove('et-car-icon-selected');
@@ -592,21 +589,34 @@
 
                                                                 const cabinNumber = cid.split("/")[1];
                                                                 console.log("ctype: " + ctype);
+                                                                const selectedTrainHead = document.querySelector('.et-train-head-selected');
+                                                                 console.log("selectedTrainHead",selectedTrainHead);
+                                                                 const isReturnTrain = selectedTrainHead.closest('.et-train-list').classList.contains('return_way') ;           
+                                                                            console.log("isReturnTrain",isReturnTrain);
+                                                                console.log("scheduleid: ", selectedScheduleId);
 
                                                                 // Xác định layout cần tải dựa vào loại cabin
                                                                 const regex = /^(A|B)n\d{2}L(V)?$/;
 
                                                                 let layoutFile = regex.test(ctype) ? "cabin_layout/Berths.jsp?cbid=" + cid + "&total=" + totalSeats + "&room=" + berthsInRoom + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId + "&depart=" + depart + "&desti=" + desti : "cabin_layout/Seats.jsp?cbid=" + cid + "&total=" + totalSeats + "&row=" + seatsInRow + "&cabinNumber=" + cabinNumber + "&ctype=" + ctype + "&sid=" + selectedScheduleId + "&depart=" + depart + "&desti=" + desti;
 
-                                                                console.log("scheduleid: ", selectedScheduleId);
                                                                 fetch(layoutFile)
                                                                         .then(response => response.text())
                                                                         .then(data => {
-                                                                            const showCabinDiv = document.querySelector(".showCabin");
+                                                                            // Xác định khu vực hiển thị dựa vào vị trí của cabin được chọn
+                                                                            let showCabinDiv;
+                                                                            
+                                                                            // Chọn div hiển thị phù hợp
+                                                                            if (isReturnTrain) {
+                                                                                showCabinDiv = document.getElementById("showCabinReturn");
+                                                                            } else {
+                                                                                showCabinDiv = document.getElementById("showCabinDepart");
+                                                                            }
+
                                                                             if (showCabinDiv) {
                                                                                 showCabinDiv.innerHTML = data; // Chèn nội dung từ JSP vào div
                                                                             } else {
-                                                                                console.error("Không tìm thấy phần tử div có class 'showCabin'");
+                                                                                console.error("Không tìm thấy phần tử div hiển thị cabin phù hợp");
                                                                             }
                                                                         })
                                                                         .catch(error => {
@@ -640,6 +650,16 @@
                                                             }
                                                             // 🟢 Function chọn ghế
                                                             function selectSeat(seatElement) {
+                                                                // Kiểm tra trạng thái ghế
+                                                                const seatStatus = seatElement.getAttribute("data-seat-status");
+                                                                console.log("seatStatus",seatStatus);
+                                                                
+                                                                // Nếu ghế đã bán hoặc có class et-sit-bought thì không cho phép thao tác
+                                                                if (seatStatus == "2") {
+                                                                    alert("Ghế này đã được đặt, vui lòng chọn ghế khác!");
+                                                                    return;
+                                                                }
+
                                                                 const seatNumber = seatElement.getAttribute("data-seat-number"); // Lấy số ghế
                                                                 const price = seatElement.getAttribute("data-seat-price") || "Không có giá"; // Lấy giá ghế
                                                                 const seatSurElement = seatElement.querySelector(".et-sit-sur"); // Tìm class "et-sit-sur"
